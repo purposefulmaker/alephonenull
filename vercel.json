@@ -1,6 +1,6 @@
 {
   "framework": "nextjs",
-  "buildCommand": "cd apps/web && pnpm run build",
+  "buildCommand": "pnpm turbo build --filter=opendocs-web",
   "outputDirectory": "apps/web/.next",
   "installCommand": "pnpm install"
 }
