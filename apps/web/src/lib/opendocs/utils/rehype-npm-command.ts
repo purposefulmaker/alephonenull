@@ -1,7 +1,7 @@
 import { visit } from 'unist-util-visit'
 
 import type { UnistNode } from '../types/unist'
-import type { Node } from 'unist-builder/lib'
+import type { Node } from 'unist'
 
 export function rehypeNpmCommand() {
   return (tree: Node) => {
