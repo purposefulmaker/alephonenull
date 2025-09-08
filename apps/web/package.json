@@ -50,8 +50,6 @@
       "tailwind-merge": "^2.4.0",
       "tailwindcss-animate": "^1.0.7",
       "unist-util-is": "^6.0.0",
-      "vercel": "latest",
-      "vercel-edge-config": "latest",
       "zod": "^3.23.8"
     },
     "devDependencies": {
