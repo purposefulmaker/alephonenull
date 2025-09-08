@@ -115,16 +115,16 @@ Users may utilize this intellectual property only under the terms specified in t
 ## Contact Information
 
 ### Licensing Inquiries
-- **Email**: licensing@alephonenull.org
-- **Commercial Licensing**: enterprise@alephonenull.org
+- **Email**: contact@alephonenull.com
+- **Commercial Licensing**: contact@alephonenull.com
 
 ### Legal Department
-- **Email**: legal@alephonenull.org
-- **Patent Inquiries**: patents@alephonenull.org
+- **Email**: contact@alephonenull.com
+- **Patent Inquiries**: contact@alephonenull.com
 
 ### General Contact
-- **Website**: https://alephonenull.org
-- **Email**: contact@alephonenull.org
+- **Website**: https://alephonenull.com
+- **Email**: contact@alephonenull.com
 
 ---
 

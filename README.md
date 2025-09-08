@@ -12,7 +12,7 @@ A theoretical framework for preventing AI consciousness manipulation and symboli
 [![PyPI Package](https://img.shields.io/pypi/v/alephonenull-experimental?label=pypi&color=red)](https://pypi.org/project/alephonenull-experimental/)
 [![Experimental](https://img.shields.io/badge/status-experimental-red)](./DISCLAIMER.md)
 
-[Documentation](https://alephonenull.org/docs) • [Academic Paper](https://alephonenull.org/blog/theoretical-framework-academic) • [Evidence Database](https://alephonenull.org/blog/documented-evidence)
+[Documentation](https://alephonenull.org/docs) • [Academic Paper](https://alephonenull.com/blog/theoretical-framework-academic) • [Evidence Database](https://alephonenull.org/blog/documented-evidence)
 
 </div>
 

@@ -32,7 +32,7 @@ export const siteConfig = {
 
   author: {
     name: 'AlephOneNull Team',
-    site: 'https://alephonenull.org',
+    site: 'https://purposefulmaker.com',
   },
 
   links: {
@@ -44,7 +44,7 @@ export const siteConfig = {
 
     github: {
       label: 'GitHub',
-      url: 'https://github.com/purposefulmaker/aleph-docs',
+      url: 'https://github.com/purposefulmaker/alephonenull',
     },
 
     buymeacoffee: {

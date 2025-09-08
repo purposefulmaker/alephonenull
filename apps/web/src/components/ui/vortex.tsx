@@ -22,7 +22,7 @@ interface VortexProps {
 
 export default function (props: VortexProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const containerRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const particleCount = props.particleCount || 700
   const particlePropCount = 9
   const particlePropsLength = particleCount * particlePropCount
@@ -73,7 +73,6 @@ export default function (props: VortexProps) {
 
   const initParticles = () => {
     tick = 0
-    // simplex = new SimplexNoise();
     particleProps = new Float32Array(particlePropsLength)
 
     for (let i = 0; i < particlePropsLength; i += particlePropCount) {
@@ -109,8 +108,9 @@ export default function (props: VortexProps) {
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
     drawParticles(ctx)
-    renderGlow(canvas, ctx)
-    renderToScreen(canvas, ctx)
+    // Avoid self-drawing feedback that can cause visual zoom/flicker
+    // renderGlow(canvas, ctx)
+    // renderToScreen(canvas, ctx)
 
     window.requestAnimationFrame(() => draw(canvas, ctx))
   }
@@ -194,10 +194,13 @@ export default function (props: VortexProps) {
     canvas: HTMLCanvasElement,
     ctx?: CanvasRenderingContext2D
   ) => {
-    const { innerWidth, innerHeight } = window
+    const container = containerRef.current
+    const rect = container?.getBoundingClientRect()
+    const width = Math.floor(rect?.width || window.innerWidth)
+    const height = Math.floor(rect?.height || window.innerHeight)
 
-    canvas.width = innerWidth
-    canvas.height = innerHeight
+    canvas.width = width
+    canvas.height = height
 
     center[0] = 0.5 * canvas.width
     center[1] = 0.5 * canvas.height
@@ -232,15 +235,19 @@ export default function (props: VortexProps) {
 
   useEffect(() => {
     setup()
-    window.addEventListener('resize', () => {
+    const onResize = () => {
       const canvas = canvasRef.current
       const ctx = canvas?.getContext('2d')
       if (canvas && ctx) {
         resize(canvas, ctx)
       }
-    })
+    }
+    window.addEventListener('resize', onResize)
+    return () => {
+      window.removeEventListener('resize', onResize)
+    }
     // eslint-disable-next-line
-  }, []);
+  }, [])
 
   /**
    * Firefox has some issues with this component and becomes very laggy
@@ -258,14 +265,12 @@ export default function (props: VortexProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         ref={containerRef}
-        className="absolute h-full w-full inset-0 z-0 bg-transparent flex items-center justify-center"
+        className="pointer-events-none absolute inset-0 z-0 flex h-full w-full items-center justify-center bg-transparent"
       >
         <canvas ref={canvasRef}></canvas>
       </motion.div>
 
-      <div className={cn('relative z-10', props.className)}>
-        {props.children}
-      </div>
+      <div className={cn('relative z-10', props.className)}>{props.children}</div>
     </div>
   )
 }

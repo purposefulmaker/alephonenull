@@ -79,7 +79,7 @@
   "bugs": {
     "url": "https://github.com/purposefulmaker/alephonenull/issues"
   },
-  "homepage": "https://alephonenull.org",
+  "homepage": "https://alephonenull.com",
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^20.0.0",

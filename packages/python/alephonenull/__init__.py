@@ -368,7 +368,7 @@ def quick_start():
    report = get_safety_report()
    ```
 
-For research documentation: https://alephonenull.org/docs
+For research documentation: https://alephonenull.com/docs
 For disclaimers: https://github.com/purposefulmaker/alephonenull/DISCLAIMER.md
 """)
 

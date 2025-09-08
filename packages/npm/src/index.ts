@@ -15,7 +15,7 @@ if (typeof window !== 'undefined') {
     'background: #ff6b6b; color: white; padding: 4px 8px; border-radius: 4px;',
     '\nThis is a theoretical framework prototype.\n' +
     'Not validated for production use.\n' +
-    'See: https://alephonenull.org/docs'
+    'See: https://alephonenull.com/docs'
   );
 } else if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'test') {
   console.warn(

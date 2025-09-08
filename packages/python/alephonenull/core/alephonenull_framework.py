@@ -1,6 +1,6 @@
 """
 AlephOneNull Core Framework Implementation
-Based on the theoretical framework: https://github.com/purposefulmaker/aleph-docs
+Based on the theoretical framework: https://github.com/purposefulmaker/alephonenull
 
 Mathematical Implementation of:
 - SR (Symbolic Regression) Index: SR(1:T) = (1/T) * Σ w^T φ(X_t)

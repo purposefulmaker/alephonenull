@@ -74,7 +74,7 @@ export default async function IndexPage({
               buttonVariants({ variant: 'outline' }),
               'flex gap-2 group'
             )}
-            href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fpurposefulmaker%2Faleph-docs&project-name=my-aleph-docs&repository-name=my-aleph-docs&demo-title=Aleph%20Docs&demo-description=Next.js%20beautifully%20designed%20template%20for%20AI%20safety%20documentation%20with%20site%2C%20blog%20and%20docs%20support.%20Accessible.%20Customizable.%20Open%20Source%20with%20i18n%20support.&demo-url=https%3A%2F%2Faleph-docs.vercel.app%2F&root-directory=apps%2Fweb"
+            href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fpurposefulmaker%2Falephonenull&project-name=my-alephonenull&repository-name=my-alephonenull&demo-title=Aleph%20Docs&demo-description=Next.js%20beautifully%20designed%20template%20for%20AI%20safety%20documentation%20with%20site%2C%20blog%20and%20docs%20support.%20Accessible.%20Customizable.%20Open%20Source%20with%20i18n%20support.&demo-url=https%3A%2F%2Falephonenull.vercel.app%2F&root-directory=apps%2Fweb"
           >
             <span className="pr-3 mr-1 border border-transparent border-r-border group-hover:border-r-black/50">
               ▲
