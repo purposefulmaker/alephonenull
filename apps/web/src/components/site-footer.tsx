@@ -19,6 +19,14 @@ export async function SiteFooter() {
             {siteConfig.author.name}
           </a>
         </p>
+        <a
+          href={siteConfig.links?.buymeacoffee?.url || '#'}
+          target="_blank"
+          rel="noreferrer"
+          className="text-muted-foreground text-sm hover:text-foreground transition-colors"
+        >
+          Buy me a coffee ☕
+        </a>
       </div>
     </footer>
   )

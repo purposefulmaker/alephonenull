@@ -46,6 +46,11 @@ export const siteConfig = {
       label: 'GitHub',
       url: 'https://github.com/purposefulmaker/aleph-docs',
     },
+
+    buymeacoffee: {
+      label: 'Buy Me a Coffee',
+      url: 'https://buymeacoffee.com/your-handle',
+    },
   },
 } as const
 
