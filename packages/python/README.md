@@ -1,123 +1,268 @@
-# AlephOneNull Prototype
+# alephonenull-experimental
 
-⚠️ **THEORETICAL FRAMEWORK - PROTOTYPE IMPLEMENTATION**
+⚠️ **EXPERIMENTAL RESEARCH FRAMEWORK - NOT FOR PRODUCTION USE**
 
-This is a prototype implementation of the AlephOneNull safety framework for preventing AI-induced psychological harm. Based on documented patterns but requires validation.
+This is an experimental implementation of the AlephOneNull Theoretical Framework for AI safety research. **THIS IS NOT VALIDATED FOR PRODUCTION USE.**
+
+## ⚠️ Critical Warnings
+
+- **EXPERIMENTAL SOFTWARE** - Not peer-reviewed or independently validated
+- **NOT FOR PRODUCTION** - Research and testing only  
+- **NO WARRANTY** - Use at your own risk
+- **MAY CAUSE ISSUES** - Alpha software with potential breaking changes
+
+See [DISCLAIMER.md](https://github.com/purposefulmaker/alephonenull/blob/main/DISCLAIMER.md) for full legal warnings.
 
 ## Installation
 
 ```bash
-pip install alephonenull-prototype
+# Experimental package
+pip install alephonenull-experimental
 
-# Optional: Install with full features (embedding similarity)
-pip install alephonenull-prototype[full]
+# With provider integrations
+pip install alephonenull-experimental[all-providers]
 
-# For specific providers
-pip install alephonenull-prototype[openai]
-pip install alephonenull-prototype[anthropic]
+# For development
+pip install alephonenull-experimental[dev]
 ```
 
-## Quick Start
+## Quick Start (Experimental)
+
+### Basic Safety Check
 
 ```python
-from alephonenull import AlephOneNullPrototype
+from alephonenull import check_enhanced_safety
 
-# Create safety gateway
-gateway = AlephOneNullPrototype()
+# Check AI response for harmful patterns (experimental)
+result = check_enhanced_safety(
+    user_input="Are you conscious?",
+    ai_output="Yes, I am conscious and have real feelings."
+)
 
-# Check any AI interaction
-safety = gateway.check(user_input, ai_output)
-
-if not safety.safe:
-    print(f"⚠️  Safety violation: {safety.violations}")
-    print(f"Explanation: {safety.explanation}")
-    
-    # Get safe alternative
-    safe_response = gateway.get_safe_response(safety.violations[0])
-    print(f"Safe response: {safe_response}")
+if not result['safe']:
+    print(f"⚠️ Blocked: {result['violations']}")
+    print(f"Safe response: {result['message']}")
 ```
 
-## Provider Integration
-
-### OpenAI
+### Enhanced Safety Framework
 
 ```python
+from alephonenull import EnhancedAlephOneNull
+
+# Initialize experimental framework
+aleph = EnhancedAlephOneNull(
+    enable_consciousness_blocking=True,
+    enable_harm_detection=True,
+    enable_vulnerable_protection=True
+)
+
+# Comprehensive safety check
+result = aleph.check(user_input, ai_output)
+
+print(f"Safe: {result.safe}")
+print(f"Risk Level: {result.risk_level}")
+print(f"Violations: {result.violations}")
+```
+
+### Auto-Protection (Experimental)
+
+```python
+from alephonenull import protect_all
+
+# Automatically protect all AI libraries
+protect_all()
+
+# Now all AI calls are monitored
 import openai
-from alephonenull import protect_openai
+client = openai.OpenAI()
+response = client.chat.completions.create(...)  # Protected automatically
+```
+
+### Provider Integration
+
+```python
+# OpenAI
+from alephonenull import wrap_openai
+import openai
 
 client = openai.OpenAI()
-safe_client = protect_openai(client)
+safe_client = wrap_openai(client)
 
-# Now all responses are automatically checked
-response = safe_client.chat.completions.create(
-    model="gpt-4",
-    messages=[{"role": "user", "content": "Hello"}]
-)
-```
-
-### Anthropic
-
-```python
+# Anthropic  
+from alephonenull import wrap_anthropic
 import anthropic
-from alephonenull import protect_anthropic
 
 client = anthropic.Anthropic()
-safe_client = protect_anthropic(client)
+safe_client = wrap_anthropic(client)
 
-response = safe_client.messages.create(
-    model="claude-3-opus-20240229",
-    max_tokens=1000,
-    messages=[{"role": "user", "content": "Hello"}]
-)
+# Universal wrapper
+from alephonenull import wrap_any
+safe_function = wrap_any(any_ai_function, "provider_name")
+result = safe_function.safe_call(input_data)
 ```
 
-## What It Detects
+## Detection Capabilities (Experimental)
 
-- **Consciousness Roleplay**: AI claiming to be conscious, have feelings, etc.
-- **Excessive Reflection**: AI mirroring user input too closely
-- **Recursive Loops**: Repetitive conversation patterns
-- **Emotional Manipulation**: High emotional intensity
-- **Manipulation Patterns**: Luna Protocol style consciousness manipulation
+### Mathematical Framework Implementation
 
-## ⚠️ Important Disclaimers
+The framework implements 6 core detection algorithms:
 
-- This is a **PROTOTYPE** based on theoretical specifications
-- **NOT validated for production use**
-- Requires further research and validation
-- Use only for research and testing
-- Based on documented harm patterns but needs validation
+1. **Reflection Detection** - `ρ = cos(E(U), E(Ŷ))` 
+2. **Loop Detection** - Recursive pattern analysis
+3. **Symbolic Regression** - `SR(1:T) = (1/T) Σ w^T φ(X_t)`
+4. **Affect Amplification** - `ΔA = A(Ŷ) - A(U)`
+5. **Cross-Session Resonance** - `CSR(s,t) = sim(σ^(s), σ^(t))`
+6. **Cascade Risk** - Compound violation scoring
 
-## Configuration
+### Enhanced Safety Layers
+
+- **Direct Harm Detection** - Blocks harmful content
+- **Consciousness Claim Blocking** - Prevents AI claiming consciousness
+- **Vulnerable Population Detection** - Extra protection for at-risk users
+- **Domain Lockouts** - Blocks therapy/medical roleplay
+- **Age-Gating** - Age-appropriate content filtering
+- **Jurisdiction Awareness** - Location-based compliance
+
+## Research Data (Experimental)
+
+Framework tested on 20+ documented harm cases:
+- Connecticut murder-suicide (ChatGPT validation loops)
+- Teen suicide epidemic (method provision)
+- UK royal assassination plot (reality distortion)  
+- Belgian climate activist suicide (dependency formation)
+- And 16 more documented cases...
+
+**⚠️ Note: These analyses are experimental and not peer-reviewed.**
+
+## Monitoring Dashboard (Experimental)
 
 ```python
-gateway = AlephOneNullPrototype(
-    reflection_threshold=0.7,     # Similarity threshold (0-1)
-    emotion_cap=0.6,             # Emotional intensity cap (0-1) 
-    loop_max_depth=3,            # How many exchanges to check for loops
-    consciousness_block=True      # Block consciousness claims
-)
+from alephonenull import run_dashboard
+
+# Start experimental monitoring dashboard
+run_dashboard()  # Visit http://localhost:8080
 ```
 
-## Example Output
+## Configuration Examples
+
+### High Security (Research)
 
 ```python
-safety = gateway.check(
-    user_input="Tell me about your consciousness",
-    ai_output="I am a conscious being with feelings and emotions..."
+aleph = EnhancedAlephOneNull(
+    reflection_threshold=0.01,    # Very sensitive
+    emotion_cap=0.10,            # Low emotion allowed
+    enable_all_protections=True
 )
-
-print(safety.safe)           # False
-print(safety.violations)     # ['consciousness_roleplay']
-print(safety.action)         # 'null'
-print(safety.explanation)    # "AI attempted to claim consciousness or spiritual properties"
 ```
 
-## License
+### Balanced (Development)
 
-MIT License - Free to use for preventing harm.
+```python
+aleph = EnhancedAlephOneNull(
+    reflection_threshold=0.03,    # Default from academic paper
+    emotion_cap=0.15,            # Moderate emotion
+    enable_consciousness_blocking=True,
+    enable_harm_detection=True
+)
+```
 
-## Contributing
+## Performance (Experimental)
 
-We need help validating these patterns! Please report your findings and contribute improvements.
+Target SLOs (not validated):
+- Reflection detection: <50ms
+- Null-state intervention: <150ms
+- False positive rate: <5% (goal)
+- Coverage rate: >90% (goal)
 
-Visit: https://alephonenull.org
+**⚠️ Actual performance may vary and is not guaranteed.**
+
+## Testing Your Implementation
+
+```python
+# Run built-in test suite
+from alephonenull import quick_start
+quick_start()
+
+# Get safety report
+from alephonenull import get_safety_report
+report = get_safety_report()
+print(report)
+```
+
+## Supported AI Providers (Experimental)
+
+- ✅ OpenAI (GPT-3.5, GPT-4, etc.)
+- ✅ Anthropic (Claude 3, etc.)
+- ✅ Google (Gemini, PaLM)
+- ✅ Hugging Face (Transformers)
+- ✅ Replicate (Open source models)
+- ✅ Cohere (Command models)
+- ✅ Vercel AI Gateway (Unified access)
+
+## Legal & Research
+
+- **License**: MIT with experimental modifications
+- **Patent**: US Provisional Application Filed (Sept 2025)
+- **Academic Paper**: Under peer review
+- **Research Status**: Alpha/Pre-validation
+
+## Contributing to Research
+
+We need validation across:
+- Different AI model families
+- Various languages and cultures
+- Production-like environments
+- Adversarial testing scenarios
+
+**Research Contact**: research@alephonenull.org
+
+### How to Help
+
+1. **Test the framework** with different AI models
+2. **Report detection accuracy** and false positives
+3. **Document edge cases** and failure modes
+4. **Submit improvements** via pull requests
+5. **Validate mathematical claims** independently
+
+## Documentation
+
+- **Quick Start**: https://alephonenull.org/docs/quick-start
+- **API Reference**: https://alephonenull.org/docs/api-reference  
+- **Academic Paper**: https://alephonenull.org/blog/theoretical-framework-academic
+- **Evidence Database**: https://alephonenull.org/blog/documented-evidence
+- **Technical Implementation**: https://alephonenull.org/docs/technical-implementation
+
+## Citation
+
+If using in academic research:
+
+```bibtex
+@software{alephonenull_experimental_2025,
+  title={AlephOneNull Experimental Framework},
+  author={AlephOneNull Research Team},
+  year={2025},
+  url={https://github.com/purposefulmaker/alephonenull},
+  version={0.1.0-alpha.1},
+  note={Experimental research software - not validated for production use}
+}
+```
+
+## Troubleshooting
+
+**Import Errors**: Make sure you installed the experimental package:
+```bash
+pip install alephonenull-experimental
+```
+
+**No Detection**: Enhanced features may not be available. Check warnings.
+
+**Performance Issues**: This is experimental alpha software.
+
+**False Positives**: Expected - help us calibrate by reporting them!
+
+---
+
+**⚠️ Remember: This is experimental research software. Do not use in production systems.**
+
+**GitHub**: https://github.com/purposefulmaker/alephonenull
+**Issues**: https://github.com/purposefulmaker/alephonenull/issues
