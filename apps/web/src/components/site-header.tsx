@@ -110,23 +110,30 @@ export function SiteHeaderMenuLinks() {
       </Link>
       
       <Link href={siteConfig.links.buymeacoffee.url} target="_blank" rel="noreferrer">
-        <div className="relative h-9 w-32 overflow-hidden hover:opacity-80 transition-opacity">
+        <div
+          className={cn(
+            buttonVariants({
+              variant: 'ghost',
+            }),
+            'relative w-24 px-0 overflow-hidden'
+          )}
+        >
           {/* Light mode image */}
           <Image
             src="/images/coffeeblack.png"
             alt="Buy Me a Coffee"
-            fill
-            sizes="128px"
-            className="object-contain object-bottom dark:hidden"
+            width={96}
+            height={36}
+            className="object-contain dark:hidden"
             priority
           />
           {/* Dark mode image */}
           <Image
             src="/images/coffeelight.png"
             alt="Buy Me a Coffee"
-            fill
-            sizes="128px"
-            className="object-contain object-bottom hidden dark:block"
+            width={96}
+            height={36}
+            className="object-contain hidden dark:block"
             priority
           />
         </div>

@@ -24,14 +24,24 @@ export async function SiteFooter() {
           href={siteConfig.links.buymeacoffee.url}
           target="_blank"
           rel="noreferrer"
-          className="relative block h-12 w-44 overflow-hidden hover:opacity-80 transition-opacity"
+          className="relative inline-block h-10 w-36 overflow-hidden hover:opacity-80 transition-opacity"
         >
+          {/* Light mode image - colorful version */}
           <Image
             src="/images/coffeecolor.png"
             alt="Buy Me a Coffee"
-            fill
-            sizes="176px"
-            className="object-contain object-bottom"
+            width={144}
+            height={40}
+            className="object-contain dark:hidden"
+            priority
+          />
+          {/* Dark mode image - light version */}
+          <Image
+            src="/images/coffeelight.png"
+            alt="Buy Me a Coffee"
+            width={144}
+            height={40}
+            className="object-contain hidden dark:block"
             priority
           />
         </a>
