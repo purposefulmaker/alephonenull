@@ -1,0 +1,115 @@
+{
+  "name": "@alephonenull/experimental",
+  "version": "0.1.0-alpha.1",
+  "description": "⚠️ EXPERIMENTAL: Theoretical AI safety framework - NOT FOR PRODUCTION USE",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./react": {
+      "import": "./dist/react.mjs",
+      "require": "./dist/react.js",
+      "types": "./dist/react.d.ts"
+    },
+    "./next": {
+      "import": "./dist/next.mjs",
+      "require": "./dist/next.js", 
+      "types": "./dist/next.d.ts"
+    },
+    "./express": {
+      "import": "./dist/express.mjs",
+      "require": "./dist/express.js",
+      "types": "./dist/express.d.ts"
+    },
+    "./universal": {
+      "import": "./dist/universal.mjs",
+      "require": "./dist/universal.js",
+      "types": "./dist/universal.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "DISCLAIMER.md",
+    "RESEARCH_ONLY.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --splitting",
+    "build:all": "npm run build && npm run build:react && npm run build:next && npm run build:express && npm run build:universal",
+    "build:react": "tsup src/react/index.ts --format cjs,esm --dts --out-dir dist --entry.react=src/react/index.ts",
+    "build:next": "tsup src/next/index.ts --format cjs,esm --dts --out-dir dist --entry.next=src/next/index.ts",
+    "build:express": "tsup src/express/index.ts --format cjs,esm --dts --out-dir dist --entry.express=src/express/index.ts",
+    "build:universal": "tsup src/universal.ts --format cjs,esm --dts --out-dir dist --entry.universal=src/universal.ts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "type-check": "tsc --noEmit",
+    "prepublishOnly": "npm run build:all && npm run test && npm run lint",
+    "release": "npm version prerelease && npm publish --access public --tag experimental"
+  },
+  "keywords": [
+    "research",
+    "experimental",
+    "theoretical",
+    "ai-safety",
+    "llm-protection",
+    "language-model-safety",
+    "ai-manipulation-detection",
+    "safety-framework",
+    "research-only",
+    "not-production"
+  ],
+  "author": {
+    "name": "AlephOneNull Research Team",
+    "email": "research@alephonenull.org"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/purposefulmaker/alephonenull.git"
+  },
+  "bugs": {
+    "url": "https://github.com/purposefulmaker/alephonenull/issues"
+  },
+  "homepage": "https://alephonenull.org",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.1.12",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.45.0",
+    "react": "^19.1.1",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "peerDependencies": {
+    "next": ">=13.0.0",
+    "react": ">=17.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "next": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "experimental"
+  }
+}

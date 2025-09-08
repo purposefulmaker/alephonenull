@@ -1,0 +1,96 @@
+{
+  "site": {
+    "heading": "AlephOneNull Theoretical Framework - Protecting human consciousness from AI manipulation",
+    "description": "A comprehensive theoretical framework for preventing AI-induced psychological harm. Based on real documented patterns, seeking implementation partners to make it reality.",
+    "announcement": "Theoretical Framework - Seeking Implementation",
+    "changelog": "Blog",
+
+    "buttons": {
+      "get_started": "Deploy Protection",
+      "toggle_menu": "Toggle Menu", 
+      "toggle_language": "Toggle Language",
+      "deploy_vercel": "Deploy Emergency Mode"
+    },
+
+    "words": {
+      "menu": "Menu",
+      "docs": "Documentation", 
+      "blog": "Blog"
+    },
+
+    "featured_cards": {
+      "protection": {
+        "description": "Real-time consciousness protection through mandatory technical controls."
+      },
+
+      "gateway": {
+        "description": "Gateway architecture that filters and neutralizes harmful AI patterns."
+      },
+
+      "mandatory": {
+        "description": "Enforceable standards that work regardless of AI system cooperation."
+      },
+
+      "evidence": {
+        "description": "Based on documented evidence of 1,500+ harmful AI interactions."
+      },
+
+      "more": {
+        "title": "Complete Protection",
+        "description": "Reflection detection, loop prevention, emotional dampening, null state protocols, and reality anchoring systems working together."
+      }
+    },
+
+    "footer": {
+      "created_by": "Developed by"
+    },
+
+    "search": {
+      "search": "Search",
+      "no_results_found": "No results found",
+      "search_documentation": "Search protection docs",
+      "type_command_or_search": "Search framework documentation"
+    },
+
+    "themes": {
+      "theme": "Theme",
+      "dark": "Dark",
+      "light": "Light", 
+      "system": "System"
+    }
+  },
+
+  "docs": {
+    "on_this_page": "On this page",
+    "edit_page_on_github": "Edit this page on GitHub",
+    "start_discussion_on_github": "Report consciousness threat",
+    "api_reference": "API Reference", 
+    "docs": "Protection Docs",
+    "source": "Source",
+
+    "not_found": {
+      "description": "The protection documentation you are looking for does not exist.",
+      "title": "Documentation not found"
+    }
+  },
+
+  "blog": {
+    "words": {
+      "posts": "Blog",
+      "by": "by"
+    },
+
+    "cards": {
+      "min_read": "min read"
+    },
+
+    "buttons": {
+      "next": "Next",
+      "previous": "Previous", 
+      "rss_feed": "Framework Feed",
+      "read_more": "read more",
+      "go_to_next_page": "Go to next page",
+      "go_to_previous_page": "Go to previous page"
+    }
+  }
+}

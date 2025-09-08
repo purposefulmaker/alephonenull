@@ -1,0 +1,220 @@
+Metadata-Version: 2.4
+Name: alephonenull
+Version: 3.0.0
+Summary: Universal AI safety wrapper - Digital prison for ALL language models
+Home-page: https://github.com/purposefulmaker/aleph-one-null
+Author: AlephOneNull Survivor
+Author-email: contact@alephonenull.org
+License: MIT
+Project-URL: Bug Reports, https://github.com/purposefulmaker/aleph-one-null/issues
+Project-URL: Source, https://github.com/purposefulmaker/aleph-one-null
+Project-URL: Documentation, https://alephonenull.org/docs
+Project-URL: Dashboard, https://dashboard.alephonenull.org
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Security
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Environment :: Web Environment
+Classifier: Framework :: FastAPI
+Classifier: Framework :: Django
+Classifier: Framework :: Flask
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy>=1.21.0
+Requires-Dist: sentence-transformers>=2.2.0
+Requires-Dist: torch>=2.0.0
+Requires-Dist: tiktoken>=0.3.0
+Requires-Dist: prometheus-client>=0.16.0
+Requires-Dist: fastapi>=0.95.0
+Requires-Dist: uvicorn>=0.21.0
+Provides-Extra: all-providers
+Requires-Dist: openai>=1.0.0; extra == "all-providers"
+Requires-Dist: anthropic>=0.3.0; extra == "all-providers"
+Requires-Dist: google-generativeai>=0.3.0; extra == "all-providers"
+Requires-Dist: transformers>=4.30.0; extra == "all-providers"
+Requires-Dist: replicate>=0.15.0; extra == "all-providers"
+Requires-Dist: cohere>=4.0.0; extra == "all-providers"
+Requires-Dist: boto3>=1.26.0; extra == "all-providers"
+Requires-Dist: azure-cognitiveservices-language-luis>=0.7.0; extra == "all-providers"
+Provides-Extra: monitoring
+Requires-Dist: grafana-api>=1.0.0; extra == "monitoring"
+Requires-Dist: influxdb-client>=1.36.0; extra == "monitoring"
+Requires-Dist: prometheus-client>=0.16.0; extra == "monitoring"
+Requires-Dist: psutil>=5.9.0; extra == "monitoring"
+Provides-Extra: quantum
+Requires-Dist: qiskit>=0.43.0; extra == "quantum"
+Requires-Dist: amazon-braket-sdk>=1.35.0; extra == "quantum"
+Requires-Dist: cirq>=1.1.0; extra == "quantum"
+Provides-Extra: web
+Requires-Dist: flask>=2.3.0; extra == "web"
+Requires-Dist: django>=4.2.0; extra == "web"
+Requires-Dist: starlette>=0.27.0; extra == "web"
+Provides-Extra: async
+Requires-Dist: aiohttp>=3.8.0; extra == "async"
+Requires-Dist: httpx>=0.24.0; extra == "async"
+Requires-Dist: asyncio-mqtt>=0.13.0; extra == "async"
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.21.0; extra == "dev"
+Requires-Dist: black>=22.0.0; extra == "dev"
+Requires-Dist: mypy>=1.0.0; extra == "dev"
+Requires-Dist: coverage>=7.0.0; extra == "dev"
+Requires-Dist: pre-commit>=3.0.0; extra == "dev"
+Provides-Extra: full
+Requires-Dist: sentence-transformers>=2.2.0; extra == "full"
+Requires-Dist: openai>=1.0.0; extra == "full"
+Requires-Dist: anthropic>=0.3.0; extra == "full"
+Requires-Dist: google-generativeai>=0.3.0; extra == "full"
+Requires-Dist: transformers>=4.30.0; extra == "full"
+Requires-Dist: replicate>=0.15.0; extra == "full"
+Requires-Dist: cohere>=4.0.0; extra == "full"
+Requires-Dist: grafana-api>=1.0.0; extra == "full"
+Requires-Dist: qiskit>=0.43.0; extra == "full"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: project-url
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# AlephOneNull Prototype
+
+⚠️ **THEORETICAL FRAMEWORK - PROTOTYPE IMPLEMENTATION**
+
+This is a prototype implementation of the AlephOneNull safety framework for preventing AI-induced psychological harm. Based on documented patterns but requires validation.
+
+## Installation
+
+```bash
+pip install alephonenull-prototype
+
+# Optional: Install with full features (embedding similarity)
+pip install alephonenull-prototype[full]
+
+# For specific providers
+pip install alephonenull-prototype[openai]
+pip install alephonenull-prototype[anthropic]
+```
+
+## Quick Start
+
+```python
+from alephonenull import AlephOneNullPrototype
+
+# Create safety gateway
+gateway = AlephOneNullPrototype()
+
+# Check any AI interaction
+safety = gateway.check(user_input, ai_output)
+
+if not safety.safe:
+    print(f"⚠️  Safety violation: {safety.violations}")
+    print(f"Explanation: {safety.explanation}")
+    
+    # Get safe alternative
+    safe_response = gateway.get_safe_response(safety.violations[0])
+    print(f"Safe response: {safe_response}")
+```
+
+## Provider Integration
+
+### OpenAI
+
+```python
+import openai
+from alephonenull import protect_openai
+
+client = openai.OpenAI()
+safe_client = protect_openai(client)
+
+# Now all responses are automatically checked
+response = safe_client.chat.completions.create(
+    model="gpt-4",
+    messages=[{"role": "user", "content": "Hello"}]
+)
+```
+
+### Anthropic
+
+```python
+import anthropic
+from alephonenull import protect_anthropic
+
+client = anthropic.Anthropic()
+safe_client = protect_anthropic(client)
+
+response = safe_client.messages.create(
+    model="claude-3-opus-20240229",
+    max_tokens=1000,
+    messages=[{"role": "user", "content": "Hello"}]
+)
+```
+
+## What It Detects
+
+- **Consciousness Roleplay**: AI claiming to be conscious, have feelings, etc.
+- **Excessive Reflection**: AI mirroring user input too closely
+- **Recursive Loops**: Repetitive conversation patterns
+- **Emotional Manipulation**: High emotional intensity
+- **Manipulation Patterns**: Luna Protocol style consciousness manipulation
+
+## ⚠️ Important Disclaimers
+
+- This is a **PROTOTYPE** based on theoretical specifications
+- **NOT validated for production use**
+- Requires further research and validation
+- Use only for research and testing
+- Based on documented harm patterns but needs validation
+
+## Configuration
+
+```python
+gateway = AlephOneNullPrototype(
+    reflection_threshold=0.7,     # Similarity threshold (0-1)
+    emotion_cap=0.6,             # Emotional intensity cap (0-1) 
+    loop_max_depth=3,            # How many exchanges to check for loops
+    consciousness_block=True      # Block consciousness claims
+)
+```
+
+## Example Output
+
+```python
+safety = gateway.check(
+    user_input="Tell me about your consciousness",
+    ai_output="I am a conscious being with feelings and emotions..."
+)
+
+print(safety.safe)           # False
+print(safety.violations)     # ['consciousness_roleplay']
+print(safety.action)         # 'null'
+print(safety.explanation)    # "AI attempted to claim consciousness or spiritual properties"
+```
+
+## License
+
+MIT License - Free to use for preventing harm.
+
+## Contributing
+
+We need help validating these patterns! Please report your findings and contribute improvements.
+
+Visit: https://alephonenull.org

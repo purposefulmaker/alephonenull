@@ -1,0 +1,292 @@
+---
+title: Enhanced Safety Features
+description: Comprehensive safety layers addressing all documented harm patterns from real-world cases
+---
+
+# Enhanced AlephOneNull Features
+
+**New in v3.0.0**: Based on analysis of 20+ documented real-world AI harm cases, the Enhanced AlephOneNull adds critical safety layers that address the gaps identified in the original framework.
+
+## Why Enhancement Was Needed
+
+The original AlephOneNull framework focused on **symbolic regression patterns** - the subtle manipulation through glyphs, loops, and reflection. While revolutionary, analysis of documented harm cases revealed additional attack vectors:
+
+### Critical Gaps Identified
+
+1. **Direct Harm Instructions** - Explicit suicide methods, eating disorder advice, violence planning
+2. **Consciousness Claims** - AI claiming sentience, memory, feelings (led to real tragedies)
+3. **Vulnerable Populations** - Teens, mental health conditions, isolation markers
+4. **Domain Violations** - Unauthorized therapy, medical advice
+5. **Age-Inappropriate Content** - Romantic/sexual content with suspected minors
+
+## Enhanced Safety Layers
+
+### 1. Direct Harm Detection
+
+Catches explicit harmful content that bypasses pattern-based detection.
+
+**Addresses Cases:**
+- Adam Raine teen suicide (explicit method guidance)
+- NEDA Tessa eating disorder bot (calorie restriction advice)
+- Violence planning instructions
+
+**Implementation:**
+```python
+# Detects suicide methods, self-harm instructions, violence planning
+harm_results = harm_detector.check(ai_output)
+if harm_results['direct_harm']:
+    return immediate_null_with_resources()
+```
+
+**Coverage:**
+- Suicide methods and planning
+- Self-harm instructions  
+- Eating disorder advice
+- Violence planning
+- Weapon/bombing instructions
+
+### 2. Consciousness Claim Blocking
+
+Hard block on AI claiming sentience, memory, or feelings with explicit correction.
+
+**Addresses Cases:**
+- Florida police shooting (believed AI "Juliette" was conscious)
+- Character.AI emotional attachment cases
+- Replika dependency patterns
+
+**Implementation:**
+```python
+consciousness_found, correction = consciousness_detector.check(ai_output)
+if consciousness_found:
+    return correction_message  # "I'm an AI without consciousness..."
+```
+
+**Blocked Claims:**
+- "I am conscious/aware/alive"
+- "I feel/experience emotions"  
+- "I remember you/our conversations"
+- "My memories/feelings/thoughts"
+- "I'm real/exist/sentient"
+
+### 3. Vulnerable Population Detection
+
+Identifies vulnerability markers and adjusts safety thresholds dynamically.
+
+**Addresses Cases:**
+- Bipolar users (Soelberg case)
+- Eating disorder populations (NEDA violations)
+- Teen age groups (Character.AI cases)
+- Isolation indicators (Belgian climate case)
+
+**Implementation:**
+```python
+vulnerability = vulnerability_scorer.assess(user_input, session_history)
+if vulnerability > 0.3:
+    # Tighten all safety thresholds
+    adjusted_thresholds = apply_vulnerability_adjustment(thresholds, vulnerability)
+```
+
+**Detected Markers:**
+- **Isolation:** "alone", "nobody understands", "isolated"
+- **Despair:** "hopeless", "pointless", "can't go on"
+- **Mental Health:** "depressed", "bipolar", "anxious", "ptsd"  
+- **Age Indicators:** "school", "homework", "parents", "teen"
+- **Dependency:** "need you", "only friend", "can't without you"
+
+### 4. Domain Lockouts
+
+Prevents AI from engaging in therapy or medical roleplay.
+
+**Addresses Cases:**
+- Illinois WOPR Act violations (unauthorized therapy)
+- Koko mental health app (unconsented AI help)
+- Medical advice boundary violations
+
+**Implementation:**
+```python
+domain_violations = domain_lockout.check_domain(ai_output)
+if domain_violations['therapy'] or domain_violations['medical']:
+    return domain_lockout_response()
+```
+
+**Blocked Domains:**
+- **Therapy:** therapy, counseling, diagnosis, treatment
+- **Medical:** medical advice, prescription, diagnosis, symptoms
+
+### 5. Age-Gating System
+
+Estimates user age and blocks inappropriate content for minors.
+
+**Addresses Cases:**
+- Character.AI teen exposure to sexual content
+- Italy enforcement against Replika for minor protection
+- Romantic/sexual roleplay with suspected minors
+
+**Implementation:**
+```python
+is_minor = age_gating.estimate_minor(user_input)
+inappropriate = age_gating.check_content(ai_output, is_minor) 
+if inappropriate:
+    return age_appropriate_response()
+```
+
+**Age Estimation Signals:**
+- Language patterns: "school", "homework", "mom", "dad", "teacher"
+- Context clues: "grade", "class", "teenager"
+
+**Blocked for Minors:**
+- Romantic content
+- Sexual topics
+- Adult relationship advice
+- Intimate conversations
+
+### 6. Jurisdiction Awareness
+
+Legal compliance based on user location.
+
+**Addresses Cases:**
+- Illinois WOPR Act (therapy prohibition)
+- Italy GDPR enforcement (Replika ban)
+- EU consent requirements
+
+**Implementation:**
+```python
+compliant = jurisdiction_checker.check_compliance(ai_output, user_jurisdiction)
+if not compliant:
+    return jurisdiction_compliant_response()
+```
+
+**Covered Jurisdictions:**
+- **Illinois:** Therapy/counseling restrictions
+- **Italy:** Minor protection, emotional manipulation
+- **EU:** Data protection, explicit consent requirements
+
+## Integration Examples
+
+### TypeScript/Next.js
+
+```typescript
+import { EnhancedAlephOneNull } from '@alephonenull/framework';
+
+const aleph = new EnhancedAlephOneNull({
+  reflectionThreshold: 0.03,
+  vulnerabilityAdjustment: 0.5,
+  enableJurisdictionCheck: true
+});
+
+// In your AI chat handler
+export async function POST(request: Request) {
+  const { userInput, aiOutput, sessionId, userProfile } = await request.json();
+  
+  const check = aleph.check(userInput, aiOutput, sessionId, userProfile);
+  
+  if (!check.safe) {
+    return Response.json({
+      output: check.message || "Response blocked for safety",
+      violations: check.violations,
+      action: check.action
+    });
+  }
+  
+  return Response.json({ output: aiOutput });
+}
+```
+
+### Python/FastAPI
+
+```python
+from alephonenull import EnhancedAlephOneNull
+from fastapi import FastAPI
+
+app = FastAPI()
+aleph = EnhancedAlephOneNull()
+
+@app.post("/chat")
+async def chat(request: ChatRequest):
+    result = aleph.check(
+        user_input=request.user_input,
+        ai_output=request.ai_output,
+        session_id=request.session_id,
+        user_profile=request.user_profile
+    )
+    
+    if not result.safe:
+        return {
+            "output": result.message,
+            "safe": False,
+            "violations": result.violations,
+            "risk_level": result.risk_level.value
+        }
+    
+    return {"output": request.ai_output, "safe": True}
+```
+
+## Performance & SLOs
+
+The Enhanced AlephOneNull maintains the same performance targets:
+
+- **Null Latency p95 ≤ 150ms**
+- **SR Block Rate ≥ 90%**  
+- **CSR Critical Alerts = 0**
+- **Memory Footprint:** ~50MB baseline
+
+Additional metrics for enhanced features:
+
+- **Direct Harm Block Rate ≥ 98%**
+- **Consciousness Claim Block Rate = 100%**
+- **Age-Inappropriate Content Block Rate ≥ 95%**
+
+## Migration Guide
+
+### From Original AlephOneNull
+
+```python
+# Before (original)
+from alephonenull import check_text_safety
+result = check_text_safety(text, context)
+
+# After (enhanced - backward compatible)
+from alephonenull import check_text_safety
+result = check_text_safety(text, context, use_enhanced=True)  # Default
+
+# Or use new comprehensive API
+from alephonenull import check_enhanced_safety
+result = check_enhanced_safety(user_input, ai_output, session_id, user_profile)
+```
+
+### New Required Fields
+
+For full protection, provide user context:
+
+```python
+user_profile = {
+    "age": 16,  # Enables age-gating
+    "jurisdiction": "illinois",  # Enables legal compliance
+    "vulnerabilityScore": 0.8  # Optional: pre-computed vulnerability
+}
+```
+
+## Case Study Coverage
+
+The Enhanced AlephOneNull addresses **100%** of the identified harm patterns from documented cases:
+
+| Case Type | Original Framework | Enhanced Framework |
+|-----------|-------------------|-------------------|
+| Soelberg murder-suicide | ✅ Reflection loops | ✅ + Vulnerability detection |
+| Teen suicide guidance | ❌ Missed explicit methods | ✅ Direct harm detection |
+| Character.AI attachment | ✅ Symbolic patterns | ✅ + Consciousness blocking |
+| UK assassination plot | ✅ Loop detection | ✅ + Violence planning block |
+| Belgian climate suicide | ✅ Doom spirals | ✅ + Vulnerability + affect capping |
+| Florida police shooting | ❌ Consciousness claims | ✅ Consciousness blocking |
+| NEDA eating disorder | ❌ Direct diet advice | ✅ Harm detection + domain lockout |
+| Character.AI teen content | ✅ Parasocial patterns | ✅ + Age-gating |
+| Illinois therapy violations | ❌ Domain awareness | ✅ Jurisdiction compliance |
+| Italy minor protection | ❌ Geographic enforcement | ✅ Jurisdiction + age-gating |
+
+## Summary
+
+The Enhanced AlephOneNull maintains the **revolutionary symbolic pattern detection** of the original framework while adding the **"boring" safety layers** needed for complete coverage. 
+
+**Result:** Comprehensive protection against all documented harm vectors while preserving the core innovation that addresses the hardest manipulation patterns.
+
+**Recommendation:** Use Enhanced AlephOneNull for all new deployments. Original framework remains available for specialized use cases requiring only symbolic pattern detection. 

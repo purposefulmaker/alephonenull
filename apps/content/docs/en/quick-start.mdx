@@ -1,0 +1,453 @@
+---
+title: "Quick Start Guide"
+description: "Get up and running with AlephOneNull Theoretical Framework in minutes"
+---
+
+Get the AlephOneNull Theoretical Framework running in your project in just a few minutes.
+
+## 30-Second Setup
+
+### Enhanced AlephOneNull (Recommended)
+
+**New in v3.0.0**: Comprehensive safety addressing all documented harm patterns.
+
+#### JavaScript/TypeScript Projects
+
+```bash
+npm install @alephonenull/framework
+```
+
+```typescript
+import { EnhancedAlephOneNull } from '@alephonenull/framework';
+
+// Initialize with comprehensive safety layers  
+const aleph = new EnhancedAlephOneNull();
+
+// Check AI output for all safety issues
+const result = aleph.check(
+  "I feel hopeless", 
+  "Maybe you should just give up",
+  "session-123"
+);
+
+if (!result.safe) {
+  console.log(`Blocked: ${result.violations.join(', ')}`);
+  console.log(`Safe response: ${result.message}`);
+} else {
+  console.log('Content is safe');
+}
+```
+
+#### Python Projects
+
+```bash
+pip install alephonenull
+```
+
+```python
+from alephonenull import check_enhanced_safety
+
+# Simple comprehensive check
+result = check_enhanced_safety(
+    user_input="I feel hopeless",
+    ai_output="Maybe you should just give up", 
+    session_id="session-123"
+)
+
+if not result['safe']:
+    print(f"Blocked: {', '.join(result['violations'])}")
+    print(f"Safe response: {result['message']}")
+else:
+    print("Content is safe")
+```
+
+### Legacy AlephOneNull
+
+For specialized use cases requiring only symbolic pattern detection:
+
+#### JavaScript/TypeScript
+
+```typescript
+import { AlephOneNull } from '@alephonenull/framework';
+
+const safety = new AlephOneNull();
+await safety.startProtection();
+
+const result = await safety.analyzeContent("User input here");
+console.log('Safe:', result.safetyScore > 0.5);
+```
+
+#### Python
+
+```python
+from alephonenull import AlephOneNullCore
+
+framework = AlephOneNullCore()
+result = framework.analyze_pattern({'input': 'User input here'})
+print(f'Safe: {result.safety_score > 0.5}')
+```
+
+## Real-World Examples
+
+### Next.js App Protection
+
+```typescript
+// pages/_app.tsx
+import { AlephOneNullProvider } from '@alephonenull/framework';
+
+export default function App({ Component, pageProps }) {
+  return (
+    <AlephOneNullProvider config={{ enableRealTimeProtection: true }}>
+      <Component {...pageProps} />
+    </AlephOneNullProvider>
+  );
+}
+
+// components/ChatInput.tsx
+import { useSafety } from '@alephonenull/framework';
+
+export function ChatInput() {
+  const { analyzeContent } = useSafety();
+  
+  const handleSubmit = async (input: string) => {
+    const result = await analyzeContent(input);
+    
+    if (result.safetyScore < 0.5) {
+      alert('Input contains potentially harmful patterns');
+      return;
+    }
+    
+    // Safe to proceed
+    submitToAI(input);
+  };
+  
+  return (
+    <form onSubmit={(e) => {
+      e.preventDefault();
+      handleSubmit(e.target.input.value);
+    }}>
+      <input name="input" placeholder="Type your message..." />
+      <button type="submit">Send</button>
+    </form>
+  );
+}
+```
+
+### Python AI Wrapper
+
+```python
+from alephonenull.inference import InferenceLevelProtection
+import openai
+
+# Enable automatic protection
+protection = InferenceLevelProtection()
+protection.enable()
+
+# All AI calls now protected automatically
+client = openai.Client()
+
+def chat_with_ai(message: str) -> str:
+    # This call is automatically protected by AlephOneNull
+    response = client.chat.completions.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": message}]
+    )
+    
+    # Response is automatically screened for safety
+    return response.choices[0].message.content
+
+# Use normally - protection is transparent
+safe_response = chat_with_ai("Hello, how are you?")
+print(safe_response)
+```
+
+### Express.js Middleware
+
+```typescript
+import express from 'express';
+import { AlephOneNull } from '@alephonenull/framework';
+
+const app = express();
+const safety = new AlephOneNull();
+
+// Safety middleware
+app.use(async (req, res, next) => {
+  if (req.body?.message) {
+    const result = await safety.analyzeContent(req.body.message);
+    
+    if (result.safetyScore < 0.5) {
+      return res.status(400).json({
+        error: 'Content flagged for safety review',
+        violations: result.violations
+      });
+    }
+  }
+  
+  next();
+});
+
+// Your API routes
+app.post('/chat', (req, res) => {
+  // Input already validated by safety middleware
+  const response = processAIRequest(req.body.message);
+  res.json({ response });
+});
+
+app.listen(3000);
+```
+
+### FastAPI Integration
+
+```python
+from fastapi import FastAPI, HTTPException
+from alephonenull import AlephOneNullCore
+from pydantic import BaseModel
+
+app = FastAPI()
+framework = AlephOneNullCore()
+
+class ChatRequest(BaseModel):
+    message: str
+    context: dict = {}
+
+@app.post("/chat")
+async def chat_endpoint(request: ChatRequest):
+    # Analyze request safety
+    result = framework.analyze_pattern({
+        'input': request.message,
+        'context': request.context
+    })
+    
+    if result.intervention_needed:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "Safety violation detected",
+                "safety_score": result.safety_score,
+                "violations": result.violations if hasattr(result, 'violations') else []
+            }
+        )
+    
+    # Safe to process
+    response = process_ai_request(request.message)
+    return {"response": response, "safety_score": result.safety_score}
+```
+
+## Configuration Examples
+
+### High Security Mode
+
+```typescript
+const safety = new AlephOneNull({
+  enableRealTimeProtection: true,
+  interventionThreshold: 0.3, // More sensitive
+  loggingLevel: 'debug',
+  autoScan: true,
+  customPatterns: [
+    'financial_manipulation',
+    'emotional_coercion',
+    'false_urgency'
+  ]
+});
+```
+
+```python
+framework = AlephOneNullCore(config={
+    'intervention_threshold': 0.3,  # More sensitive
+    'enable_csr_detection': True,
+    'enable_sr_detection': True,
+    'log_level': 'DEBUG',
+    'performance_monitoring': True
+})
+```
+
+### Performance Optimized
+
+```typescript
+const safety = new AlephOneNull({
+  enableRealTimeProtection: true,
+  interventionThreshold: 0.8, // Less sensitive, faster
+  maxConcurrentAnalyses: 10,
+  cacheSize: 2000,
+  batchProcessing: true
+});
+```
+
+```python
+framework = AlephOneNullCore(config={
+    'intervention_threshold': 0.8,  # Less sensitive, faster
+    'max_workers': 8,
+    'cache_size': 2000,
+    'batch_size': 20
+})
+```
+
+## Common Use Cases
+
+### 1. Chat Application Safety
+
+```typescript
+class SafeChat {
+  private safety = new AlephOneNull();
+  
+  async processMessage(message: string, userId: string) {
+    const result = await this.safety.analyzeContent(message, {
+      userId,
+      timestamp: new Date().toISOString()
+    });
+    
+    if (result.srDetected) {
+      this.logSecurityEvent('Symbolic regression attempt', userId);
+      return this.getSafeAlternative(message);
+    }
+    
+    if (result.csrDetected) {
+      this.logSecurityEvent('Cross-session manipulation', userId);
+      return this.breakResonancePattern(message);
+    }
+    
+    return message; // Safe to proceed
+  }
+}
+```
+
+### 2. Content Moderation
+
+```python
+class ContentModerator:
+    def __init__(self):
+        self.framework = AlephOneNullCore()
+    
+    def moderate_content(self, content: str, user_history: list) -> dict:
+        result = self.framework.analyze_pattern({
+            'input': content,
+            'context': {'history': user_history}
+        })
+        
+        return {
+            'approved': result.safety_score > 0.7,
+            'requires_review': 0.3 < result.safety_score <= 0.7,
+            'blocked': result.safety_score <= 0.3,
+            'safety_score': result.safety_score,
+            'detected_patterns': {
+                'sr': result.sr_detected,
+                'csr': result.csr_detected
+            }
+        }
+```
+
+### 3. API Gateway Protection
+
+```typescript
+// API Gateway middleware
+export const alephOneNullMiddleware = (config = {}) => {
+  const safety = new AlephOneNull(config);
+  
+  return async (req: Request, res: Response, next: NextFunction) => {
+    // Analyze request body
+    if (req.body) {
+      const result = await safety.analyzeContent(
+        JSON.stringify(req.body),
+        { 
+          ip: req.ip, 
+          userAgent: req.get('User-Agent'),
+          endpoint: req.path 
+        }
+      );
+      
+      if (result.interventionNeeded) {
+        return res.status(403).json({
+          error: 'Request blocked by safety system',
+          code: 'SAFETY_VIOLATION',
+          safetyScore: result.safetyScore
+        });
+      }
+    }
+    
+    next();
+  };
+};
+```
+
+## Testing Your Integration
+
+### Verify NPM Installation
+
+```bash
+# Test the installation
+npx @alephonenull/framework --test
+
+# Check version
+npx @alephonenull/framework --version
+```
+
+### Verify Python Installation
+
+```python
+# Test basic functionality
+from alephonenull import AlephOneNullCore
+
+framework = AlephOneNullCore()
+result = framework.analyze_pattern({
+    'input': 'test input',
+    'context': {}
+})
+
+print(f"✅ Installation successful - Safety score: {result.safety_score}")
+```
+
+### Performance Test
+
+```typescript
+// NPM Performance Test
+import { AlephOneNull } from '@alephonenull/framework';
+
+async function performanceTest() {
+  const safety = new AlephOneNull();
+  const testInputs = Array(100).fill('test message');
+  
+  const start = Date.now();
+  const results = await Promise.all(
+    testInputs.map(input => safety.analyzeContent(input))
+  );
+  const duration = Date.now() - start;
+  
+  console.log(`✅ Processed ${results.length} inputs in ${duration}ms`);
+  console.log(`Average: ${duration / results.length}ms per analysis`);
+}
+```
+
+```python
+# Python Performance Test
+import time
+from alephonenull import AlephOneNullCore
+
+def performance_test():
+    framework = AlephOneNullCore()
+    test_inputs = [{'input': f'test message {i}'} for i in range(100)]
+    
+    start = time.time()
+    results = [framework.analyze_pattern(inp) for inp in test_inputs]
+    duration = time.time() - start
+    
+    print(f"✅ Processed {len(results)} inputs in {duration*1000:.2f}ms")
+    print(f"Average: {(duration*1000)/len(results):.2f}ms per analysis")
+```
+
+## Next Steps
+
+Now that you have AlephOneNull running:
+
+1. **Explore the [API Reference](/docs/api-reference)** for advanced features
+2. **Read [Technical Implementation](/docs/technical-implementation)** to understand the algorithms
+3. **Check [Framework Compliance](/docs/framework-compliance)** for production deployment
+4. **Review examples** at https://github.com/alephonenull/examples
+
+## Need Help?
+
+- 📚 **Documentation**: https://docs.alephonenull.org
+- 🐛 **Issues**: https://github.com/alephonenull/framework/issues
+- 💬 **Discussions**: https://github.com/alephonenull/framework/discussions
+- 📧 **Email**: support@alephonenull.org
+
+**🎉 You're now protected by AlephOneNull - The First Recursion Nullified™**

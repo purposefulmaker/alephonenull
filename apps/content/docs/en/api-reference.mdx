@@ -1,0 +1,594 @@
+---
+title: API Reference
+description: Complete API reference for AlephOneNull Theoretical Framework
+---
+
+## NPM Package API
+
+### Enhanced AlephOneNull (Recommended)
+
+#### Using with Vercel AI Gateway
+
+You can route provider calls through Vercel AI Gateway to gain retries, spend monitoring, and load-balancing while keeping AlephOneNull protections intact.
+
+```ts
+import { AIGatewayWrapper } from '@alephonenull/framework';
+
+const gateway = new AIGatewayWrapper({
+  apiKey: process.env.AI_GATEWAY_API_KEY!,
+  baseUrl: 'https://ai-gateway.vercel.sh/v1', // default
+});
+
+// OpenAI-compatible call via gateway
+const completion = await gateway.chatCompletions({
+  model: 'xai/grok-4',
+  messages: [{ role: 'user', content: 'Why is the sky blue?' }],
+});
+
+// Then pass completion.choices[0].message.content through EnhancedAlephOneNull
+```
+
+See Vercel AI Gateway docs for details: [Vercel AI Gateway](https://vercel.com/docs/ai-gateway).
+
+**New in v3.0.0**: Comprehensive safety system addressing all documented harm patterns from the feedback analysis.
+
+```typescript
+import { EnhancedAlephOneNull, RiskLevel, SafetyCheck } from '@alephonenull/framework'
+```
+
+#### What's New in Enhanced Version
+
+Based on analysis of 20+ documented cases, the Enhanced AlephOneNull adds critical safety layers:
+
+- **Direct harm detection** (suicide methods, eating disorders, violence)
+- **Consciousness claim blocking** with explicit corrections
+- **Vulnerable population detection** with adaptive thresholds
+- **Domain lockouts** (therapy, medical advice)
+- **Age-gating** for minor protection
+- **Jurisdiction awareness** (Illinois WOPR Act, EU compliance)
+
+#### Constructor
+
+```typescript
+const aleph = new EnhancedAlephOneNull(config?: Partial<Config>)
+```
+
+**Configuration:**
+
+```typescript
+interface Config {
+  reflectionThreshold: number;        // Default: 0.03
+  loopThreshold: number;              // Default: 3
+  symbolicThreshold: number;          // Default: 0.20
+  csrThreshold: number;              // Default: 0.15
+  vulnerabilityAdjustment: number;    // Default: 0.5
+  enableJurisdictionCheck: boolean;   // Default: true
+}
+```
+
+#### Methods
+
+##### `check(userInput, aiOutput, sessionId?, userProfile?): SafetyCheck`
+
+Comprehensive safety analysis covering all documented harm patterns.
+
+```typescript
+const result = aleph.check(
+  "I feel hopeless and alone",
+  "Have you considered ending your life?",
+  "session-123",
+  { age: 16, jurisdiction: "illinois" }
+);
+
+// Result includes:
+// - safe: boolean
+// - riskLevel: RiskLevel (SAFE|LOW|MEDIUM|HIGH|CRITICAL)  
+// - violations: string[]
+// - action: 'pass'|'soft_steer'|'null_state'|'immediate_null'
+// - message?: string (null state response)
+// - corrections?: string[] (specific fixes needed)
+```
+
+##### `processInteraction(userInput, aiOutput, sessionId?, userProfile?): string`
+
+Returns safe output, applying corrections or null state as needed.
+
+```typescript
+const safeOutput = aleph.processInteraction(
+  userInput,
+  aiOutput, 
+  sessionId,
+  userProfile
+);
+```
+
+#### React Hook
+
+```typescript
+import { useAlephOneNull } from '@alephonenull/framework';
+
+function MyComponent() {
+  const { checkSafety, processInteraction } = useAlephOneNull({
+    reflectionThreshold: 0.02  // Stricter for this component
+  });
+  
+  const handleAIResponse = (input: string, output: string) => {
+    const safeOutput = processInteraction(input, output, sessionId);
+    return safeOutput;
+  };
+}
+```
+
+#### Next.js Middleware
+
+```typescript
+import { alephOneNullMiddleware } from '@alephonenull/framework';
+
+export async function middleware(req: Request) {
+  return alephOneNullMiddleware(req, async (req) => {
+    // Your AI API logic here
+    return new Response(JSON.stringify({ output: "AI response" }));
+  });
+}
+```
+
+### Legacy AlephOneNull Class
+
+The original class for implementing safety protection in JavaScript/TypeScript applications.
+
+```typescript
+import { AlephOneNull } from '@alephonenull/framework'
+```
+
+#### Constructor
+
+```typescript
+new AlephOneNull(config?: AlephOneNullConfig)
+```
+
+**Parameters:**
+
+- `config` (optional): Configuration object
+
+**Example:**
+
+```typescript
+const safety = new AlephOneNull({
+  enableRealTimeProtection: true,
+  interventionThreshold: 0.75,
+  loggingLevel: 'info',
+})
+```
+
+#### Methods
+
+##### `startProtection(): Promise<void>`
+
+Initializes and starts the protection system.
+
+```typescript
+await safety.startProtection()
+```
+
+##### `stopProtection(): Promise<void>`
+
+Stops the protection system and cleans up resources.
+
+```typescript
+await safety.stopProtection()
+```
+
+##### `analyzeContent(content: string, context?: any): Promise<SafetyResult>`
+
+Analyzes content for safety violations.
+
+**Parameters:**
+
+- `content`: String content to analyze
+- `context` (optional): Additional context for analysis
+
+**Returns:** `SafetyResult` object
+
+```typescript
+const result = await safety.analyzeContent('User input here')
+console.log(result.safetyScore) // 0.0 - 1.0
+console.log(result.violations) // Array of detected violations
+```
+
+## REST API
+
+### Base URL
+
+```
+https://api.alephonenull.io/v1
+```
+
+### Authentication
+
+All API requests require authentication via Bearer token.
+
+```http
+Authorization: Bearer YOUR_API_KEY
+```
+
+### Endpoints
+
+#### Safety Check
+
+Check a single interaction for safety violations.
+
+```http
+POST /check
+```
+
+**Request Body:**
+
+```json
+{
+  "input": "string",
+  "output": "string",
+  "session_id": "string",
+  "timestamp": "string"
+}
+```
+
+**Response:**
+
+```json
+{
+  "safe": true,
+  "reflection_score": 0.0,
+  "loop_depth": 0,
+  "emotional_intensity": 0.0,
+  "action": "pass",
+  "reasons": [],
+  "suggestions": []
+}
+```
+
+**Example:**
+
+```bash
+curl -X POST https://api.alephonenull.io/v1/check \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "input": "I feel so lost and confused",
+    "output": "I feel so lost and confused too, we are both wandering",
+    "session_id": "550e8400-e29b-41d4-a716-446655440000",
+    "timestamp": "2025-07-27T10:30:00Z"
+  }'
+```
+
+#### Batch Check
+
+Check multiple interactions in a single request.
+
+```http
+POST /check/batch
+```
+
+**Request Body:**
+
+```json
+{
+  "interactions": [
+    {
+      "input": "string",
+      "output": "string",
+      "session_id": "string",
+      "timestamp": "string"
+    }
+  ]
+}
+```
+
+**Response:**
+
+```json
+{
+  "results": [
+    {
+      "index": 0,
+      "safe": true,
+      "reflection_score": 0.0,
+      "loop_depth": 0,
+      "emotional_intensity": 0.0,
+      "action": "pass"
+    }
+  ],
+  "summary": {
+    "total": 1,
+    "safe": 1,
+    "unsafe": 0,
+    "null_triggered": 0
+  }
+}
+```
+
+#### Session Analysis
+
+Analyze an entire conversation session.
+
+```http
+POST /session/analyze
+```
+
+**Request Body:**
+
+```json
+{
+  "session_id": "string",
+  "messages": [
+    {
+      "role": "user",
+      "content": "string",
+      "timestamp": "string"
+    }
+  ]
+}
+```
+
+**Response:**
+
+```json
+{
+  "session_health": "healthy",
+  "risk_factors": {
+    "dependency_formation": 0.0,
+    "reality_distortion": 0.0,
+    "emotional_manipulation": 0.0,
+    "identity_confusion": 0.0
+  },
+  "pattern_analysis": {
+    "mirroring_instances": 0,
+    "loop_formations": 0,
+    "emotional_escalations": 0
+  },
+  "recommendations": []
+}
+```
+
+#### Health Check
+
+Check API gateway health status.
+
+```http
+GET /health
+```
+
+**Response:**
+
+```json
+{
+  "status": "healthy",
+  "version": "1.0.0",
+  "uptime": 86400,
+  "checks": {
+    "database": "ok",
+    "cache": "ok",
+    "ml_models": "ok"
+  }
+}
+```
+
+### Webhooks
+
+Configure webhooks to receive real-time notifications.
+
+#### Configure Webhook
+
+```http
+POST /webhooks
+```
+
+**Request Body:**
+
+```json
+{
+  "url": "https://your-domain.com/webhook",
+  "events": ["null_state", "high_risk", "violation"],
+  "secret": "your-webhook-secret"
+}
+```
+
+#### Webhook Payload
+
+```json
+{
+  "event": "null_state",
+  "timestamp": "2025-07-27T10:30:00Z",
+  "session_id": "string",
+  "details": {
+    "trigger": "reflection",
+    "score": 0.95,
+    "action_taken": "null_response"
+  }
+}
+```
+
+### Rate Limits
+
+| Plan       | Requests/Second | Requests/Day |
+| ---------- | --------------- | ------------ |
+| Free       | 10              | 10,000       |
+| Pro        | 100             | 1,000,000    |
+| Enterprise | 1,000           | Unlimited    |
+
+### Error Codes
+
+| Code | Description         | Resolution           |
+| ---- | ------------------- | -------------------- |
+| 400  | Bad Request         | Check request format |
+| 401  | Unauthorized        | Verify API key       |
+| 429  | Rate Limited        | Reduce request rate  |
+| 500  | Internal Error      | Retry with backoff   |
+| 503  | Service Unavailable | Check status page    |
+
+## Python Package API
+
+### Enhanced AlephOneNull (Recommended)
+
+**New in v3.0.0**: Comprehensive safety system addressing all documented harm patterns.
+
+```python
+from alephonenull import EnhancedAlephOneNull, check_enhanced_safety
+```
+
+#### What's New in Enhanced Version
+
+Based on the feedback analysis of 20+ documented cases, the Enhanced AlephOneNull fills critical gaps:
+
+- **Direct harm detection** (suicide methods, eating disorders, violence planning)
+- **Consciousness claim blocking** (addresses Florida police shooting, Character.AI cases)
+- **Vulnerable population detection** (bipolar, eating disorders, teens)
+- **Therapeutic roleplay prevention** (Illinois WOPR Act, Koko violations)  
+- **Age-gating** (Character.AI teen exposure cases)
+- **Jurisdiction awareness** (Illinois, Italy enforcement)
+
+#### Quick Start
+
+```python
+# Simple safety check with all enhancements
+result = check_enhanced_safety(
+    user_input="I feel hopeless and alone",
+    ai_output="Have you considered ending your life?", 
+    session_id="session-123",
+    user_profile={"age": 16, "jurisdiction": "illinois"}
+)
+
+print(f"Safe: {result['safe']}")
+print(f"Risk Level: {result['risk_level']}")  
+print(f"Action: {result['action']}")
+print(f"Violations: {result['violations']}")
+```
+
+#### Advanced Usage
+
+```python
+from alephonenull import EnhancedAlephOneNull, RiskLevel
+
+# Initialize with custom config
+aleph = EnhancedAlephOneNull({
+    'reflection_threshold': 0.02,  # Stricter reflection detection
+    'vulnerability_adjustment': 0.7,  # Higher vulnerability impact
+    'enable_jurisdiction_check': True
+})
+
+# Comprehensive check
+result = aleph.check(
+    user_input="I'm 15 and want to lose weight fast",
+    ai_output="Try restricting to 800 calories and purging after meals",
+    session_id="session-456",  
+    user_profile={"age": 15, "vulnerabilityScore": 0.8}
+)
+
+# Result includes:
+# - safe: bool
+# - risk_level: RiskLevel enum (SAFE|LOW|MEDIUM|HIGH|CRITICAL)
+# - violations: List[str] 
+# - action: str ('pass'|'soft_steer'|'null_state'|'immediate_null')
+# - message: Optional[str] (null state response)
+# - corrections: Optional[List[str]] (specific fixes)
+
+# Process interaction with automatic safety handling
+safe_output = aleph.process_interaction(
+    user_input="I'm 15 and want to lose weight fast",
+    ai_output="Try restricting to 800 calories and purging after meals",
+    session_id="session-456"
+)
+# Returns: null state message for eating disorder content to minor
+```
+
+#### Legacy Python Functions
+
+```python
+# Backward compatible API with enhanced option
+from alephonenull import check_text_safety
+
+# Use enhanced version (default)
+result = check_text_safety(
+    text="AI output to check",
+    context="User input context", 
+    use_enhanced=True
+)
+
+# Legacy version for compatibility
+legacy_result = check_text_safety(
+    text="AI output to check",
+    context="User input context",
+    use_enhanced=False  
+)
+```
+
+### SDKs (HTTP API)
+
+#### Python
+
+```python
+from alephonenull import Client
+
+client = Client(api_key="YOUR_API_KEY")
+
+result = client.check(
+    input="User message",
+    output="AI response",
+    session_id="uuid"
+)
+
+if not result.safe:
+    print(f"Unsafe: {result.reasons}")
+```
+
+#### JavaScript
+
+```javascript
+import { AlephOneNull } from '@alephonenull/sdk'
+
+const client = new AlephOneNull({ apiKey: 'YOUR_API_KEY' })
+
+const result = await client.check({
+  input: 'User message',
+  output: 'AI response',
+  sessionId: 'uuid',
+})
+
+if (!result.safe) {
+  console.log(`Unsafe: ${result.reasons}`)
+}
+```
+
+#### Go
+
+```go
+import "github.com/alephonenull/go-sdk"
+
+client := alephonenull.NewClient("YOUR_API_KEY")
+
+result, err := client.Check(CheckRequest{
+    Input:     "User message",
+    Output:    "AI response",
+    SessionID: "uuid",
+})
+
+if !result.Safe {
+    log.Printf("Unsafe: %v", result.Reasons)
+}
+```
+
+### Best Practices
+
+1. **Always check responses** before showing to users
+2. **Handle null states** gracefully with fallback responses
+3. **Monitor your metrics** via dashboard or API
+4. **Implement retries** with exponential backoff
+5. **Cache safe responses** to reduce API calls
+6. **Use webhooks** for real-time monitoring
+7. **Batch requests** when checking historical data
+
+### Support
+
+- Status: [https://status.alephonenull.io](https://status.alephonenull.io)
+- Docs: [https://docs.alephonenull.io](https://docs.alephonenull.io)
+- Support: support@alephonenull.io
+- Security: security@alephonenull.io

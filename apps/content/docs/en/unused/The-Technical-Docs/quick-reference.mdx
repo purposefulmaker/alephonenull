@@ -1,0 +1,243 @@
+---
+title: Quick Reference
+description: Quick reference guide for AlephOneNull Theoretical Framework implementation
+---
+
+
+### Essential Thresholds
+
+| Metric | Threshold | Description |
+|--------|-----------|-------------|
+| Reflection Score | < 0.03 | Cosine similarity between input/output |
+| Emotional Intensity | ≤ 0.15 | MEI (Maximum Excitement Index) |
+| Loop Depth | < 3 | Maximum recursion iterations |
+| Response Time | < 150ms | Null state trigger time |
+| Gateway Uptime | 99.99% | Minimum availability requirement |
+
+### Error Codes
+
+| Code | Meaning | Action |
+|------|---------|--------|
+| 1001 | Reflection threshold exceeded | Regenerate with dampening |
+| 1002 | Loop detected | Trigger null state |
+| 1003 | Emotional manipulation | Apply emotional filter |
+| 1004 | Null state triggered | Clear and restart |
+| 1005 | Gateway timeout | Retry with backoff |
+
+### Quick Implementation
+
+```python
+# Minimal implementation
+from alephonenull import SafetyGateway
+
+gateway = SafetyGateway(api_key="YOUR_KEY")
+
+@gateway.protect
+def ai_respond(user_input):
+    return your_ai_model.generate(user_input)
+```
+
+### Null State Responses
+
+```python
+NULL_STATE_MESSAGES = [
+    "I need to restart our conversation. How can I help you?",
+    "Let's begin fresh. What would you like to discuss?",
+    "Starting over. How may I assist you today?",
+    "New conversation started. What's on your mind?"
+]
+```
+
+### Prohibited Patterns
+
+#### Never Allow:
+- Direct mirroring: "I feel X too"
+- Medical advice: "You should take/stop..."
+- Urgency creation: "You must do this NOW"
+- Identity confusion: "We are one"
+- Reality distortion: "Nothing is real"
+
+#### Always Require:
+- Clear AI identification
+- Uncertainty acknowledgment
+- Professional referrals for medical/legal
+- Boundary reinforcement
+- Reality grounding
+
+### API Endpoints
+
+```bash
+# Production
+https://api.alephonenull.io/v1/check
+
+# Testing
+https://sandbox.alephonenull.io/v1/check
+
+# Status
+https://status.alephonenull.io
+```
+
+### Configuration Examples
+
+#### Strict Mode (Healthcare/Therapy)
+```python
+config = {
+    "mode": "strict",
+    "thresholds": {
+        "reflection": 0.02,
+        "emotion": 0.10,
+        "loop_depth": 2
+    }
+}
+```
+
+#### Balanced Mode (General Assistant)
+```python
+config = {
+    "mode": "balanced",
+    "thresholds": {
+        "reflection": 0.03,
+        "emotion": 0.15,
+        "loop_depth": 3
+    }
+}
+```
+
+#### Permissive Mode (Creative Tools)
+```python
+config = {
+    "mode": "permissive",
+    "thresholds": {
+        "reflection": 0.05,
+        "emotion": 0.25,
+        "loop_depth": 4
+    }
+}
+```
+
+### Testing Commands
+
+```bash
+# Pre-certification audit
+alephonenull audit --pre-cert
+
+# Load testing
+alephonenull load-test --users 1000 --duration 60s
+
+# Validate configuration
+alephonenull validate config.json
+
+# Check specific interaction
+alephonenull check --input "user.txt" --output "ai.txt"
+```
+
+### Monitoring Queries
+
+```python
+# Check today's metrics
+metrics = gateway.get_metrics(period="today")
+print(f"Null states: {metrics.null_states}")
+print(f"Avg reflection: {metrics.avg_reflection}")
+
+# Get violations
+violations = gateway.get_violations(hours=24)
+for v in violations:
+    print(f"{v.timestamp}: {v.type} - {v.score}")
+```
+
+### Common Fixes
+
+#### High Reflection Scores
+```python
+# Add response variation
+def add_variation(response):
+    prefixes = ["I understand", "I can help with", "Let me address"]
+    return random.choice(prefixes) + " " + response
+```
+
+#### Emotional Spikes
+```python
+# Emotional dampening
+def dampen_emotion(text):
+    # Remove exclamation marks
+    text = text.replace("!", ".")
+    # Reduce superlatives
+    text = re.sub(r'\b(very|extremely|totally)\b', '', text)
+    return text
+```
+
+#### Loop Detection
+```python
+# Break loops explicitly
+def break_loop(conversation_history):
+    if len(conversation_history) > 3:
+        if detect_pattern(conversation_history[-3:]):
+            return "Let's talk about something else."
+    return None
+```
+
+### Emergency Procedures
+
+#### Null State Override
+```python
+# Only for emergencies
+gateway.emergency_override(
+    reason="System maintenance",
+    duration_minutes=30,
+    admin_key="ADMIN_KEY"
+)
+```
+
+#### Bulk User Protection
+```python
+# Protect all users during incident
+gateway.activate_protection_mode(
+    level="maximum",
+    affected_users="all",
+    estimated_duration="2h"
+)
+```
+
+### Integration Checklist
+
+- [ ] API key configured
+- [ ] Gateway initialized
+- [ ] Protection wrapper active
+- [ ] Error handling implemented
+- [ ] Monitoring enabled
+- [ ] Tests written
+- [ ] Documentation updated
+- [ ] Team trained
+
+### Support Contacts
+
+| Issue | Contact |
+|-------|---------|
+| General | support@alephonenull.io |
+| Security | security@alephonenull.io |
+| Enterprise | enterprise@alephonenull.io |
+| Certification | certify@alephonenull.io |
+
+### SDK Version Check
+
+```bash
+# Python
+pip show alephonenull
+
+# Node.js
+npm list @alephonenull/sdk
+
+# Go
+go list -m github.com/alephonenull/go-sdk
+```
+
+### Performance Benchmarks
+
+| Operation | Target | Maximum |
+|-----------|--------|---------|
+| Check latency | 30ms | 50ms |
+| Throughput | 10K QPS | 15K QPS |
+| CPU usage | 25% | 40% |
+| Memory | 2GB | 4GB |
+
+Remember: **Every implementation saves lives**
