@@ -5,7 +5,7 @@ export const a = ({
   className,
   href,
   ...props
-}: React.HTMLAttributes<HTMLAnchorElement>) => {
+}: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
   // Check if it's an internal link
   const isInternalLink = href && (href.startsWith('/') || href.startsWith('#'))
   
