@@ -111,25 +111,25 @@ export default async function IndexPage({
           <FeaturedCard
             icon="🛡️"
             title="Symbolic Regression Block"
-            description="94% reduction in dangerous symbolic patterns"
+            description="94% reduction in cognitive manipulation patterns"
           />
 
           <FeaturedCard
             icon="🔄"
-            title="Recursion Nullification"
-            description="Breaks manipulation loops at inference time"
+            title="Mental Recursion Nullification"
+            description="Breaks thought loops at inference time"
           />
 
           <FeaturedCard
             icon="⚡️"
             title="Real-Time Protection"
-            description="Sub-150ms safety intervention latency"
+            description="Sub-150ms agency preservation latency"
           />
 
           <FeaturedCard
             icon="🔒"
             title="Cross-Session Defense"
-            description="Prevents memory exploitation patterns"
+            description="Guards cognitive boundaries across interactions"
           />
         </div>
 
@@ -137,7 +137,7 @@ export default async function IndexPage({
           icon="+"
           orientation="horizontal"
           title="Complete Framework Implementation"
-          description="Provider-level behavioral modification, platform integration, and developer SDKs for comprehensive AI safety protection against manipulation and dependency formation."
+          description="Provider-level behavioral modification, platform integration, and developer SDKs for comprehensive protection of human agency against mental recursion and cognitive boundary violations."
         />
       </section>
     </div>
