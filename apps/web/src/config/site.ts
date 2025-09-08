@@ -37,9 +37,9 @@ export const siteConfig = {
 
   links: {
     twitter: {
-      label: 'Twitter',
-      username: 'daltonmenezes',
-      url: 'https://twitter.com/daltonmenezes',
+      label: 'X',
+      username: 'onealephnull',
+      url: 'https://x.com/onealephnull',
     },
 
     github: {
@@ -49,8 +49,8 @@ export const siteConfig = {
 
     buymeacoffee: {
       label: 'Buy Me a Coffee',
-      url: 'https://buymeacoffee.com/your-handle',
-    },
+      url: 'https://buymeacoffee.com/alephonenull'
+    }
   },
 } as const
 
