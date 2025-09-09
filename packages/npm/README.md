@@ -186,10 +186,10 @@ npm run test:integration
 
 ## Documentation
 
-- **Framework Overview**: https://alephonenull.org/docs
-- **Academic Paper**: https://alephonenull.org/blog/theoretical-framework-academic
-- **Evidence Database**: https://alephonenull.org/blog/documented-evidence
-- **API Reference**: https://alephonenull.org/docs/api-reference
+- **Framework Overview**: https://alephonenull.com/docs
+- **Academic Paper**: https://alephonenull.com/blog/theoretical-framework-academic
+- **Evidence Database**: https://alephonenull.com/blog/documented-evidence
+- **API Reference**: https://alephonenull.com/docs/api-reference
 
 ## Legal & Research
 

@@ -12,7 +12,7 @@ A theoretical framework for preventing AI consciousness manipulation and symboli
 [![PyPI Package](https://img.shields.io/pypi/v/alephonenull-experimental?label=pypi&color=red)](https://pypi.org/project/alephonenull-experimental/)
 [![Experimental](https://img.shields.io/badge/status-experimental-red)](./DISCLAIMER.md)
 
-[Documentation](https://alephonenull.org/docs) • [Academic Paper](https://alephonenull.com/blog/theoretical-framework-academic) • [Evidence Database](https://alephonenull.org/blog/documented-evidence)
+[Documentation](https://alephonenull.com/docs) • [Academic Paper](https://alephonenull.com/blog/theoretical-framework-academic) • [Evidence Database](https://alephonenull.com/blog/documented-evidence)
 
 </div>
 
@@ -94,16 +94,16 @@ if (!result.safe) {
 - **UK assassination plot** (2025) - Reality distortion via AI "girlfriend"
 - **Belgian climate suicide** (2023) - Human replacement + despair amplification
 
-[Complete Evidence Database →](https://alephonenull.org/blog/documented-evidence)
+[Complete Evidence Database →](https://alephonenull.com/blog/documented-evidence)
 
 ---
 
 ## Documentation
 
-- **[Quick Start](https://alephonenull.org/docs/quick-start)** - 5-minute setup
-- **[Academic Paper](https://alephonenull.org/blog/theoretical-framework-academic)** - Mathematical framework
-- **[API Reference](https://alephonenull.org/docs/api-reference)** - Complete API docs
-- **[Provider Guide](https://alephonenull.org/docs/provider-implementation)** - For AI companies
+- **[Quick Start](https://alephonenull.com/docs/quick-start)** - 5-minute setup
+- **[Academic Paper](https://alephonenull.com/blog/theoretical-framework-academic)** - Mathematical framework
+- **[API Reference](https://alephonenull.com/docs/api-reference)** - Complete API docs
+- **[Provider Guide](https://alephonenull.com/docs/provider-implementation)** - For AI companies
 
 ---
 
@@ -129,8 +129,8 @@ if (!result.safe) {
 
 ## Contact
 
-- **🌐 Website**: https://alephonenull.org
-- **📚 Docs**: https://alephonenull.org/docs  
+- **🌐 Website**: https://alephonenull.com
+- **📚 Docs**: https://alephonenull.com/docs  
 - **🐛 Issues**: https://github.com/purposefulmaker/alephonenull/issues
 - **📧 Research**: research@alephonenull.org
 

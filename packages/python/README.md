@@ -226,11 +226,11 @@ We need validation across:
 
 ## Documentation
 
-- **Quick Start**: https://alephonenull.org/docs/quick-start
-- **API Reference**: https://alephonenull.org/docs/api-reference  
-- **Academic Paper**: https://alephonenull.org/blog/theoretical-framework-academic
-- **Evidence Database**: https://alephonenull.org/blog/documented-evidence
-- **Technical Implementation**: https://alephonenull.org/docs/technical-implementation
+- **Quick Start**: https://alephonenull.com/docs/quick-start
+- **API Reference**: https://alephonenull.com/docs/api-reference  
+- **Academic Paper**: https://alephonenull.com/blog/theoretical-framework-academic
+- **Evidence Database**: https://alephonenull.com/blog/documented-evidence
+- **Technical Implementation**: https://alephonenull.com/docs/technical-implementation
 
 ## Citation
 

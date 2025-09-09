@@ -32,7 +32,7 @@ export const siteConfig = {
 
   author: {
     name: 'AlephOneNull Team',
-    site: 'https://alephonenull.org',
+    site: 'https://alephonenull.com',
   },
 
   links: {

@@ -82,7 +82,7 @@ setup(
     project_urls={
         "Bug Reports": "https://github.com/purposefulmaker/alephonenull/issues",
         "Source": "https://github.com/purposefulmaker/alephonenull",
-        "Documentation": "https://alephonenull.org/docs",
+        "Documentation": "https://alephonenull.com/docs",
         "Disclaimer": "https://github.com/purposefulmaker/alephonenull/blob/main/DISCLAIMER.md",
     },
 )

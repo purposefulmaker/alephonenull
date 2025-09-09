@@ -66,7 +66,7 @@ All permitted Use under Sections 2â€“3 is conditioned on:
 ## 6. Commercial Licensing
 
 For any **Commercial Use**, OEM embedding, enterprise compliance, certification, or indemnification, you must obtain a separate written license from Licensor.
-**Contact:** [contact@alephonenull.com](mailto:entropy@alephonenull.com)
+**Contact:** [contact@alephonenull.com](mailto:contact@alephonenull.com)
 
 ---
 
