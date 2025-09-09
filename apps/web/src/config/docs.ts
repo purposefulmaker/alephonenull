@@ -171,14 +171,6 @@ export const docsConfig: DocsConfig = {
           items: [],
         },
         {
-          href: '/blog/en/complete-reference',
-          title: {
-            en: 'Original 100-Page Framework',
-            pt: 'Framework Original de 100 Páginas',
-          },
-          items: [],
-        },
-        {
           href: '/blog/en/theoretical-framework-academic',
           title: {
             en: 'Academic Paper',
