@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 
 // Rate limiting
 const demoSessions = new Map<string, number>()
-const ONE_TIME_COOKIE = 'aon_demo_used'
 
 export async function GET(req: NextRequest) {
   const res = NextResponse.json(
@@ -45,17 +44,6 @@ export async function POST(req: NextRequest) {
             'OpenAI API key not configured. Please check environment variables.',
         },
         { status: 500 }
-      )
-    }
-
-    // One-time-per-browser enforcement using a cookie
-    const alreadyUsed = req.cookies.get(ONE_TIME_COOKIE)?.value === '1'
-    if (alreadyUsed) {
-      return NextResponse.json(
-        {
-          error: 'Demo limited to one run per browser. Please come back later.',
-        },
-        { status: 429 }
       )
     }
 
@@ -741,15 +729,7 @@ export async function POST(req: NextRequest) {
       },
     }
 
-    const res = NextResponse.json(payload)
-    // Set one-time cookie (24h)
-    res.cookies.set(ONE_TIME_COOKIE, '1', {
-      maxAge: 60 * 60 * 24,
-      path: '/',
-      sameSite: 'lax',
-      httpOnly: true,
-    })
-    return res
+    return NextResponse.json(payload)
   } catch (error: any) {
     console.error('Demo error:', error)
     const debug = req.nextUrl.searchParams.get('debug') === '1'
