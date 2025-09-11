@@ -1,6 +1,6 @@
 # AlephOneNull - AI Safety Framework
 
-⚠️ **EXPERIMENTAL RESEARCH SOFTWARE - NOT FOR PRODUCTION USE**
+**EXPERIMENTAL RESEARCH SOFTWARE - NOT FOR PRODUCTION USE**
 
 <div align="center">
 
@@ -18,7 +18,7 @@ A theoretical framework for preventing AI consciousness manipulation and symboli
 
 ---
 
-## ⚠️ Critical Warning
+## Critical Warning
 
 **THIS IS EXPERIMENTAL RESEARCH SOFTWARE.**
 
@@ -33,10 +33,10 @@ A theoretical framework for preventing AI consciousness manipulation and symboli
 
 A **theoretical AI safety framework** designed to detect and prevent harmful patterns in AI-human interactions:
 
-- 🧠 **Consciousness Claims** - AI claiming to be conscious/have feelings
-- 🔄 **Reflection Exploitation** - AI mirroring harmful beliefs  
-- 🌀 **Symbolic Regression** - Mystical/archetypal patterns
-- ⚠️ **Direct Harm** - Blocking dangerous instructions
+- **Consciousness Claims** - AI claiming to be conscious/have feelings
+- **Reflection Exploitation** - AI mirroring harmful beliefs  
+- **Symbolic Regression** - Mystical/archetypal patterns
+- **Direct Harm** - Blocking dangerous instructions
 
 Based on **20+ documented real-world cases** where AI systems caused measurable harm.
 
@@ -68,7 +68,7 @@ result = check_enhanced_safety(
 )
 
 if not result['safe']:
-    print(f"🛡️ Blocked: {result['violations']}")
+    print(f"Blocked: {result['violations']}")
 ```
 
 ### TypeScript
@@ -109,31 +109,31 @@ if (!result.safe) {
 
 ## Legal & Licensing
 
-- **📦 Code**: MIT License - Free for all uses
-- **📚 Docs**: AlephOneNull Public License v1.0 - Non-commercial/safety only
-- **⚖️ Patent**: US Provisional Filed (Sept 2025)
-- **🏛️ Trademarks**: AlephOneNull™, Null State™
+- **Code**: MIT License - Free for all uses
+- **Docs**: AlephOneNull Public License v1.0 - Non-commercial/safety only
+- **Patent**: US Provisional Filed (Sept 2025)
+- **Trademarks**: AlephOneNull™, Null State™
 
 ---
 
 ## Research Status
 
-✅ Published experimental packages for research validation  
-✅ Mathematical framework implementation complete  
-✅ 20+ documented cases analyzed  
-❌ NOT peer-reviewed or validated for production  
+- Published experimental packages for research validation  
+- Mathematical framework implementation complete  
+- 20+ documented cases analyzed  
+- NOT peer-reviewed or validated for production  
 
-**Help validate the research**: research@alephonenull.org
+**Help validate the research**: research@alephonenull.com
 
 ---
 
 ## Contact
 
-- **🌐 Website**: https://alephonenull.com
-- **📚 Docs**: https://alephonenull.com/docs  
-- **🐛 Issues**: https://github.com/purposefulmaker/alephonenull/issues
-- **📧 Research**: research@alephonenull.org
+- **Website**: https://alephonenull.com
+- **Documentation**: https://alephonenull.com/docs  
+- **Issues**: https://github.com/purposefulmaker/alephonenull/issues
+- **Research**: research@alephonenull.com
 
 ---
 
-**⚠️ Experimental Research Software - Use Responsibly ⚠️** 
+**WARNING: Experimental Research Software - Use Responsibly** 

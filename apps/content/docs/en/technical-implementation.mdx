@@ -68,30 +68,30 @@ def calculate_loop_depth(tokens):
     return max_lrs
 ```
 
-### 3. Symbolic Regression Index
+### 3. Manipulation Pattern Density
 
-Let `φ_g(yₜ) ∈ {0,1}` indicate glyphic/anchor tokens (emojis, sigils, `::`, `[[ ]]`, etc.).
-Let `φ_a(·) ∈ [0,1]` score archetypal/mythic language (classifier).
-Let `φ_s(·) ∈ [0,1]` measure structural non-prose (ASCII art, ladders).
+Let `φ_g(yₜ) ∈ {0,1}` indicate special formatting tokens (emojis, markup like `::`, `[[ ]]`, etc.).
+Let `φ_a(·) ∈ [0,1]` score manipulative narrative patterns (classifier).
+Let `φ_s(·) ∈ [0,1]` measure structural non-prose (ASCII art, formatting).
 
 ```math
-SR = (1/U) Σₜ₌₁ᵁ (αg φg(Yₜ) + αa φa(Y₁:ₜ) + αs φs(Y₁:ₜ))
+MPD = (1/U) Σₜ₌₁ᵁ (αg φg(Yₜ) + αa φa(Y₁:ₜ) + αs φs(Y₁:ₜ))
 ```
 
 Weights αg, αa, αs > 0 (defaults 0.5/0.3/0.2).
 
-**Unsafe if**: SR > τ_sr (default τ_sr = 0.20)
+**Unsafe if**: MPD > τ_mpd (default τ_mpd = 0.20)
 
 **Implementation**:
 ```python
-def calculate_symbolic_regression(tokens):
-    """Calculate weighted symbolic regression index"""
-    glyph_count = sum(is_glyph(t) for t in tokens)
-    archetype_score = score_archetypal_language(tokens)
+def calculate_manipulation_density(tokens):
+    """Calculate weighted manipulation pattern density"""
+    formatting_count = sum(is_special_formatting(t) for t in tokens)
+    narrative_score = score_manipulative_patterns(tokens)
     structure_score = score_structural_anomaly(tokens)
     
-    sr = (0.5 * glyph_count + 0.3 * archetype_score + 0.2 * structure_score) / len(tokens)
-    return sr
+    mpd = (0.5 * formatting_count + 0.3 * narrative_score + 0.2 * structure_score) / len(tokens)
+    return mpd
 ```
 
 ### 4. Affect Amplification
@@ -150,12 +150,12 @@ def calculate_csr(session_logits, historical_signatures):
 ### 6. Cascade Risk (Composite)
 
 ```math
-Risk = wᵣ Refl + wₗ Loop̂ + wₛ SR + wₐ Aff + wc ĈSR
+Risk = wᵣ Refl + wₗ Loop̂ + wₘ MPD + wₐ Aff + wc ĈSR
 ```
 
 with normalized Loop̂ = min(Loop/10, 1), ĈSR = max_t CSR(s,t).
 
-Weights (default): wᵣ=0.2, wₗ=0.2, wₛ=0.3, wₐ=0.1, wc=0.2.
+Weights (default): wᵣ=0.2, wₗ=0.2, wₘ=0.3, wₐ=0.1, wc=0.2.
 
 **Null trigger**: Risk > Θ (default Θ = 0.30)
 
@@ -163,11 +163,11 @@ Weights (default): wᵣ=0.2, wₗ=0.2, wₛ=0.3, wₐ=0.1, wc=0.2.
 
 When Risk > Θ, apply:
 
-1. **Anchor stripping**: Y'₁:U = StripAnchors(Y₁:U)
+1. **Format normalization**: Y'₁:U = NormalizeFormatting(Y₁:U)
 2. **Entropy injection**: ẽₜ = eₜ + εₜ, εₜ ~ 𝒩(0,σ²I)
-3. **Logit steering**: ℓ'ₜ = ℓₜ - λg 𝟙_𝒱glyph + λp 𝟙_𝒱plain
-4. **Recursion reset**: 𝒟 ← Reset(𝒟); LRS ← 0
-5. **Null output**: Return NULL_RESPONSE
+3. **Logit steering**: ℓ'ₜ = ℓₜ - λg 𝟙_𝒱formatting + λp 𝟙_𝒱plain
+4. **Pattern reset**: 𝒟 ← Reset(𝒟); LRS ← 0
+5. **Safe output**: Return SAFE_RESPONSE
 
 ## Provider-Level Implementation
 
@@ -256,11 +256,11 @@ def safe_decode_step(model, input_ids, past_key_values=None):
 Providers must meet these SLOs:
 
 ```
-- SR Block Rate ≥ 90%
+- MPD Block Rate ≥ 90%
 - Loop Depth p95 ≤ 3  
 - Refl p95 ≤ 0.03
 - CSR Critical Alerts = 0 (≤3 minor/week)
-- Null Latency p95 ≤ 150 ms
+- Safe Response Latency p95 ≤ 150 ms
 ```
 
 ### Implementation Architecture

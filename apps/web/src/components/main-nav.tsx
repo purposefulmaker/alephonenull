@@ -10,6 +10,7 @@ interface MainNavProps {
   messages: {
     docs: string
     blog: string
+    demo?: string
   }
 }
 
@@ -55,6 +56,18 @@ export function MainNav({ messages }: MainNavProps) {
           )}
         >
           {messages.docs}
+        </Link>
+
+        <Link
+          href="/docs/live-demo"
+          className={cn(
+            'hover:text-foreground/80 transition-colors',
+            pathname === '/docs/live-demo'
+              ? 'dark:text-primary-active'
+              : 'text-foreground/60'
+          )}
+        >
+          {messages.demo || 'Demo'}
         </Link>
       </nav>
     </div>

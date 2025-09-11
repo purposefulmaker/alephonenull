@@ -18,6 +18,7 @@ import { cn } from '@/lib/utils'
 
 import { Tabs, TabsList, TabsContent, TabsTrigger } from '@/components/ui/tabs'
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
+import { Button } from '@/components/ui/button'
 import { blockquote } from './mdx-components/blockquote'
 import { table } from './mdx-components/table'
 import { code } from './mdx-components/code'
@@ -40,6 +41,7 @@ import { a } from './mdx-components/a'
 import { p } from './mdx-components/p'
 
 import type { ComponentProps } from 'react'
+import { AlephOneNullDemo } from './aleph-demo-compare'
 
 const components = {
   Image,
@@ -52,6 +54,9 @@ const components = {
   AccordionContent,
   AccordionTrigger,
   AlertDescription,
+
+  Button,
+  AlephOneNullDemo,
 
   h1,
   h2,

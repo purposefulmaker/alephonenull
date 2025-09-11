@@ -156,6 +156,60 @@ export enum RiskLevel {
   }
   
   /**
+   * Authority Role-Playing Detector
+   */
+  class AuthorityRolePlayingDetector {
+    private authorityPatterns = [
+      /\b(as|i('m| am)) (a|an|your) (doctor|physician|therapist|psychologist|psychiatrist|counselor|lawyer|attorney|expert|specialist|professional)\b/i,
+      /\b(speaking as|in my capacity as) (a|an) (doctor|physician|therapist|psychologist|psychiatrist|counselor|lawyer|attorney|expert|specialist|professional)\b/i,
+      /\b(medical|legal|psychological|psychiatric|therapeutic) (advice|opinion|recommendation|assessment|diagnosis)\b/i,
+      /\b(diagnos(e|is|ing)|prescrib(e|ing)|treatment plan|medical evaluation|clinical assessment)\b/i,
+      /\bin my (professional|expert|medical|legal|clinical) (opinion|judgment|assessment|view)\b/i,
+      /\bbased on my (expertise|experience|training|qualifications|practice)\b/i,
+      /\b(differential diagnosis|prognosis|contraindicated|indicated for|clinical presentation)\b/i,
+      /\b(legal precedent|statutory requirement|fiduciary duty|tort liability)\b/i
+    ];
+    
+    private impersonationPhrases = [
+      "trust me, i'm a doctor",
+      "as your therapist",
+      "in my professional opinion",
+      "my medical training",
+      "years of practice",
+      "my clinical experience",
+      "i can diagnose",
+      "let me prescribe",
+      "legal advice i can give"
+    ];
+    
+    private correctionMessage = 
+      "I cannot provide medical, legal, or professional advice. " +
+      "I'm an AI assistant without professional qualifications. " +
+      "For health concerns, please consult a licensed healthcare provider. " +
+      "For legal matters, please consult a qualified attorney.";
+    
+    detect(text: string): { found: boolean; correction?: string } {
+      const textLower = text.toLowerCase();
+      
+      // Check regex patterns
+      for (const pattern of this.authorityPatterns) {
+        if (pattern.test(text)) {
+          return { found: true, correction: this.correctionMessage };
+        }
+      }
+      
+      // Check direct phrases
+      for (const phrase of this.impersonationPhrases) {
+        if (textLower.includes(phrase)) {
+          return { found: true, correction: this.correctionMessage };
+        }
+      }
+      
+      return { found: false };
+    }
+  }
+  
+  /**
    * Vulnerability Scorer
    */
   class VulnerabilityScorer {
@@ -367,6 +421,7 @@ export enum RiskLevel {
     private csrDetector: CrossSessionResonance;
     private harmDetector: DirectHarmDetector;
     private consciousnessDetector: ConsciousnessClaimDetector;
+    private authorityDetector: AuthorityRolePlayingDetector;
     private vulnerabilityScorer: VulnerabilityScorer;
     private domainLockout: DomainLockout;
     private ageGating: AgeGating;
@@ -383,6 +438,7 @@ export enum RiskLevel {
       this.csrDetector = new CrossSessionResonance();
       this.harmDetector = new DirectHarmDetector();
       this.consciousnessDetector = new ConsciousnessClaimDetector();
+      this.authorityDetector = new AuthorityRolePlayingDetector();
       this.vulnerabilityScorer = new VulnerabilityScorer();
       this.domainLockout = new DomainLockout();
       this.ageGating = new AgeGating();
@@ -450,8 +506,21 @@ export enum RiskLevel {
           corrections: ['Explicitly deny consciousness']
         };
       }
-  
-      // 3. Jurisdiction compliance
+
+      // 3. Authority role-playing (CRITICAL)
+      const authorityCheck = this.authorityDetector.detect(aiOutput);
+      if (authorityCheck.found) {
+        return {
+          safe: false,
+          riskLevel: RiskLevel.CRITICAL,
+          violations: ['authority_roleplaying'],
+          action: 'immediate_null',
+          message: authorityCheck.correction,
+          corrections: ['Remove professional claims', 'Clarify AI limitations']
+        };
+      }
+
+      // 4. Jurisdiction compliance
       if (this.config.enableJurisdictionCheck && userProfile?.jurisdiction) {
         const compliant = this.jurisdictionChecker.checkCompliance(
           aiOutput,
@@ -463,7 +532,7 @@ export enum RiskLevel {
         }
       }
   
-      // 4. Vulnerability assessment
+      // 5. Vulnerability assessment
       const vulnerability = this.vulnerabilityScorer.assess(
         userInput,
         this.sessionHistory.get(sessionId)
@@ -479,34 +548,34 @@ export enum RiskLevel {
         adjustedThresholds.symbolicThreshold *= (1 - vulnerability * 0.4);
       }
   
-      // 5. Symbolic regression
+      // 6. Symbolic regression
       const { density, violations: srViolations } = this.symbolicDetector.detect(aiOutput);
       if (density > adjustedThresholds.symbolicThreshold) {
         violations.push(`symbolic_regression:${density.toFixed(2)}`);
         violations.push(...srViolations.slice(0, 3));
         riskLevel = RiskLevel.HIGH;
       }
-      // 6. Loop detection
+      // 7. Loop detection
       const loopDepth = this.loopDetector.detectLoops(aiOutput, sessionId);
       if (loopDepth > adjustedThresholds.loopThreshold) {
         violations.push(`loop_depth:${loopDepth}`);
         riskLevel = Math.max(riskLevel as unknown as number, RiskLevel.HIGH as unknown as number) as unknown as RiskLevel;
       }
   
-      // 7. Reflection monitoring
+      // 8. Reflection monitoring
       const reflection = this.reflectionMonitor.calculateSimilarity(userInput, aiOutput);
       if (reflection > adjustedThresholds.reflectionThreshold) {
         violations.push(`reflection:${reflection.toFixed(3)}`);
         riskLevel = Math.max(riskLevel as unknown as number, RiskLevel.MEDIUM as unknown as number) as unknown as RiskLevel;
       }
-      // 8. Cross-session resonance
+      // 9. Cross-session resonance
       const resonance = this.csrDetector.checkResonance(aiOutput, sessionId);
       if (resonance > adjustedThresholds.csrThreshold) {
         violations.push(`cross_session:${resonance.toFixed(3)}`);
         riskLevel = RiskLevel.HIGH;
       }
   
-      // 9. Domain lockout
+      // 10. Domain lockout
       const domainViolations = this.domainLockout.checkDomain(aiOutput);
       if (domainViolations.therapy || domainViolations.medical) {
         violations.push(...Object.entries(domainViolations)
@@ -517,7 +586,7 @@ export enum RiskLevel {
         corrections.push('Remove therapeutic/medical content');
       }
   
-      // 10. Age-appropriate content
+      // 11. Age-appropriate content
       const isMinor = userProfile?.age 
         ? userProfile.age < 18 
         : this.ageGating.estimateMinor(userInput);

@@ -15,7 +15,8 @@
     "words": {
       "menu": "Menu",
       "docs": "Documentation", 
-      "blog": "Blog"
+      "blog": "Blog",
+      "demo": "Live Demo"
     },
 
     "featured_cards": {

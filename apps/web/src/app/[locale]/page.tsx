@@ -53,7 +53,7 @@ export default async function IndexPage({
         <PageHeaderDescription>{t('site.description')}</PageHeaderDescription>
 
         <PageActions className="flex-wrap gap-3 sm:gap-0">
-          <Link href="/docs" className={cn(buttonVariants())}>
+          <Link href="/docs/quick-start" className={cn(buttonVariants())}>
             {t('site.buttons.get_started')}
           </Link>
 
@@ -86,11 +86,11 @@ export default async function IndexPage({
         <div className="w-full max-w-[35rem] mx-auto space-y-4">
           <InstallationBox
             className="w-full relative flex flex-wrap items-center pl-4 pr-12"
-            __rawString__="npm install @alephonenull/framework"
+            __rawString__="npm install alephonenull-experimental"
           />
           <InstallationBox
             className="w-full relative flex flex-wrap items-center pl-4 pr-12"
-            __rawString__="pip install alephonenull"
+            __rawString__="pip install alephonenull-experimental"
           />
         </div>
 

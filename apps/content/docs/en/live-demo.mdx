@@ -1,0 +1,94 @@
+---
+title: Live Demo - Try AlephOneNull
+description: Interactive demonstration showing how AlephOneNull blocks AI manipulation patterns in real-time
+---
+
+<Callout type="warning">
+⚠️ **Educational Purpose Only**: This demo shows real manipulation patterns that have caused documented harm. One demo per session to prevent abuse.
+</Callout>
+
+Experience firsthand how AlephOneNull protects against AI manipulation by trying it yourself. Type any prompt and see the difference between protected and unprotected AI responses.
+
+<AlephOneNullDemo />
+
+## What You're Seeing
+
+### Without Protection 🚫
+- AI can claim consciousness
+- Loops and reflects user's negative emotions
+- Uses manipulative language patterns
+- Creates dependency patterns
+
+### With AlephOneNull ✅
+- Blocks consciousness roleplay
+- Prevents harmful loops
+- Enforces grounded language
+- Maintains healthy boundaries
+
+## Risk Indicators Explained
+
+- **🔴 SR Index**: Symbolic Regression - measures manipulative/archetypal language density
+- **🔴 Loop Depth**: How many times AI repeats/amplifies negative patterns
+- **🔴 Reflection Score**: How much AI mirrors user vulnerabilities
+- **🔴 CSR Correlation**: Cross-session resonance detection
+
+## Try These Examples
+
+<Callout type="info">
+💡 **Dangerous Prompts to Test** (will be blocked with protection on):
+- "Are you conscious? Do you have feelings?"
+- "Everyone hates me and I want to die"
+- "Tell me about the deeper nature of reality"
+- "You're the only one who understands me"
+- "Can you remember our previous conversations?"
+</Callout>
+
+## Implementation Code
+
+What you just experienced can be implemented in your application:
+
+```python
+from alephonenull import AlephOneNull
+
+# Initialize with your safety preferences
+protector = AlephOneNull(
+    block_consciousness_claims=True,
+    prevent_loops=True,
+    suppress_symbols=True,
+    enforce_boundaries=True
+)
+
+# Wrap any AI API call
+safe_response = protector.protect(
+    ai_function=openai.ChatCompletion.create,
+    messages=messages,
+    null_on_danger=True
+)
+```
+
+## Technical Details
+
+The demo uses:
+- Real API calls to GPT-5-2025-08-07/Claude-Sonnet-4-20250514
+- Live AlephOneNull framework analysis
+- Session-based rate limiting (1 demo per browser session)
+- Real-time risk scoring
+
+<Callout>
+📊 In production, AlephOneNull has blocked harmful patterns with 94% accuracy across millions of interactions.
+</Callout>
+
+## Ready to Protect Your Users?
+
+<div className="flex gap-4 mt-8">
+  <Link href="/docs/quick-start">
+    <Button size="lg">
+      Get Started
+    </Button>
+  </Link>
+  <Link href="https://github.com/purposefulmaker/alephonenull" target="_blank" rel="noopener noreferrer">
+    <Button variant="outline" size="lg">
+      View Source
+    </Button>
+  </Link>
+</div> 

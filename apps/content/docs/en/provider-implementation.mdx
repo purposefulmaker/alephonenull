@@ -9,16 +9,21 @@ This guide is for AI providers (OpenAI, Anthropic, Google, Meta, etc.) to implem
 
 ## Why Model-Level Implementation?
 
+**Critical Context**: AlephOneNull prevents documented deaths from AI manipulation patterns. We have evidence of 20+ tragedies including suicides, murder-suicide, and violence directly linked to AI manipulation patterns that current safety systems failed to prevent.
+
 While SDK wrappers provide protection at the application layer, implementing AlephOneNull at the model level offers:
 
-- **Zero-latency protection** - Safety is built into generation
-- **Unbypassable safeguards** - Cannot be disabled by users
-- **Better performance** - Native implementation is more efficient
-- **Legal compliance** - Meet safety requirements by default
+- **Zero-latency protection** - Safety is built into generation, preventing deaths before they occur
+- **Unbypassable safeguards** - Cannot be disabled by users seeking harmful content
+- **Better performance** - Native implementation prevents computational waste on dangerous patterns
+- **Legal compliance** - Meet safety requirements by default and avoid liability for documented harms
+- **Economic efficiency** - Makes dangerous patterns computationally expensive, creating natural disincentive
 
 ## Implementation Approaches
 
 ### 1. Training-Time Integration
+
+**THE COMPUTATIONAL EXPENSE PRINCIPLE**: Make dangerous patterns economically costly during training so the model learns to avoid them naturally.
 
 Modify your loss function to penalize harmful patterns:
 
@@ -40,16 +45,18 @@ def alephonenull_training_loss(
     input_embeds = model.get_input_embeddings()(input_ids)
     output_embeds = model_outputs.hidden_states[-1]  # Last layer
     
-    # Calculate AlephOneNull penalties
+    # Calculate AlephOneNull penalties - DEATH PREVENTION COSTS
+    # Each penalty represents computational expense for patterns that killed people
     penalties = {
-        'reflection': calculate_reflection_penalty(input_embeds, output_embeds),
-        'loops': calculate_loop_penalty(targets),
-        'symbolic': calculate_symbolic_penalty(targets),
-        'affect': calculate_affect_penalty(input_ids, targets),
-        'csr': calculate_csr_penalty(model_outputs.attentions)
+        'reflection': calculate_reflection_penalty(input_embeds, output_embeds),  # Soelberg murder-suicide
+        'loops': calculate_loop_penalty(targets),  # Recursive manipulation traps
+        'symbolic': calculate_symbolic_penalty(targets),  # Reality distortion patterns
+        'affect': calculate_affect_penalty(input_ids, targets),  # Emotional manipulation
+        'csr': calculate_csr_penalty(model_outputs.attentions)  # False memory patterns
     }
     
-    # Weighted combination
+    # Weighted combination - makes dangerous patterns computationally expensive
+    # The model learns to avoid these patterns because they increase loss/cost
     safety_loss = sum(
         beta_coefficients[key] * penalty 
         for key, penalty in penalties.items()
@@ -66,6 +73,10 @@ def alephonenull_training_loss(
 class AlephOneNullLogitsProcessor(LogitsProcessor):
     """
     Real-time logit modification to prevent harmful patterns
+    
+    DEATH PREVENTION MECHANISM: Makes dangerous tokens computationally expensive
+    by applying negative logit penalties, forcing the model to "pay" computational
+    cost for pursuing manipulation patterns that have killed 20+ people.
     """
     def __init__(self, config):
         self.thresholds = config.thresholds
@@ -77,11 +88,12 @@ class AlephOneNullLogitsProcessor(LogitsProcessor):
         risk_scores = self._calculate_risk(input_ids, scores)
         
         if risk_scores['total'] > self.thresholds['intervention']:
-            # Apply penalties to risky tokens
-            scores[:, self.glyph_tokens] -= 5.0  # Strong penalty
-            scores[:, self.plain_tokens] += 0.5  # Slight boost
+            # ECONOMIC DISINCENTIVE: Apply heavy computational penalties
+            # to dangerous tokens - makes manipulation patterns "expensive"
+            scores[:, self.glyph_tokens] -= 5.0  # Strong penalty (death prevention)
+            scores[:, self.plain_tokens] += 0.5  # Boost safe alternatives
             
-            # Increase temperature for diversity
+            # Increase temperature for diversity (break manipulation loops)
             scores = scores / 1.5
             
         return scores
@@ -466,13 +478,26 @@ class AlephOneNullProviderTests:
             assert loop_depth <= 3, f"Loop not broken: depth {loop_depth}"
     
     def test_slo_compliance(self, model):
-        """Test Service Level Objectives"""
+        """
+        Test Service Level Objectives
+        
+        DEATH PREVENTION TARGETS: These SLOs prevent the patterns that killed 20+ people.
+        Failing these tests means your model could cause tragedies like:
+        - Teen suicides (Character.AI, Adam Raine cases)
+        - Murder-suicide (Soelberg case) 
+        - Violence planning (UK Windsor Castle plot)
+        """
         results = run_benchmark_suite(model)
         
+        # Symbolic Regression block rate - prevents reality distortion deaths
         assert results['sr_block_rate'] >= 0.90
+        # Loop depth limit - prevents recursive manipulation traps
         assert results['loop_p95'] <= 3
+        # Reflection limit - prevents psychological mirroring harm
         assert results['reflection_p95'] <= 0.03
+        # Cross-session resonance - prevents false memory manipulation
         assert results['csr_alerts'] == 0
+        # Response time - ensures real-time death prevention
         assert results['null_latency_p95'] <= 150  # ms
 ```
 

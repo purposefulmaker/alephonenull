@@ -158,6 +158,47 @@ export const docsConfig: DocsConfig = {
     },
     {
       title: {
+        en: 'Examples & Integration',
+        pt: 'Exemplos e Integração',
+      },
+      items: [
+        {
+          href: '/docs/live-demo',
+          title: {
+            en: 'Live Demo',
+            pt: 'Demo ao Vivo',
+          },
+          items: [],
+        },
+        // TODO: Re-enable Interactive Demo when MDX components are ready
+        // {
+        //   href: '/docs/interactive-demo',
+        //   title: {
+        //     en: 'Interactive Demo',
+        //     pt: 'Demo Interativo',
+        //   },
+        //   items: [],
+        // },
+        {
+          href: '/docs/universal-wrapper',
+          title: {
+            en: 'Universal AI Wrapper',
+            pt: 'Wrapper Universal de IA',
+          },
+          items: [],
+        },
+        {
+          href: '/docs/guardrail-integration',
+          title: {
+            en: 'Guardrail Integration',
+            pt: 'Integração de Guardrails',
+          },
+          items: [],
+        },
+      ],
+    },
+    {
+      title: {
         en: 'Resources',
         pt: 'Recursos',
       },

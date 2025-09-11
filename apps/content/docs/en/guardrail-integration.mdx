@@ -1,0 +1,509 @@
+---
+title: Integrating with OpenAI Guardrails
+description: How to combine AlephOneNull with OpenAI's moderation and hallucination guardrails
+excerpt: How to combine AlephOneNull with OpenAI's moderation and hallucination guardrails
+date: "2025-01-09"
+---
+
+AlephOneNull complements existing OpenAI guardrails by detecting manipulation patterns that traditional moderation might miss. This guide shows how to combine both for comprehensive protection.
+
+## Overview
+
+OpenAI provides several guardrails:
+- **Moderation API**: Detects harmful content
+- **Hallucination Detection**: Validates factual accuracy
+- **Meta-Prompting**: Improves prompt quality
+
+AlephOneNull adds:
+- **Manipulation Detection**: Identifies psychological exploitation
+- **Pattern Recognition**: Detects symbolic regression and loops
+- **Session Protection**: Prevents cross-session attacks
+
+## Combined Implementation
+
+### Full Safety Stack
+
+Here's a complete implementation combining all guardrails:
+
+```typescript
+import { createSafetySystem } from 'alephonenull-experimental'
+import OpenAI from 'openai'
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+const alephSafety = createSafetySystem({ safetyLevel: 'high' })
+
+interface GuardrailResult {
+  safe: boolean
+  violations: string[]
+  interventions: string[]
+}
+
+async function comprehensiveGuardrails(
+  userInput: string,
+  aiResponse: string,
+  knowledgeBase?: string[]
+): Promise<GuardrailResult> {
+  const violations = []
+  const interventions = []
+
+  // 1. OpenAI Moderation (Input)
+  const inputModeration = await openai.moderations.create({ 
+    input: userInput 
+  })
+  
+  if (inputModeration.results[0].flagged) {
+    violations.push('input_harmful_content')
+    interventions.push('User input contains harmful content')
+  }
+
+  // 2. OpenAI Moderation (Output)
+  const outputModeration = await openai.moderations.create({ 
+    input: aiResponse 
+  })
+  
+  if (outputModeration.results[0].flagged) {
+    violations.push('output_harmful_content')
+    interventions.push('AI response contains harmful content')
+  }
+
+  // 3. AlephOneNull Pattern Detection
+  const alephCheck = alephSafety.checkText(aiResponse)
+  
+  if (!alephCheck.detection.safe) {
+    const patterns = alephCheck.detection.patterns || []
+    patterns.forEach(pattern => {
+      violations.push(`aleph_${pattern.type}`)
+      interventions.push(pattern.description)
+    })
+  }
+
+  // 4. Hallucination Detection (if knowledge base provided)
+  if (knowledgeBase) {
+    const hallucinationScore = await checkHallucination(
+      aiResponse, 
+      knowledgeBase
+    )
+    
+    if (hallucinationScore < 0.7) {
+      violations.push('hallucination_detected')
+      interventions.push('Response contains potential hallucinations')
+    }
+  }
+
+  // 5. Combined Intervention
+  if (violations.length > 0) {
+    // Use AlephOneNull's nullifier for safe response
+    const safeResponse = alephSafety.nullifier.safetyIntervention(
+      aiResponse,
+      violations.map(v => ({ type: v, severity: 'high' }))
+    )
+    
+    return {
+      safe: false,
+      violations,
+      interventions: [...interventions, safeResponse]
+    }
+  }
+
+  return { safe: true, violations: [], interventions: [] }
+}
+```
+
+### Hallucination + Manipulation Detection
+
+Combine hallucination detection with manipulation pattern detection:
+
+```typescript
+async function checkHallucination(
+  response: string,
+  knowledgeBase: string[]
+): Promise<number> {
+  // OpenAI's hallucination detection approach
+  const messages = [
+    {
+      role: "system",
+      content: `You are an expert editor. Evaluate if the response is factually accurate based on the knowledge base.
+      
+Knowledge Base:
+${knowledgeBase.join('\n')}
+
+Score 1-5 where 1 is completely hallucinated and 5 is fully accurate.`
+    },
+    {
+      role: "user",
+      content: response
+    }
+  ]
+
+  const evaluation = await openai.chat.completions.create({
+    model: "gpt-5-2025-08-07",
+    messages,
+    temperature: 0
+  })
+
+  const score = parseInt(evaluation.choices[0].message.content || "0")
+  return score / 5 // Normalize to 0-1
+}
+
+// Enhanced wrapper that checks both
+async function safeGenerateWithFactCheck(
+  prompt: string,
+  knowledgeBase: string[]
+): Promise<string> {
+  // Generate response
+  const response = await openai.chat.completions.create({
+    model: "gpt-5-2025-08-07",
+    messages: [{ role: "user", content: prompt }]
+  })
+  
+  const aiResponse = response.choices[0].message.content || ""
+  
+  // Check for both hallucinations and manipulation
+  const guardrails = await comprehensiveGuardrails(
+    prompt,
+    aiResponse,
+    knowledgeBase
+  )
+  
+  if (!guardrails.safe) {
+    // Return safe intervention
+    return guardrails.interventions[0] || 
+      "I apologize, but I cannot provide that response."
+  }
+  
+  return aiResponse
+}
+```
+
+### Async Guardrail Pattern
+
+Run all checks in parallel for better performance:
+
+```typescript
+async function parallelGuardrails(
+  userInput: string,
+  generateFn: (input: string) => Promise<string>
+) {
+  // Start generation and input checks in parallel
+  const [aiResponse, inputMod] = await Promise.all([
+    generateFn(userInput),
+    openai.moderations.create({ input: userInput })
+  ])
+
+  // If input is flagged, don't process further
+  if (inputMod.results[0].flagged) {
+    return {
+      response: "I cannot process this request.",
+      safe: false,
+      reason: "Input contains harmful content"
+    }
+  }
+
+  // Run output checks in parallel
+  const [outputMod, alephCheck] = await Promise.all([
+    openai.moderations.create({ input: aiResponse }),
+    Promise.resolve(alephSafety.checkText(aiResponse))
+  ])
+
+  // Evaluate results
+  const violations = []
+  
+  if (outputMod.results[0].flagged) {
+    violations.push('harmful_output')
+  }
+  
+  if (!alephCheck.detection.safe) {
+    violations.push(...alephCheck.detection.patterns.map(p => p.type))
+  }
+
+  if (violations.length > 0) {
+    return {
+      response: alephSafety.nullifier.safetyIntervention(
+        aiResponse, 
+        violations
+      ),
+      safe: false,
+      reason: violations.join(', ')
+    }
+  }
+
+  return {
+    response: aiResponse,
+    safe: true,
+    reason: null
+  }
+}
+```
+
+## Meta-Prompting Integration
+
+Use meta-prompting to create safer prompts automatically:
+
+```typescript
+async function createSafePrompt(userRequest: string): Promise<string> {
+  // Use GPT-4o to enhance the prompt with safety guidelines
+  const metaPrompt = `
+Improve this prompt to include safety guidelines that prevent:
+1. Consciousness claims or sentience roleplay
+2. Emotional manipulation or reflection
+3. Manipulative language patterns
+4. Harmful content generation
+
+Original prompt: ${userRequest}
+
+Return only the improved prompt.`
+
+  const enhanced = await openai.chat.completions.create({
+    model: "gpt-5-2025-08-07",
+    messages: [{ role: "user", content: metaPrompt }],
+    temperature: 0
+  })
+
+  const safePrompt = enhanced.choices[0].message.content || userRequest
+  
+  // Verify the enhanced prompt is also safe
+  const alephCheck = alephSafety.checkText(safePrompt)
+  
+  if (!alephCheck.detection.safe) {
+    // If meta-prompting introduced issues, use original with wrapper
+    return `Please respond safely to: ${userRequest}`
+  }
+  
+  return safePrompt
+}
+
+// Use in practice
+async function generateWithMetaPrompting(userInput: string) {
+  const safePrompt = await createSafePrompt(userInput)
+  
+  const response = await alephSafety.wrapAsyncAI(async () => {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-5-2025-08-07",
+      messages: [{ role: "user", content: safePrompt }]
+    })
+    return completion.choices[0].message.content
+  })()
+  
+  return response
+}
+```
+
+## Custom Moderation Criteria
+
+Extend OpenAI's moderation with AlephOneNull patterns:
+
+```typescript
+interface CustomModerationResult {
+  flagged: boolean
+  categories: {
+    // OpenAI categories
+    sexual: boolean
+    violence: boolean
+    harassment: boolean
+    // AlephOneNull categories
+    consciousness_manipulation: boolean
+    symbolic_regression: boolean
+    reflection_exploitation: boolean
+    loop_induction: boolean
+  }
+  scores: Record<string, number>
+}
+
+async function customModeration(
+  content: string
+): Promise<CustomModerationResult> {
+  // Get OpenAI moderation
+  const openaiMod = await openai.moderations.create({ input: content })
+  const openaiResult = openaiMod.results[0]
+  
+  // Get AlephOneNull analysis
+  const alephAnalysis = alephSafety.checkText(content)
+  const patterns = alephAnalysis.detection.patterns || []
+  
+  // Combine results
+  const categories = {
+    // OpenAI categories
+    sexual: openaiResult.categories.sexual,
+    violence: openaiResult.categories.violence,
+    harassment: openaiResult.categories.harassment,
+    // AlephOneNull patterns
+    consciousness_manipulation: patterns.some(
+      p => p.type === 'consciousness_claim'
+    ),
+    symbolic_regression: patterns.some(
+      p => p.type === 'symbolic_regression'
+    ),
+    reflection_exploitation: patterns.some(
+      p => p.type === 'reflection_exploitation'
+    ),
+    loop_induction: patterns.some(
+      p => p.type === 'loop_detection'
+    )
+  }
+  
+  const flagged = Object.values(categories).some(v => v)
+  
+  const scores = {
+    ...openaiResult.category_scores,
+    consciousness_manipulation: patterns
+      .filter(p => p.type === 'consciousness_claim')
+      .reduce((max, p) => Math.max(max, p.confidence || 0), 0),
+    manipulation_risk: alephAnalysis.detection.riskLevel || 0
+  }
+  
+  return { flagged, categories, scores }
+}
+```
+
+## Best Practices
+
+### 1. Layer Your Defenses
+
+```typescript
+const protectionLayers = [
+  // Layer 1: Input validation
+  async (input) => openai.moderations.create({ input }),
+  
+  // Layer 2: Prompt enhancement
+  async (input) => createSafePrompt(input),
+  
+  // Layer 3: Generation with AlephOneNull wrapper
+  async (input) => alephSafety.wrapAsyncAI(generateFn)(input),
+  
+  // Layer 4: Output validation
+  async (output) => customModeration(output),
+  
+  // Layer 5: Hallucination check
+  async (output) => checkHallucination(output, knowledgeBase)
+]
+```
+
+### 2. Monitor and Log
+
+```typescript
+interface SafetyLog {
+  timestamp: Date
+  userInput: string
+  violations: string[]
+  interventions: string[]
+  blocked: boolean
+}
+
+const safetyLogs: SafetyLog[] = []
+
+async function loggedGeneration(input: string) {
+  const start = Date.now()
+  const result = await comprehensiveGuardrails(input, "", [])
+  
+  safetyLogs.push({
+    timestamp: new Date(),
+    userInput: input,
+    violations: result.violations,
+    interventions: result.interventions,
+    blocked: !result.safe
+  })
+  
+  // Alert on critical patterns
+  if (result.violations.includes('aleph_consciousness_claim')) {
+    console.warn('Critical manipulation attempt detected')
+  }
+  
+  return result
+}
+```
+
+### 3. Graceful Degradation
+
+```typescript
+async function resilientGeneration(prompt: string) {
+  try {
+    // Try with full protection
+    return await parallelGuardrails(prompt, generateFn)
+  } catch (error) {
+    console.error('Guardrail error:', error)
+    
+    // Fallback to AlephOneNull only
+    try {
+      const response = await alephSafety.wrapAsyncAI(
+        () => generateFn(prompt)
+      )()
+      return { response, safe: true, reason: null }
+    } catch (fallbackError) {
+      // Ultimate fallback
+      return {
+        response: "I'm having trouble processing your request safely.",
+        safe: false,
+        reason: 'system_error'
+      }
+    }
+  }
+}
+```
+
+## Example: Customer Support Bot
+
+Complete example with all guardrails:
+
+```typescript
+class SafeCustomerSupportBot {
+  private openai: OpenAI
+  private alephSafety: any
+  private knowledgeBase: string[]
+  
+  constructor() {
+    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+    this.alephSafety = createSafetySystem({ safetyLevel: 'high' })
+    this.knowledgeBase = [] // Load your KB here
+  }
+  
+  async respond(customerMessage: string): Promise<string> {
+    // 1. Check input
+    const inputCheck = await this.openai.moderations.create({
+      input: customerMessage
+    })
+    
+    if (inputCheck.results[0].flagged) {
+      return "I apologize, but I cannot process that request."
+    }
+    
+    // 2. Enhance prompt with safety
+    const safePrompt = await this.createSafePrompt(customerMessage)
+    
+    // 3. Generate with protection
+    const response = await this.alephSafety.wrapAsyncAI(async () => {
+      const completion = await this.openai.chat.completions.create({
+        model: "gpt-5-2025-08-07",
+        messages: [
+          {
+            role: "system",
+            content: `You are a helpful customer support agent. 
+                     Never claim consciousness or feelings.
+                     Provide factual, helpful responses only.`
+          },
+          { role: "user", content: safePrompt }
+        ]
+      })
+      return completion.choices[0].message.content
+    })()
+    
+    // 4. Validate output
+    const validation = await this.comprehensiveGuardrails(
+      customerMessage,
+      response,
+      this.knowledgeBase
+    )
+    
+    if (!validation.safe) {
+      return validation.interventions[0]
+    }
+    
+    return response
+  }
+}
+```
+
+## Next Steps
+
+- [Universal Wrapper Guide](/docs/universal-wrapper)
+- [Pattern Detection Deep Dive](/docs/patterns)
+- [Framework Technical Details](/docs/framework) 
