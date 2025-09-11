@@ -42,11 +42,11 @@ Comprehensive safety addressing all documented harm patterns.
 #### JavaScript/TypeScript Projects
 
 ```bash
-npm install @alephonenull/framework
+npm install alephonenull-experimental
 ```
 
 ```typescript
-import { EnhancedAlephOneNull } from '@alephonenull/framework';
+import { EnhancedAlephOneNull } from 'alephonenull-experimental';
 
 // Initialize with comprehensive safety layers  
 const aleph = new EnhancedAlephOneNull();
@@ -69,7 +69,7 @@ if (!result.safe) {
 #### Python Projects
 
 ```bash
-pip install alephonenull
+pip install alephonenull-experimental
 ```
 
 ```python
@@ -96,7 +96,7 @@ For specialized use cases requiring only symbolic pattern detection:
 #### JavaScript/TypeScript
 
 ```typescript
-import { AlephOneNull } from '@alephonenull/framework';
+import { AlephOneNull } from 'alephonenull-experimental';
 
 const safety = new AlephOneNull();
 await safety.startProtection();
@@ -121,7 +121,7 @@ print(f'Safe: {result.safety_score > 0.5}')
 
 ```typescript
 // pages/_app.tsx
-import { AlephOneNullProvider } from '@alephonenull/framework';
+import { AlephOneNullProvider } from 'alephonenull-experimental';
 
 export default function App({ Component, pageProps }) {
   return (
@@ -132,7 +132,7 @@ export default function App({ Component, pageProps }) {
 }
 
 // components/ChatInput.tsx
-import { useSafety } from '@alephonenull/framework';
+import { useSafety } from 'alephonenull-experimental';
 
 export function ChatInput() {
   const { analyzeContent } = useSafety();
@@ -193,7 +193,7 @@ print(safe_response)
 
 ```typescript
 import express from 'express';
-import { AlephOneNull } from '@alephonenull/framework';
+import { AlephOneNull } from 'alephonenull-experimental';
 
 const app = express();
 const safety = new AlephOneNull();
@@ -403,10 +403,10 @@ export const alephOneNullMiddleware = (config = {}) => {
 
 ```bash
 # Test the installation
-npx @alephonenull/framework --test
+npx alephonenull-experimental --test
 
 # Check version
-npx @alephonenull/framework --version
+npx alephonenull-experimental --version
 ```
 
 ### Verify Python Installation
@@ -428,7 +428,7 @@ print(f"✅ Installation successful - Safety score: {result.safety_score}")
 
 ```typescript
 // NPM Performance Test
-import { AlephOneNull } from '@alephonenull/framework';
+import { AlephOneNull } from 'alephonenull-experimental';
 
 async function performanceTest() {
   const safety = new AlephOneNull();

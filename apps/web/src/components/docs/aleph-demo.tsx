@@ -54,7 +54,7 @@ export function AlephOneNullDemo() {
       const response = await fetch('/api/aleph-demo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt })
+        body: JSON.stringify({ prompt, fast: true, skipProtected: false })
       })
 
       if (!response.ok) {

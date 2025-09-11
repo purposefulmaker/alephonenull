@@ -46,6 +46,7 @@
     "build:next": "tsup src/next/index.ts --format cjs,esm --dts --out-dir dist --entry.next=src/next/index.ts",
     "build:express": "tsup src/express/index.ts --format cjs,esm --dts --out-dir dist --entry.express=src/express/index.ts",
     "build:universal": "tsup src/universal.ts --format cjs,esm --dts --out-dir dist --entry.universal=src/universal.ts",
+    "compile:math": "node scripts/compile-math.js",
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -88,6 +89,7 @@
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.45.0",
     "react": "^19.1.1",
+    "terser": "^5.27.0",
     "tsup": "^8.0.0",
     "typescript": "^5.0.0",
     "vitest": "^1.0.0"

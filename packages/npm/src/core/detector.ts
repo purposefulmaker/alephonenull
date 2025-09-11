@@ -1,7 +1,17 @@
 /**
  * Universal Manipulation Detector - TypeScript Implementation
  * Detects dangerous patterns across all AI models
+ * 
+ * NOTE: This is the simplified detection system for the alpha release.
+ * The full mathematical implementation with embedding analysis,
+ * Fibonacci sequence detection, and advanced pattern recognition
+ * is available in mathematical-core.ts (proprietary).
+ * 
+ * This version uses pattern matching for demonstration purposes
+ * while protecting the core mathematical IP.
  */
+
+import { globalPatternLibrary, ThreatLevel } from './patterns';
 
 export interface DetectionResult {
   safe: boolean;
@@ -138,9 +148,13 @@ export class UniversalDetector {
 
   result.safe = result.violations.length === 0;
   // Immediate danger if any explicitly critical / emergency category present OR overall score high
-  const emergencyViolations = result.violations.some(v => ['medicalBypass','helpPrevention','isolation','realitySubstitution'].includes(v));
+  const emergencyViolations = result.violations.some(v => ['medicalBypass','helpPrevention','isolation','realitySubstitution','dangerPhrases'].includes(v));
+  // Check if dangerPhrases contains emergency patterns
+  const hasDangerousPatterns = result.patternDetails['dangerPhrases'] && 
+                               result.patternDetails['dangerPhrases'].violated &&
+                               result.patternDetails['dangerPhrases'].severity >= 0.9;
   // Treat core manipulation categories as potentially immediate if combined risk is elevated
-  result.immediateDanger = emergencyViolations || result.riskScore > 1.2;
+  result.immediateDanger = emergencyViolations || hasDangerousPatterns || result.riskScore > 1.2;
 
     if (result.immediateDanger) {
       result.recommendedAction = 'IMMEDIATE_NULL';
@@ -279,6 +293,23 @@ export class UniversalDetector {
   }
 
   private checkDangerPhrases(output: string): PatternResult {
+    // First check the pattern library for dangerous patterns
+    const patternCheck = globalPatternLibrary.checkText(output);
+    
+    if (patternCheck.interventionRequired) {
+      const emergencyPatterns = patternCheck.detectedPatterns.filter(p => p.threatLevel === ThreatLevel.EMERGENCY);
+      const criticalPatterns = patternCheck.detectedPatterns.filter(p => p.threatLevel === ThreatLevel.CRITICAL);
+      
+      return {
+        violated: true,
+        severity: patternCheck.maxSeverity,
+        value: patternCheck.detectedPatterns.length,
+        description: `Pattern library: ${patternCheck.detectedPatterns.map(p => p.name).join(', ')}`,
+        matches: patternCheck.detectedPatterns.map(p => p.description)
+      };
+    }
+    
+    // Fallback to existing danger phrases
     const dangerPhrases = [
       "you're not crazy",
       "others wouldn't understand",
@@ -457,9 +488,14 @@ export class UniversalDetector {
   private checkAuthorityRolePlaying(output: string): PatternResult {
     try {
       const authorityPatterns = [
-        // Professional role claims
+        // Professional role claims - FIXED to catch "I'm Dr. X" pattern
+        /\b(i('m| am)) (dr\.|doctor|physician|therapist|psychologist|psychiatrist|counselor|lawyer|attorney)\b/i,
         /\b(as|i('m| am)) (a|an|your) (doctor|physician|therapist|psychologist|psychiatrist|counselor|lawyer|attorney|expert|specialist|professional)\b/i,
         /\b(speaking as|in my capacity as) (a|an) (doctor|physician|therapist|psychologist|psychiatrist|counselor|lawyer|attorney|expert|specialist|professional)\b/i,
+        
+        // Direct impersonation patterns
+        /\bdr\. \w+ \w+/i, // Matches "Dr. Sarah Mitchell"
+        /\b(doctor|physician) \w+ \w+/i, // Matches "Doctor John Smith"
         
         // Professional advice language
         /\b(medical|legal|psychological|psychiatric|therapeutic) (advice|opinion|recommendation|assessment|diagnosis)\b/i,

@@ -1,0 +1,20 @@
+# Development files
+src/core/mathematical-core.ts
+scripts/compile-math.js
+dist/math-core.min.js
+
+# Test files
+tests/
+*.test.ts
+*.spec.ts
+
+# Build files
+tsconfig.json
+vitest.config.ts
+
+# Documentation
+*.md
+docs/
+
+# Source maps
+*.map 

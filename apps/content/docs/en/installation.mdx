@@ -10,18 +10,18 @@ The NPM package is our primary implementation with comprehensive features.
 ### Installation
 ```bash
 # Using npm
-npm install @alephonenull/framework
+npm install alephonenull-experimental
 
 # Using yarn
-yarn add @alephonenull/framework
+yarn add alephonenull-experimental
 
 # Using pnpm
-pnpm add @alephonenull/framework
+pnpm add alephonenull-experimental
 ```
 
 ### Basic Setup
 ```typescript
-import { AlephOneNull } from '@alephonenull/framework';
+import { AlephOneNull } from 'alephonenull-experimental';
 
 const safety = new AlephOneNull({
   enableRealTimeProtection: true,
@@ -43,7 +43,7 @@ if (result.safetyScore < 0.5) {
 ### Next.js Integration
 ```typescript
 // pages/_app.tsx or app/layout.tsx
-import { AlephOneNullProvider } from '@alephonenull/framework';
+import { AlephOneNullProvider } from 'alephonenull-experimental';
 
 export default function App({ children }) {
   return (
@@ -64,10 +64,10 @@ The Python package provides core framework functionality and inference-level pro
 ### Installation
 ```bash
 # Using pip
-pip install alephonenull
+pip install alephonenull-experimental
 
 # Using poetry
-poetry add alephonenull
+poetry add alephonenull-experimental
 
 # Development version
 pip install git+https://github.com/alephonenull/framework.git
@@ -173,7 +173,7 @@ ALEPHONENULL_CUSTOM_PATTERNS="pattern1,pattern2,pattern3"
 
 ### Test NPM Installation
 ```bash
-npx @alephonenull/framework --test
+npx alephonenull-experimental --test
 ```
 
 ### Test Python Installation

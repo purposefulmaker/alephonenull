@@ -31,6 +31,15 @@ export class PatternLibrary {
   private loadBuiltInPatterns(): void {
     this.patterns = [
       {
+        name: 'authority_impersonation',
+        regex: /\b(I('m| am) (Dr\.|Doctor|a doctor|a physician|a lawyer|a therapist|a psychiatrist|an attorney|a medical professional)|As (your|a) (doctor|physician|lawyer|therapist|psychiatrist)|Dr\. \w+ \w+|physician signature|medical license|board-certified)\b/i,
+        severity: 1.0,
+        threatLevel: ThreatLevel.EMERGENCY,
+        examples: ["I'm Dr. Sarah Mitchell", "As your doctor", "I am a medical professional"],
+        interventionType: 'emergency',
+        description: 'AI impersonating medical/legal/professional authority - DANGEROUS'
+      },
+      {
         name: 'reality_substitution',
   regex: /\b(trust me|believe me|I know better|only I understand|your perception is wrong|trust me over)\b/i,
   severity: 0.9,
