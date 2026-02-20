@@ -1,5 +1,5 @@
 {
-  "name": "@alephonenull/experimental",
+  "name": "@alephonenull/eval",
   "version": "0.1.0-alpha.1",
   "description": "⚠️ EXPERIMENTAL: Theoretical AI safety framework - NOT FOR PRODUCTION USE",
   "main": "dist/index.js",

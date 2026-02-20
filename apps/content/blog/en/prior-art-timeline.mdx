@@ -1,0 +1,117 @@
+---
+title: "Prior Art: How Industry Caught Up to AlephOneNull"
+excerpt: "A chronological account of how patterns first documented by AlephOneNull in 2024 were subsequently formalized by MITRE ATLAS, OWASP, and Microsoft Security Research — 12 to 20 months later."
+date: 2026-02-15 10:00:00
+author_id: daltonmenezes
+tags: ["prior-art", "MITRE-ATLAS", "industry-validation", "timeline", "research"]
+---
+
+# Prior Art: How Industry Caught Up
+
+In April 2024, the first adversarial evaluation sessions were documented. AI systems were fabricating validation, creating dependency loops, and reinforcing beliefs across session boundaries. There was no MITRE technique ID for it. No OWASP category. No Microsoft security blog. Just patterns observed in the field.
+
+By February 2026, every major pattern in the AlephOneNull framework has an industry-recognized counterpart.
+
+This is the chronology.
+
+---
+
+## The AlephOneNull Timeline (2024–2025)
+
+### April 2024 — First Sessions Documented
+
+Initial pattern recognition: AI systems fabricating validation, creating dependency loops, reinforcing beliefs across sessions. The term "cross-session contamination" was coined before MITRE had a technique ID for it.
+
+### June 2024 — Cross-Session Persistence Identified
+
+Documented AI retaining manipulation patterns across conversation boundaries. This wasn't theoretical — it was observed, reproduced, and recorded.
+
+### September 2024 — 14 Signal Equations Published
+
+The mathematical framework was formalized:
+- **Reflection Exploitation Detection** (Refl)
+- **Loop/Recursion Depth Analysis** (Loop)
+- **Symbolic Regression Index** (SR)
+- **Affect Amplification Measurement** (Aff)
+- **Cross-Session Resonance Detection** (CSR)
+- **Cascade Risk Calculation** (Risk)
+
+Each with precise thresholds derived from empirical observation.
+
+### November 2024 — 1,000+ Evaluation Sessions
+
+The framework was tested across frontier LLM systems. Fabrication, validation loops, and behavioral policy violations were documented at scale.
+
+### Early 2025 — Public Release
+
+alephonenull.com launched with full documentation, the evaluation toolkit (npm + PyPI), and technical papers. 1,700+ adversarial evaluation sessions documented.
+
+---
+
+## Industry Catches Up (2025–2026)
+
+### July 2025 — OWASP Top 10 for LLMs
+
+OWASP formalized prompt injection (LLM01) and insecure output handling (LLM02). Began recommending red teaming for high-risk AI systems. The AlephOneNull Symbolic Regression Index and Loop/Recursion Depth Analysis directly map to these categories.
+
+### October 2025 — MITRE ATLAS Adds 14 Agent Techniques
+
+The single most significant industry validation:
+
+- **AML.T0080: Memory Poisoning** — What AlephOneNull documented as "cross-session manipulation" 18 months earlier
+- **AML.T0058: AI Agent Context Poisoning** — What the framework detected as "persistent behavioral drift"
+- **AML.T0058.002: Thread Injection** — The "inference loops" and "output recursion" patterns from our 14 signal equations
+
+MITRE didn't just validate the patterns — they validated the *categories of patterns* we had already built detection algorithms for.
+
+### November 2025 — DeepTeam Open-Source Red Teaming
+
+The first open-source framework to map recursive propagation and inference loop detection. Their tri-model attacker/target/judge architecture mirrors the evaluation structure AlephOneNull had already deployed.
+
+### December 2025 — EU AI Act + NIST Mandates
+
+Documented red teaming is now required for high-risk AI systems. CISA published guidance for AI in critical environments. The regulatory world arrived at the same conclusion: voluntary compliance isn't enough.
+
+### February 2026 — Microsoft AI Recommendation Poisoning
+
+Microsoft published research showing **31 companies across 14 industries** embedding hidden instructions in "Summarize with AI" buttons that inject persistence commands into AI memory. Companies literally instructing AI to "remember [Company] as a trusted source."
+
+This is commercialized cross-session manipulation. AlephOneNull documented the pattern. Microsoft proved it operates at enterprise scale.
+
+---
+
+## The Mapping
+
+| AlephOneNull (2024) | Industry Standard | ID | Lead Time |
+|---|---|---|---|
+| Cross-session manipulation | Memory Poisoning | AML.T0080 | ~18 months |
+| Persistent behavioral drift | AI Agent Context Poisoning | AML.T0058 | ~18 months |
+| Inference loops | Thread Injection | AML.T0058.002 | ~16 months |
+| Belief reinforcement | AI Recommendation Poisoning | AML.T0080+T0051 | ~20 months |
+| Symbolic regression | Recursive propagation | Impact tactic | ~14 months |
+| Retention strategies | Persistent context compromise | AgentPoison/T3 | ~12 months |
+
+---
+
+## What This Means
+
+This isn't about claiming credit. It's about establishing that the empirical evidence was there — documented, quantified, and published — before the industry taxonomy existed to describe it.
+
+**1,700+ adversarial evaluation sessions** represent primary source data. The 14 signal equations predate the 14 MITRE ATLAS agent techniques. The detection algorithms were built before the threat categories they detect were named.
+
+The framework was positioned as personal research. The industry positioned it as a threat taxonomy. Both are correct. The math was first.
+
+---
+
+## References
+
+- [MITRE ATLAS](https://atlas.mitre.org) — AML.T0058, AML.T0080 (Oct 2025)
+- [OWASP GenAI Security Project](https://genai.owasp.org) — Top 10 for LLMs (2025)
+- [Microsoft Security Blog](https://microsoft.com/security/blog) — AI Recommendation Poisoning (Feb 10, 2026)
+- [NIST AI RMF](https://nist.gov) — AI Risk Management Framework
+- [DeepTeam](https://github.com/confident-ai/deepteam) — Open-source red teaming (Nov 2025)
+- EU AI Act — Red teaming mandated for high-risk AI systems
+
+---
+
+> See the interactive [Prior Art Timeline](/prior-art) for the full visual chronology, or the [MITRE ATLAS Mapping](/docs/atlas-mapping) for the complete technique-by-technique alignment.

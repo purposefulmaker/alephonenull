@@ -33,7 +33,7 @@
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.9.1",
     "@types/unist": "^3.0.3",
-    "alephonenull-experimental": "0.1.0-alpha.1",
+    "alephonenull-eval": "0.1.0-alpha.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",

@@ -107,6 +107,14 @@ export const docsConfig: DocsConfig = {
           items: [],
         },
         {
+          href: '/docs/atlas-mapping',
+          title: {
+            en: 'MITRE ATLAS Mapping',
+            pt: 'Mapeamento MITRE ATLAS',
+          },
+          items: [],
+        },
+        {
           href: '/docs/null-protocol',
           title: {
             en: 'The Null Protocol',
@@ -190,8 +198,8 @@ export const docsConfig: DocsConfig = {
         {
           href: '/docs/guardrail-integration',
           title: {
-            en: 'Guardrail Integration',
-            pt: 'Integração de Guardrails',
+            en: 'Behavioral Constraint Integration',
+            pt: 'Integração de Restrições Comportamentais',
           },
           items: [],
         },
@@ -208,6 +216,22 @@ export const docsConfig: DocsConfig = {
           title: {
             en: 'Licensing',
             pt: 'Licenciamento',
+          },
+          items: [],
+        },
+        {
+          href: '/prior-art',
+          title: {
+            en: 'Prior Art Timeline',
+            pt: 'Cronologia de Arte Prévia',
+          },
+          items: [],
+        },
+        {
+          href: '/blog/en/prior-art-timeline',
+          title: {
+            en: 'Prior Art (Article)',
+            pt: 'Arte Prévia (Artigo)',
           },
           items: [],
         },

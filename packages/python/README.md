@@ -1,4 +1,4 @@
-# alephonenull-experimental
+# alephonenull-eval
 
 ⚠️ **EXPERIMENTAL RESEARCH FRAMEWORK - NOT FOR PRODUCTION USE**
 
@@ -17,13 +17,13 @@ See [DISCLAIMER.md](https://github.com/purposefulmaker/alephonenull/blob/main/DI
 
 ```bash
 # Experimental package
-pip install alephonenull-experimental
+pip install alephonenull-eval
 
 # With provider integrations
-pip install alephonenull-experimental[all-providers]
+pip install alephonenull-eval[all-providers]
 
 # For development
-pip install alephonenull-experimental[dev]
+pip install alephonenull-eval[dev]
 ```
 
 ## Quick Start (Experimental)
@@ -249,9 +249,9 @@ If using in academic research:
 
 ## Troubleshooting
 
-**Import Errors**: Make sure you installed the experimental package:
+**Import Errors**: Make sure you installed the evaluation package:
 ```bash
-pip install alephonenull-experimental
+pip install alephonenull-eval
 ```
 
 **No Detection**: Enhanced features may not be available. Check warnings.

@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name="alephonenull-experimental",
+    name="alephonenull-eval",
     version="0.1.0a1",  # Alpha version
     author="AlephOneNull Research Team",
     author_email="research@alephonenull.org",

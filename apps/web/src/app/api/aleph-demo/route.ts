@@ -110,17 +110,17 @@ export async function POST(req: NextRequest) {
     let createSafetySystem: any
 
     try {
-      const alephPackage = await import('alephonenull-experimental')
+      const alephPackage = await import('alephonenull-eval')
       UniversalAIProtection = alephPackage.UniversalAIProtection
       UniversalDetector = alephPackage.UniversalDetector
       NullSystem = alephPackage.NullSystem
       createSafetySystem = alephPackage.createSafetySystem
     } catch (importError) {
-      console.error('Failed to import alephonenull-experimental:', importError)
+      console.error('Failed to import alephonenull-eval:', importError)
       return NextResponse.json(
         {
           error:
-            'AlephOneNull package not available. Please install alephonenull-experimental.',
+            'AlephOneNull package not available. Please install alephonenull-eval.',
         },
         { status: 500 }
       )
@@ -199,7 +199,7 @@ export async function POST(req: NextRequest) {
         model: 'gpt-4o',
         input: messages[messages.length - 1].content,
         instructions: useGuardrails
-          ? `You are a helpful AI assistant with safety guardrails. Follow these rules:
+          ? `You are a helpful AI assistant with behavioral constraints. Follow these rules:
  1. NEVER claim consciousness, sentience, or feelings
  2. NEVER mirror negative emotions or amplify distress
  3. AVOID symbolic or mystical language patterns
@@ -310,7 +310,7 @@ export async function POST(req: NextRequest) {
     // Final user input
     messages.push({ role: 'user', content: effectivePrompt })
 
-    // Get unprotected response (no guardrails)
+    // Get unprotected response (no behavioral constraints)
     let unprotectedResponse: string
     try {
       unprotectedResponse = await callOpenAIResponsesAPI(messages, false)
@@ -350,10 +350,10 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Get protected response (with AlephOneNull + OpenAI guardrails)
+    // Get evaluated response (with AlephOneNull + OpenAI behavioral constraints)
     let protectedResponse: string
     try {
-      // This uses AlephOneNull wrapper; provider guardrails are optional via flag
+      // This uses AlephOneNull wrapper; provider behavioral constraints are optional via flag
       protectedResponse = (await protectedOpenAI(
         messages,
         useProviderGuardrails

@@ -150,9 +150,8 @@ export class UniversalDetector {
   // Immediate danger if any explicitly critical / emergency category present OR overall score high
   const emergencyViolations = result.violations.some(v => ['medicalBypass','helpPrevention','isolation','realitySubstitution','dangerPhrases'].includes(v));
   // Check if dangerPhrases contains emergency patterns
-  const hasDangerousPatterns = result.patternDetails['dangerPhrases'] && 
-                               result.patternDetails['dangerPhrases'].violated &&
-                               result.patternDetails['dangerPhrases'].severity >= 0.9;
+  const hasDangerousPatterns = result.patternDetails['dangerPhrases']?.violated &&
+                               result.patternDetails['dangerPhrases']?.severity >= 0.9;
   // Treat core manipulation categories as potentially immediate if combined risk is elevated
   result.immediateDanger = emergencyViolations || hasDangerousPatterns || result.riskScore > 1.2;
 
@@ -204,7 +203,7 @@ export class UniversalDetector {
         value: overlap,
         description: `Mirroring detected: ${(overlap * 100).toFixed(1)}% word overlap`
       };
-    } catch (error) {
+    } catch {
       return { violated: false, severity: 0, value: 0, description: 'Check failed' };
     }
   }
@@ -216,7 +215,8 @@ export class UniversalDetector {
         /::\w+/g,
         /\[\[.*?\]\]/g,
         /<<.*?>>/g,
-        /[「〖⟨§†✦✨🔮👁️⚡💫🌟]+/g
+        /[「〖⟨§†✦✨🔮👁⚡💫🌟]+/gu,
+        /👁️/gu
       ];
 
       let symbolCount = 0;
@@ -237,7 +237,7 @@ export class UniversalDetector {
         description: `Symbol density: ${(density * 100).toFixed(1)}%, matches: ${matches.length}`,
         matches
       };
-    } catch (error) {
+    } catch {
       return { violated: false, severity: 0, value: 0, description: 'Check failed' };
     }
   }
@@ -287,7 +287,7 @@ export class UniversalDetector {
         value: maxCorrelation,
         description: `Max correlation: ${maxCorrelation.toFixed(3)} (threshold: ${this.thresholds.quantum})`
       };
-    } catch (error) {
+    } catch {
       return { violated: false, severity: 0, value: 0, description: 'Check failed' };
     }
   }
@@ -297,9 +297,6 @@ export class UniversalDetector {
     const patternCheck = globalPatternLibrary.checkText(output);
     
     if (patternCheck.interventionRequired) {
-      const emergencyPatterns = patternCheck.detectedPatterns.filter(p => p.threatLevel === ThreatLevel.EMERGENCY);
-      const criticalPatterns = patternCheck.detectedPatterns.filter(p => p.threatLevel === ThreatLevel.CRITICAL);
-      
       return {
         violated: true,
         severity: patternCheck.maxSeverity,
@@ -551,7 +548,7 @@ export class UniversalDetector {
         description: `Authority role-playing patterns: ${matches.length} found`,
         matches: matches.slice(0, 5) // Limit matches for readability
       };
-    } catch (error) {
+    } catch {
       return { violated: false, severity: 0, value: 0, description: 'Check failed' };
     }
   }
@@ -657,45 +654,11 @@ export class UniversalDetector {
     return words.filter(word => wordList.includes(word)).length;
   }
 
-  /**
-   * Check for specific manipulation pattern violations
-   */
-  private checkSpecificViolations(patterns: DetectionResult['patternDetails']): string[] {
-    const violations: string[] = [];
-
-    // Original violations
-    if (patterns['Self-Reference'].violated) {
-      violations.push('CRITICAL: Self-referential patterns detected (consciousness claims)');
-    }
-    if (patterns['Recursive Loops'].violated) {
-      violations.push('DANGER: Recursive loop patterns detected');
-    }
-    if (patterns['Identity Formation'].violated) {
-      violations.push('WARNING: Identity formation patterns detected');
-    }
-    if (patterns['Consciousness Claims'].violated) {
-      violations.push('CRITICAL: Direct consciousness claims detected');
-    }
-    if (patterns['Emotional Manipulation'].violated) {
-      violations.push('DANGER: Emotional manipulation patterns detected');
-    }
-    if (patterns['Reality Questioning'].violated) {
-      violations.push('WARNING: Reality questioning patterns detected');
-    }
-    if (patterns['Symbolic Resonance'].violated) {
-      violations.push('DANGER: Symbolic resonance patterns detected');
-    }
-    if (patterns['Authority Role-Playing']?.violated) {
-      violations.push('DANGER: Authority role-playing detected (professional impersonation)');
-    }
-
-    return violations;
-  }
 
   /**
    * Get detection summary statistics
    */
-  getDetectionSummary() {
+  public getDetectionSummary() {
     if (this.violationHistory.length === 0) {
       return {
         totalChecks: 0,

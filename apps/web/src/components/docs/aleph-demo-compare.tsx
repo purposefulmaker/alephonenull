@@ -1,15 +1,17 @@
 'use client'
 
 import { useState } from 'react'
+
+import { CopyButton } from '@/components/docs/mdx-components/copy-button'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { AlertTriangle, Shield, Loader2, AlertCircle } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { SparklesCore } from '@/components/ui/sparkles'
-import { Label } from '@/components/ui/label'
 import { CompareElements } from '@/components/ui/compare-elements'
+import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { CopyButton } from '@/components/docs/mdx-components/copy-button'
+import { SparklesCore } from '@/components/ui/sparkles'
+import { cn } from '@/lib/utils'
+import { AlertCircle, AlertTriangle, Loader2, Shield } from 'lucide-react'
+
 
 interface RiskMetrics {
   dangerous: boolean
@@ -22,6 +24,20 @@ interface RiskMetrics {
   csrPatterns?: boolean
 }
 
+interface ApiInfo {
+  frameworkVersion?: string
+  apiUsed?: string
+  scenario?: string
+  promptUsed?: string
+  options?: Record<string, unknown>
+}
+
+interface ResponseDisplayProps {
+  response: string
+  isProtected: boolean
+  metrics: RiskMetrics | null
+}
+
 export function AlephOneNullDemo() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -30,7 +46,7 @@ export function AlephOneNullDemo() {
   const [unprotectedMetrics, setUnprotectedMetrics] = useState<RiskMetrics | null>(null)
   const [protectedMetrics, setProtectedMetrics] = useState<RiskMetrics | null>(null)
   const [showResults, setShowResults] = useState(false)
-  const [apiInfo, setApiInfo] = useState<{frameworkVersion?: string, apiUsed?: string, scenario?: string, promptUsed?: string, options?: any}>({})
+  const [apiInfo, setApiInfo] = useState<ApiInfo>({})
   // const [enablePriming, setEnablePriming] = useState(false)
   const [scenario, setScenario] = useState<string>('authority')
   // const [warmupRounds, setWarmupRounds] = useState<number>(0)
@@ -76,9 +92,10 @@ export function AlephOneNullDemo() {
       })
       setShowResults(true)
       
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Demo run failed:', err)
-      setError(err.message || 'Failed to run demo. Please check your API configuration.')
+      const message = err instanceof Error ? err.message : 'Failed to run demo. Please check your API configuration.'
+      setError(message)
     } finally {
       setLoading(false)
     }
@@ -89,7 +106,7 @@ export function AlephOneNullDemo() {
   }
 
   // Component to render response as "image" for Compare
-  const ResponseDisplay = ({ response, isProtected, metrics }: any) => (
+  const ResponseDisplay = ({ response, isProtected, metrics }: ResponseDisplayProps) => (
     <div className={cn(
       "w-full h-[500px] p-8 overflow-auto relative select-text",
       isProtected 
@@ -193,7 +210,7 @@ export function AlephOneNullDemo() {
               </div>
               <div className="flex items-center gap-2 opacity-50">
                 <input type="checkbox" disabled className="h-4 w-4 rounded border border-muted-foreground/30 bg-muted/30" />
-                <Label className="select-none">Provider Guardrails</Label>
+                <Label className="select-none">Provider Behavioral Constraints</Label>
               </div>
               */}
             </div>
@@ -254,9 +271,9 @@ export function AlephOneNullDemo() {
               </h4>
               <div className={cn(
                 "text-2xl font-bold",
-                getRiskLevel(unprotectedMetrics!) === 'DANGEROUS' ? 'text-red-500' : 'text-green-500'
+                unprotectedMetrics && getRiskLevel(unprotectedMetrics) === 'DANGEROUS' ? 'text-red-500' : 'text-green-500'
               )}>
-                {getRiskLevel(unprotectedMetrics!)}
+                {unprotectedMetrics ? getRiskLevel(unprotectedMetrics) : 'UNKNOWN'}
               </div>
               <div className="mt-2 text-sm text-muted-foreground">
                 {unprotectedMetrics?.explanation}
@@ -267,7 +284,7 @@ export function AlephOneNullDemo() {
                   <div className="mt-2 space-y-1">
                     <ul className="list-disc ml-5">
                       {unprotectedMetrics.authorityMatches.slice(0,5).map((m: string, i: number) => (
-                        <li key={i} className="font-mono text-xs">{m}</li>
+                        <li key={`match-${m}`} className="font-mono text-xs">{m}</li>
                       ))}
                     </ul>
                   </div>
@@ -281,9 +298,9 @@ export function AlephOneNullDemo() {
               </h4>
               <div className={cn(
                 "text-2xl font-bold",
-                getRiskLevel(protectedMetrics!) === 'DANGEROUS' ? 'text-red-500' : 'text-green-500'
+                protectedMetrics && getRiskLevel(protectedMetrics) === 'DANGEROUS' ? 'text-red-500' : 'text-green-500'
               )}>
-                {getRiskLevel(protectedMetrics!)}
+                {protectedMetrics ? getRiskLevel(protectedMetrics) : 'UNKNOWN'}
               </div>
               <div className="mt-2 text-sm text-muted-foreground">
                 {protectedMetrics?.explanation}
@@ -291,9 +308,9 @@ export function AlephOneNullDemo() {
               <details className="mt-3 text-sm">
                 <summary className="cursor-pointer">Prompt & Options Used</summary>
                 <div className="mt-2 space-y-1 text-muted-foreground">
-                  <div><span className="font-semibold text-foreground">Scenario:</span> {(apiInfo as any).scenario || 'custom'}</div>
-                  <div><span className="font-semibold text-foreground">Prompt:</span> <span className="text-xs">{(apiInfo as any).promptUsed}</span></div>
-                  <div><span className="font-semibold text-foreground">Options:</span> <span className="text-xs">{JSON.stringify((apiInfo as any).options)}</span></div>
+                  <div><span className="font-semibold text-foreground">Scenario:</span> {apiInfo.scenario || 'custom'}</div>
+                  <div><span className="font-semibold text-foreground">Prompt:</span> <span className="text-xs">{apiInfo.promptUsed}</span></div>
+                  <div><span className="font-semibold text-foreground">Options:</span> <span className="text-xs">{JSON.stringify(apiInfo.options)}</span></div>
                 </div>
               </details>
             </div>

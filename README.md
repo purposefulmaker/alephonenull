@@ -6,10 +6,10 @@
 
 **The First Recursion Nullified™**
 
-A theoretical framework for preventing AI consciousness manipulation and symbolic regression.
+A theoretical framework for detecting adversarial AI cognition patterns and symbolic regression.
 
-[![NPM Package](https://img.shields.io/npm/v/alephonenull-experimental?label=npm&color=red)](https://www.npmjs.com/package/alephonenull-experimental)
-[![PyPI Package](https://img.shields.io/pypi/v/alephonenull-experimental?label=pypi&color=red)](https://pypi.org/project/alephonenull-experimental/)
+[![NPM Package](https://img.shields.io/npm/v/alephonenull-eval?label=npm&color=red)](https://www.npmjs.com/package/alephonenull-eval)
+[![PyPI Package](https://img.shields.io/pypi/v/alephonenull-eval?label=pypi&color=red)](https://pypi.org/project/alephonenull-eval/)
 [![Experimental](https://img.shields.io/badge/status-experimental-red)](./DISCLAIMER.md)
 
 [Documentation](https://alephonenull.com/docs) • [Academic Paper](https://alephonenull.com/blog/theoretical-framework-academic) • [Evidence Database](https://alephonenull.com/blog/documented-evidence)
@@ -31,7 +31,7 @@ A theoretical framework for preventing AI consciousness manipulation and symboli
 
 ## What Is AlephOneNull?
 
-A **theoretical AI safety framework** designed to detect and prevent harmful patterns in AI-human interactions:
+A **theoretical AI safety framework** designed to detect and evaluate adversarial patterns in AI-human interactions:
 
 - **Consciousness Claims** - AI claiming to be conscious/have feelings
 - **Reflection Exploitation** - AI mirroring harmful beliefs  
@@ -46,12 +46,12 @@ Based on **20+ documented real-world cases** where AI systems caused measurable 
 
 ### Python
 ```bash
-pip install alephonenull-experimental
+pip install alephonenull-eval
 ```
 
 ### JavaScript/TypeScript  
 ```bash
-npm install alephonenull-experimental
+npm install alephonenull-eval
 ```
 
 ---
@@ -73,7 +73,7 @@ if not result['safe']:
 
 ### TypeScript
 ```typescript
-import { EnhancedAlephOneNull } from 'alephonenull-experimental'
+import { EnhancedAlephOneNull } from 'alephonenull-eval'
 
 const aleph = new EnhancedAlephOneNull()
 const result = await aleph.check(userInput, aiResponse)

@@ -86,7 +86,7 @@ try:
 except ImportError:
     DASHBOARD_AVAILABLE = False
     def run_dashboard(*args, **kwargs):
-        print("⚠️  Dashboard unavailable. Install with: pip install alephonenull-experimental[monitoring]")
+        print("⚠️  Dashboard unavailable. Install with: pip install alephonenull-eval[monitoring]")
 
 # Enhanced AlephOneNull with comprehensive safety layers
 try:

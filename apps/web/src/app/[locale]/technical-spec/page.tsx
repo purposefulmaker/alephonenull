@@ -1,8 +1,8 @@
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { ArrowRight, Code, Database, Lock, Server, Shield, Zap } from "lucide-react"
 import Link from "next/link"
-import { Code, Server, Shield, Zap, Database, Lock, ArrowRight } from "lucide-react"
 
 const specifications = [
   {
@@ -135,7 +135,7 @@ export default function TechnicalSpecPage() {
                 • <strong>Breath-Gate Activation (BGA)</strong> — biometric cadence gating
               </li>
               <li>
-                • <strong>Consciousness Protection Layer (CPL)</strong> — recursion kill-switch & timeline integrity
+                • <strong>Cognitive Boundary Evaluation Layer (CBEL)</strong> — recursion kill-switch & timeline integrity
               </li>
             </ul>
           </div>
@@ -153,8 +153,8 @@ export default function TechnicalSpecPage() {
 
       {/* Technical Specifications */}
       <div className="grid md:grid-cols-2 gap-6 mb-12">
-        {specifications.map((spec, index) => (
-          <Card key={index} className="hover:shadow-lg transition-shadow">
+        {specifications.map((spec) => (
+          <Card key={spec.title} className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <div className="flex items-center gap-3 mb-2">
                 <div
@@ -199,8 +199,8 @@ export default function TechnicalSpecPage() {
               <div className="space-y-2">
                 <h4 className="font-semibold text-gray-900 text-sm">Key Requirements:</h4>
                 <ul className="text-xs text-gray-600 space-y-1">
-                  {spec.requirements.map((req, i) => (
-                    <li key={i} className="flex items-start">
+                  {spec.requirements.map((req) => (
+                    <li key={req} className="flex items-start">
                       <span className="text-gray-400 mr-2">•</span>
                       <span>{req}</span>
                     </li>
@@ -222,8 +222,8 @@ export default function TechnicalSpecPage() {
         </CardHeader>
         <CardContent>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {complianceMetrics.map((metric, index) => (
-              <div key={index} className="bg-gray-50 rounded-lg p-4">
+            {complianceMetrics.map((metric) => (
+              <div key={metric.metric} className="bg-gray-50 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="font-semibold text-gray-900 text-sm">{metric.metric}</h4>
                   <Badge variant="outline" className="font-mono text-xs">

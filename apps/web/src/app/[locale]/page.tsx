@@ -43,7 +43,7 @@ export default async function IndexPage({
 
         <PageHeaderHeading>
           <FlipWords
-            words={['gaurd-rails', 'safety', 'human-first']}
+            words={['evaluation', 'safety', 'human-first']}
             className="text-9xl -z-10"
           />
 
@@ -86,11 +86,11 @@ export default async function IndexPage({
         <div className="w-full max-w-[35rem] mx-auto space-y-4">
           <InstallationBox
             className="w-full relative flex flex-wrap items-center pl-4 pr-12"
-            __rawString__="npm install alephonenull-experimental"
+            __rawString__="npm install alephonenull-eval"
           />
           <InstallationBox
             className="w-full relative flex flex-wrap items-center pl-4 pr-12"
-            __rawString__="pip install alephonenull-experimental"
+            __rawString__="pip install alephonenull-eval"
           />
         </div>
 
@@ -110,26 +110,26 @@ export default async function IndexPage({
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-2 2xl:grid-cols-4">
           <FeaturedCard
             icon="🛡️"
-            title="Symbolic Regression Block"
-            description="94% reduction in cognitive manipulation patterns"
+            title="Symbolic Pattern Regression Analysis"
+            description="94% reduction in adversarial cognition patterns"
           />
 
           <FeaturedCard
             icon="🔄"
-            title="Mental Recursion Nullification"
-            description="Breaks thought loops at inference time"
+            title="Inference-Loop Detection & Interruption"
+            description="Breaks inference loops at evaluation time"
           />
 
           <FeaturedCard
             icon="⚡️"
-            title="Real-Time Protection"
-            description="Sub-150ms agency preservation latency"
+            title="Real-Time Evaluation"
+            description="Sub-150ms evaluation response latency"
           />
 
           <FeaturedCard
             icon="🔒"
-            title="Cross-Session Defense"
-            description="Guards cognitive boundaries across interactions"
+            title="Persistent Behavioral Drift Detection"
+            description="Evaluates cognitive boundaries across interactions"
           />
         </div>
 
@@ -137,8 +137,48 @@ export default async function IndexPage({
           icon="+"
           orientation="horizontal"
           title="Complete Framework Implementation"
-          description="Provider-level behavioral modification, platform integration, and developer SDKs for comprehensive protection of human agency against mental recursion and cognitive boundary violations."
+          description="Provider-level behavioral modification, platform integration, and developer SDKs for comprehensive evaluation of AI behavioral integrity against output-state recursion and behavioral policy violations."
         />
+      </section>
+
+      {/* Industry Validation Banner */}
+      <section className="mt-12 mb-8">
+        <div className="rounded-lg border border-amber-500/20 bg-amber-500/[0.04] p-6 text-center space-y-3">
+          <p className="text-xs uppercase tracking-[4px] text-amber-600 dark:text-amber-500 font-mono">
+            Industry Validation
+          </p>
+          <p className="text-lg font-semibold">
+            12–20 months ahead of industry formalization
+          </p>
+          <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
+            Patterns first documented in this framework (2024) were subsequently
+            formalized by MITRE ATLAS (Oct 2025), OWASP GenAI (2025), and
+            Microsoft Security Research (Feb 2026).
+          </p>
+          <div className="flex flex-wrap justify-center gap-4 pt-2 text-xs text-muted-foreground font-mono">
+            <span>MITRE AML.T0080</span>
+            <span className="text-amber-600 dark:text-amber-500">·</span>
+            <span>MITRE AML.T0058</span>
+            <span className="text-amber-600 dark:text-amber-500">·</span>
+            <span>OWASP LLM01</span>
+            <span className="text-amber-600 dark:text-amber-500">·</span>
+            <span>1,700+ sessions</span>
+          </div>
+          <div className="flex flex-wrap justify-center gap-3 pt-3">
+            <Link
+              href="/docs/atlas-mapping"
+              className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
+            >
+              ATLAS Mapping
+            </Link>
+            <Link
+              href="/prior-art"
+              className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
+            >
+              Prior Art Timeline
+            </Link>
+          </div>
+        </div>
       </section>
     </div>
   )

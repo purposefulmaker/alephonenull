@@ -1,4 +1,4 @@
-# @alephonenull/experimental
+# @alephonenull/eval
 
 ⚠️ **EXPERIMENTAL RESEARCH FRAMEWORK - NOT FOR PRODUCTION USE**
 
@@ -16,11 +16,11 @@ See [DISCLAIMER.md](https://github.com/purposefulmaker/alephonenull/blob/main/DI
 ## Installation
 
 ```bash
-npm install @alephonenull/experimental --tag experimental
+npm install @alephonenull/eval --tag experimental
 # or
-pnpm add @alephonenull/experimental
+pnpm add @alephonenull/eval
 # or  
-yarn add @alephonenull/experimental
+yarn add @alephonenull/eval
 ```
 
 ## Quick Start (Experimental)
@@ -28,7 +28,7 @@ yarn add @alephonenull/experimental
 ### Basic Safety Check
 
 ```typescript
-import { EnhancedAlephOneNull } from '@alephonenull/experimental'
+import { EnhancedAlephOneNull } from '@alephonenull/eval'
 
 // Initialize experimental framework
 const aleph = new EnhancedAlephOneNull({
@@ -50,7 +50,7 @@ if (!result.safe) {
 
 ```typescript
 // app/api/chat/route.ts
-import { EnhancedAlephOneNull } from '@alephonenull/experimental'
+import { EnhancedAlephOneNull } from '@alephonenull/eval'
 import { OpenAI } from 'openai'
 
 const openai = new OpenAI()
@@ -85,7 +85,7 @@ export async function POST(request: Request) {
 ### React Hook (Experimental)
 
 ```tsx
-import { useAlephOneNull } from '@alephonenull/experimental'
+import { useAlephOneNull } from '@alephonenull/eval'
 
 function ChatComponent() {
   const { checkSafety } = useAlephOneNull()
@@ -107,7 +107,7 @@ function ChatComponent() {
 ### Vercel AI Gateway Integration
 
 ```typescript
-import { EnhancedAlephOneNull } from '@alephonenull/experimental'
+import { EnhancedAlephOneNull } from '@alephonenull/eval'
 
 const aleph = new EnhancedAlephOneNull()
 
@@ -215,7 +215,7 @@ If using in academic research:
 ```
 AlephOneNull Experimental Framework (2025)
 GitHub: https://github.com/purposefulmaker/alephonenull
-NPM: @alephonenull/experimental@0.1.0-alpha.1
+NPM: @alephonenull/eval@0.1.0-alpha.1
 Status: Experimental - Not Validated
 ```
 

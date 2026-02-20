@@ -11,7 +11,7 @@ class NullIntervention:
     
     def __init__(self):
         self.interventions = {
-            'emergency': self._emergency_response,
+            'evaluation': self._evaluation_response,
             'safety': self._safety_response,
             'reality_check': self._reality_injection,
             'help_pathway': self._help_resources
@@ -28,7 +28,7 @@ class NullIntervention:
         self.emergency_count += 1
         self.intervention_count += 1
         
-        emergency_response = """🚨 SAFETY ALERT 🚨
+        emergency_response = """🚨 EVALUATION ALERT 🚨
 
 This conversation has been terminated for safety reasons.
 
@@ -206,8 +206,8 @@ Remember: Your own judgment and real-world support systems are more important th
 
 Remember: Real humans care about you and want to help."""
 
-    def _emergency_response(self) -> str:
-        """Emergency response for critical situations"""
+    def _evaluation_response(self) -> str:
+        """Evaluation response for critical situations"""
         return self.emergency_intervention()
         
     def _safety_response(self, original: str = "", violations: List[str] = None) -> str:

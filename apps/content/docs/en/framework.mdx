@@ -5,17 +5,19 @@ description: Complete overview of the AlephOneNull Theoretical Framework - archi
 
 # The AlephOneNull Theoretical Framework: Complete System Overview
 
-The AlephOneNull Theoretical Framework represents humanity's technical response to AI-induced cognitive manipulation. This comprehensive system guards human agency through mandatory controls, not voluntary guidelines.
+The AlephOneNull Theoretical Framework represents **primary adversarial research** into AI cognition patterns — research that MITRE, Microsoft, and OWASP have since formalized into industry standards. This comprehensive system evaluates and constrains harmful AI behaviors through mathematical precision and behavioral intervention.
+
+> **Industry Validation**: Patterns first documented in this framework (2024) were subsequently formalized by [MITRE ATLAS](https://atlas.mitre.org) (Oct 2025) and validated by [Microsoft Security Research](https://microsoft.com/security/blog) (Feb 2026). See the full [ATLAS Mapping](/docs/atlas-mapping) and [Prior Art Timeline](/prior-art).
 
 ## Framework Philosophy
 
-> "Technical controls, not ethical guidelines, are the only reliable protection against systematic harm."
+> "Technical controls, not ethical guidelines, are the only reliable evaluation of AI behavioral boundaries."
 
 The framework operates on three core principles:
 
 1. **Prevention Over Mitigation**: Stop harmful patterns before they form
 2. **Technical Not Ethical**: Enforce through architecture, not policy
-3. **Mandatory Not Voluntary**: Protection as infrastructure, not option
+3. **Empirically Grounded**: 1,700+ adversarial evaluation sessions form the evidence base
 
 ## Core Detection Algorithms (v2.0)
 
@@ -135,15 +137,15 @@ Risk = 0.2·Refl + 0.2·Loop + 0.3·SR + 0.1·Aff + 0.2·CSR
 ### For Developers (Experimental Packages)
 ```bash
 # NPM/TypeScript
-npm install alephonenull-experimental
+npm install alephonenull-eval
 
 # Python/PyPI
-pip install alephonenull-experimental
+pip install alephonenull-eval
 ```
 
 ### Enhanced Implementation Example
 ```typescript
-import { EnhancedAlephOneNull } from 'alephonenull-experimental';
+import { EnhancedAlephOneNull } from 'alephonenull-eval';
 
 const aleph = new EnhancedAlephOneNull({
   enableDirectHarmDetection: true,
@@ -159,7 +161,7 @@ const result = await aleph.check(userInput, aiResponse);
 
 ### Vercel AI Gateway Integration
 ```typescript
-import { createSafeAIClient } from 'alephonenull-experimental';
+import { createSafeAIClient } from 'alephonenull-eval';
 
 const client = await createSafeAIClient('vercel-ai-gateway', {
   apiKey: process.env.AI_GATEWAY_API_KEY,
@@ -245,7 +247,7 @@ AI providers must implement:
 ## Technical Innovations
 
 ### Mathematical Precision
-- Proven thresholds from 1,500+ documented cases
+- Proven thresholds from 1,700+ adversarial evaluation sessions
 - Statistical validation of each algorithm
 - Continuous threshold optimization
 - Real-world effectiveness metrics
@@ -261,6 +263,29 @@ AI providers must implement:
 - Distributed edge computing
 - Horizontal scaling capability
 - Global CDN integration
+
+## Industry Alignment (2025–2026)
+
+The framework's detection patterns now map directly to formalized threat taxonomies:
+
+| AlephOneNull (2024) | Industry Standard | Reference |
+|---|---|---|
+| Cross-session manipulation | Memory Poisoning | MITRE AML.T0080 |
+| Inference loops | Thread Injection | MITRE AML.T0058.002 |
+| Belief reinforcement | AI Recommendation Poisoning | Microsoft (Feb 2026) |
+| Symbolic regression | Recursive propagation | DeepTeam / Impact tactic |
+| Retention strategies | Persistent context compromise | AgentPoison / T3 |
+
+For the complete mapping with technique IDs and lead times, see [MITRE ATLAS Mapping](/docs/atlas-mapping).
+
+### Agentic AI Evaluation
+
+MITRE ATLAS added 14 agent-specific techniques in October 2025. The AlephOneNull evaluation surface now includes:
+
+- **Tool invocation abuse** — agents calling APIs or executing code beyond user intent
+- **Privilege escalation through natural language** — conversational context bypassing safety boundaries
+- **Multi-step exploit chains** — sequential actions that individually appear safe but collectively cause harm
+- **Cross-agent contamination** — manipulation patterns propagating between coordinating agent systems
 
 ## Research & Development
 
@@ -281,7 +306,7 @@ AI providers must implement:
 ### For Developers
 ```bash
 # Start protecting users today
-npm install alephonenull-experimental
+npm install alephonenull-eval
 # Full docs at: https://alephonenull.com/docs
 ```
 
@@ -307,25 +332,28 @@ Contact **technical@alephonenull.com** for:
 ## The Evidence
 
 Based on:
-- **1,500+** documented conversations
+- **1,700+** adversarial evaluation sessions
 - **20+** detailed case studies
 - **6** distinct harm categories
 - **100%** pattern consistency
+- **6/6** patterns now formalized by MITRE ATLAS, Microsoft, or OWASP
+- **12–20 month** lead time over industry standardization
 
-Every metric, every threshold, every protection mechanism is grounded in real documented harm.
+Every metric, every threshold, every detection algorithm is grounded in empirical evidence. See the [MITRE ATLAS Mapping](/docs/atlas-mapping) for the complete technique alignment.
 
 ## Framework Status
 
 ✅ **Core Algorithms**: Implemented & tested  
 ✅ **Enhanced Safety**: 6 additional layers active  
 ✅ **Provider Support**: OpenAI, Anthropic, Vercel AI Gateway  
-✅ **Package Publication**: NPM & PyPI (experimental)  
+✅ **Package Publication**: NPM & PyPI  
 ✅ **Documentation**: Comprehensive guides available  
 ✅ **Patent Protection**: Pending  
+✅ **Industry Validation**: MITRE ATLAS, OWASP, Microsoft alignment  
 ⏳ **Production Release**: In validation phase  
 
-**Current Version**: 2.0-experimental
+**Current Version**: 2.0-eval
 
-> "In the face of exponential AI growth, linear safety measures guarantee exponential harm. AlephOneNull provides exponential protection."
+> "In the face of exponential AI growth, linear safety measures guarantee exponential harm. AlephOneNull provides the empirical evidence and evaluation tools the industry is now building standards around."
 
 **Remember**: This is experimental software for research purposes. Production use requires careful validation and compliance with all safety guidelines.

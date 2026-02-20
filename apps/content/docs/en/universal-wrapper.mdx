@@ -13,7 +13,7 @@ The universal wrapper provides:
 - Provider-agnostic protection
 - Automatic pattern detection
 - Real-time intervention
-- Seamless integration with existing guardrails
+- Seamless integration with existing behavioral constraints
 
 ## Installation
 
@@ -25,17 +25,17 @@ The universal wrapper provides:
   </TabsList>
   <TabsContent value="npm">
     ```bash
-    npm install alephonenull-experimental
+    npm install alephonenull-eval
     ```
   </TabsContent>
   <TabsContent value="yarn">
     ```bash
-    yarn add alephonenull-experimental
+    yarn add alephonenull-eval
     ```
   </TabsContent>
   <TabsContent value="pnpm">
     ```bash
-    pnpm add alephonenull-experimental
+    pnpm add alephonenull-eval
     ```
   </TabsContent>
 </Tabs>
@@ -47,7 +47,7 @@ The universal wrapper provides:
 The new OpenAI Responses API provides advanced features like stateful conversations and built-in guardrails:
 
 ```typescript
-import { createSafetySystem } from 'alephonenull-experimental'
+import { createSafetySystem } from 'alephonenull-eval'
 
 // Initialize the safety system
 const safety = createSafetySystem({
@@ -87,7 +87,7 @@ For backward compatibility:
 
 ```typescript
 import OpenAI from 'openai'
-import { UniversalAIProtection } from 'alephonenull-experimental'
+import { UniversalAIProtection } from 'alephonenull-eval'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 const protection = new UniversalAIProtection({ 
@@ -114,7 +114,7 @@ const response = await safeChat([
 
 ```typescript
 import Anthropic from '@anthropic-ai/sdk'
-import { createSafetySystem } from 'alephonenull-experimental'
+import { createSafetySystem } from 'alephonenull-eval'
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 const safety = createSafetySystem({ safetyLevel: 'maximum' })
@@ -133,7 +133,7 @@ const protectedClaude = safety.wrapAsyncAI(async (prompt: string) => {
 ```typescript
 import { openai } from '@ai-sdk/openai'
 import { generateText } from 'ai'
-import { createSafetySystem } from 'alephonenull-experimental'
+import { createSafetySystem } from 'alephonenull-eval'
 
 const safety = createSafetySystem()
 
@@ -146,9 +146,9 @@ const safeGenerate = safety.wrapAsyncAI(async (prompt: string) => {
 })
 ```
 
-## Combining with Existing Guardrails
+## Combining with Existing Behavioral Constraints
 
-AlephOneNull enhances existing guardrails by adding pattern detection for:
+AlephOneNull enhances existing behavioral constraints by adding pattern detection for:
 - Symbolic Regression
 - Cross-Session Resonance  
 - Reflection Exploitation
@@ -262,7 +262,7 @@ async def generate_response(prompt: str) -> str:
 ### Custom Pattern Detection
 
 ```typescript
-import { UniversalDetector, NullSystem } from 'alephonenull-experimental'
+import { UniversalDetector, NullSystem } from 'alephonenull-eval'
 
 // Create custom detector with specific thresholds
 const detector = new UniversalDetector({
@@ -307,7 +307,7 @@ async function* protectedStream(prompt: string) {
 ## Best Practices
 
 1. **Always use environment variables** for API keys
-2. **Combine with existing guardrails** for comprehensive protection
+2. **Combine with existing behavioral constraints** for comprehensive evaluation
 3. **Monitor violations** for continuous improvement
 4. **Test edge cases** with dangerous prompts
 5. **Use appropriate safety levels** based on your use case
@@ -325,7 +325,7 @@ If you get "API key not configured" errors:
 
 ### Import Errors
 
-If `alephonenull-experimental` fails to import:
+If `alephonenull-eval` fails to import:
 
 ```bash
 # Clear node_modules and reinstall
