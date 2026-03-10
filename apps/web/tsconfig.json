@@ -1,7 +1,6 @@
 {
   "extends": "@opendocs/typescript-config/nextjs.json",
   "compilerOptions": {
-    "ignoreDeprecations": "6.0",
     "plugins": [
       {
         "name": "next"
@@ -11,7 +10,6 @@
       "@/*": ["./src/*"],
       "contentlayer/generated": ["./.contentlayer/generated"]
     },
-    "baseUrl": ".",
     "rootDir": ".",
     "moduleResolution": "bundler"
   },

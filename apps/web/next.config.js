@@ -4,6 +4,7 @@ const { createContentlayerPlugin } = require('next-contentlayer2')
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  transpilePackages: ['@alephonenull/eval'],
   experimental: {
     appDir: true,
   },

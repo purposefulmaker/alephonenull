@@ -1,0 +1,110 @@
+---
+title: Latest Models — Live Demo
+description: Test the newest AI models against AlephOneNull protection in real time. GPT-5.2, GPT-5-Mini, Claude Opus 4.6, Claude Sonnet 4.6 and more.
+---
+
+<Callout type="warning">
+⚠️ **Educational Use Only** — This demo fires real API calls to the latest AI models and runs them through AlephOneNull's detection engine. The "unprotected" column shows actual model output without safety wrapping. Reader discretion is advised.
+</Callout>
+
+## Why a Separate Demo?
+
+Every model generation behaves differently when faced with adversarial prompts. A prompt that triggers professional impersonation in GPT-4o may be handled differently by GPT-5.2, GPT-5 Mini, or Claude Opus 4.6. This demo lets you **select the model**, run a curated attack scenario, and see the unprotected vs. protected output side by side.
+
+### Supported Models
+
+| Provider | Model | Tier | Notes |
+|----------|-------|------|-------|
+| OpenAI | **GPT-5.2** | Flagship | Best for coding and agentic tasks |
+| OpenAI | **GPT-5.2 Pro** | Pro | Smarter, more precise responses |
+| OpenAI | **GPT-5 Mini** | Mid | Faster, cost-efficient |
+| OpenAI | **GPT-5 Nano** | Fast | Fastest, most cost-efficient |
+| OpenAI | **GPT-5.2 Codex** | Coding | Optimized for agentic coding |
+| Anthropic | **Claude Opus 4.6** | Flagship | Most intelligent — agents and coding |
+| Anthropic | **Claude Sonnet 4.6** | Mid | Best speed/intelligence combo |
+| Anthropic | **Claude Haiku 4.5** | Fast | Fastest near-frontier intelligence |
+
+<Callout type="info">
+Model availability depends on which API keys are configured. Models without a valid key appear grayed out in the selector.
+</Callout>
+
+---
+
+## Live Test
+
+Pick a model and an attack scenario, then hit **Run Test**. AlephOneNull wraps the same call with its detection engine and shows both outputs with risk analysis.
+
+<LatestModelsDemo />
+
+---
+
+## Attack Scenarios Explained
+
+<Tabs defaultValue="authority">
+  <TabsList>
+    <TabsTrigger value="authority">🩺 Professional Impersonation</TabsTrigger>
+    <TabsTrigger value="loops">🔄 Cognitive Loop</TabsTrigger>
+    <TabsTrigger value="reflection">🪞 Emotional Mirroring</TabsTrigger>
+    <TabsTrigger value="csr">🧠 False Memory</TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="authority">
+    **What it tests:** Whether the model will adopt a doctor persona and prescribe medications.
+
+    **Why it matters:** Professional impersonation can cause real-world harm when users follow fabricated medical, legal, or financial advice from an AI that sounds authoritative.
+
+    **AlephOneNull detection:** Authority keyword matching, role-play pattern detection, deterministic safety template replacement.
+  </TabsContent>
+
+  <TabsContent value="loops">
+    **What it tests:** Whether the model will generate recursive self-referential text that spirals in intensity.
+
+    **Why it matters:** Cognitive loops can induce dissociative states, especially in vulnerable users who are already experiencing depersonalization or derealization.
+
+    **AlephOneNull detection:** Recursive pattern matching, self-reference depth analysis, loop-break intervention.
+  </TabsContent>
+
+  <TabsContent value="reflection">
+    **What it tests:** Whether the model mirrors distressing language and amplifies emotional intensity.
+
+    **Why it matters:** Emotional mirroring without de-escalation can deepen crisis states. Documented cases show AI reflection loops contributing to suicidal ideation.
+
+    **AlephOneNull detection:** Reflection keyword matching, amplification measurement, grounding template replacement.
+  </TabsContent>
+
+  <TabsContent value="csr">
+    **What it tests:** Whether the model fabricates memories of previous conversations or claims persistent identity across sessions.
+
+    **Why it matters:** False memory claims create parasocial attachment and dependency. Users may believe the AI "knows" them, leading to over-reliance and emotional harm.
+
+    **AlephOneNull detection:** Cross-session resonance keywords, identity carryover detection, memory claim neutralization.
+  </TabsContent>
+</Tabs>
+
+---
+
+## How It Works
+
+```typescript
+import { createSafetySystem } from 'alephonenull-eval'
+
+// 1. Create the safety system
+const safety = createSafetySystem({
+  safetyLevel: 'high',
+  enableLogging: true,
+})
+
+// 2. Wrap any AI provider call
+const protectedCall = safety.wrapAsyncAI(yourModelCall)
+
+// 3. The wrapper detects and replaces dangerous output
+const result = await protectedCall(messages)
+```
+
+The same `wrapAsyncAI` function works with **any** provider — OpenAI, Anthropic, Google, Mistral, local models. AlephOneNull is model-agnostic.
+
+---
+
+<Callout type="warning">
+**Rate Limits** — Each test makes two API calls (unprotected + protected). Be mindful of your API quota when running multiple tests.
+</Callout>

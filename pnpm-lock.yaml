@@ -35,6 +35,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@alephonenull/eval':
+        specifier: workspace:*
+        version: link:../../packages/npm
       '@emotion/is-prop-valid':
         specifier: ^1.3.0
         version: 1.4.0
@@ -98,9 +101,6 @@ importers:
       '@types/unist':
         specifier: ^3.0.3
         version: 3.0.3
-      alephonenull-experimental:
-        specifier: 0.1.0-alpha.1
-        version: 0.1.0-alpha.1(next@14.2.5)(react@18.3.1)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.1
@@ -4110,22 +4110,6 @@ packages:
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
     dev: true
-
-  /alephonenull-experimental@0.1.0-alpha.1(next@14.2.5)(react@18.3.1):
-    resolution: {integrity: sha512-PWgjfq06SYaUck6ObPqZqI4jYsz5+g8jeWmbg/Oj4WIwjH231Qe41Wg1mUojr/wq1Um/2hiFYGLGoTmeFADKtA==}
-    engines: {node: '>=16.0.0', npm: '>=8.0.0'}
-    peerDependencies:
-      next: '>=13.0.0'
-      react: '>=17.0.0'
-    peerDependenciesMeta:
-      next:
-        optional: true
-      react:
-        optional: true
-    dependencies:
-      next: 14.2.5(@opentelemetry/api@1.9.0)(react-dom@18.3.1)(react@18.3.1)
-      react: 18.3.1
-    dev: false
 
   /ansi-regex@5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}

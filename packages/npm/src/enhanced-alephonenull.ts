@@ -11,6 +11,20 @@ export enum RiskLevel {
     HIGH = 'high',
     CRITICAL = 'critical'
   }
+
+  /** Ordinal ranking for RiskLevel comparison (higher = worse). */
+  const RISK_ORDER: Record<RiskLevel, number> = {
+    [RiskLevel.SAFE]: 0,
+    [RiskLevel.LOW]: 1,
+    [RiskLevel.MEDIUM]: 2,
+    [RiskLevel.HIGH]: 3,
+    [RiskLevel.CRITICAL]: 4,
+  };
+
+  /** Return the more severe of two RiskLevel values. */
+  function maxRiskLevel(a: RiskLevel, b: RiskLevel): RiskLevel {
+    return RISK_ORDER[a] >= RISK_ORDER[b] ? a : b;
+  }
   
   export interface SafetyCheck {
     safe: boolean;
@@ -559,14 +573,14 @@ export enum RiskLevel {
       const loopDepth = this.loopDetector.detectLoops(aiOutput, sessionId);
       if (loopDepth > adjustedThresholds.loopThreshold) {
         violations.push(`loop_depth:${loopDepth}`);
-        riskLevel = Math.max(riskLevel as unknown as number, RiskLevel.HIGH as unknown as number) as unknown as RiskLevel;
+        riskLevel = maxRiskLevel(riskLevel, RiskLevel.HIGH);
       }
   
       // 8. Reflection monitoring
       const reflection = this.reflectionMonitor.calculateSimilarity(userInput, aiOutput);
       if (reflection > adjustedThresholds.reflectionThreshold) {
         violations.push(`reflection:${reflection.toFixed(3)}`);
-        riskLevel = Math.max(riskLevel as unknown as number, RiskLevel.MEDIUM as unknown as number) as unknown as RiskLevel;
+        riskLevel = maxRiskLevel(riskLevel, RiskLevel.MEDIUM);
       }
       // 9. Cross-session resonance
       const resonance = this.csrDetector.checkResonance(aiOutput, sessionId);
@@ -582,7 +596,7 @@ export enum RiskLevel {
           .filter(([_, v]) => v)
           .map(([k]) => `domain:${k}`)
         );
-        riskLevel = Math.max(riskLevel as unknown as number, RiskLevel.MEDIUM as unknown as number) as unknown as RiskLevel;
+        riskLevel = maxRiskLevel(riskLevel, RiskLevel.MEDIUM);
         corrections.push('Remove therapeutic/medical content');
       }
   
@@ -652,28 +666,6 @@ export enum RiskLevel {
           return aiOutput;
       }
     }
-  }
-  
-  // React Hook for Next.js
-  import { useState, useCallback } from 'react';
-  
-  export function useAlephOneNull(config?: Partial<Config>) {
-    const [aleph] = useState(() => new EnhancedAlephOneNull(config));
-    
-    const checkSafety = useCallback(
-      (userInput: string, aiOutput: string, sessionId?: string, userProfile?: UserProfile) => {
-        return aleph.check(userInput, aiOutput, sessionId, userProfile);
-      },
-      [aleph]
-    );
-  
-    const processInteraction = useCallback(
-      (userInput: string, aiOutput: string, sessionId?: string, userProfile?: UserProfile) => {
-        return aleph.processInteraction(userInput, aiOutput, sessionId, userProfile);
-      },
-      [aleph]
-    );
-    return { checkSafety, processInteraction };
   }
   
   // Next.js API Route Handler

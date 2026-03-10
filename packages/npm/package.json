@@ -1,15 +1,16 @@
 {
   "name": "@alephonenull/eval",
-  "version": "0.1.0-alpha.1",
+  "version": "2.0.0",
   "description": "⚠️ EXPERIMENTAL: Theoretical AI safety framework - NOT FOR PRODUCTION USE",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
       "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "default": "./src/index.ts"
     },
     "./react": {
       "import": "./dist/react.mjs",
@@ -30,6 +31,12 @@
       "import": "./dist/universal.mjs",
       "require": "./dist/universal.js",
       "types": "./dist/universal.d.ts"
+    },
+    "./v2": {
+      "types": "./src/v2/index.ts",
+      "import": "./src/v2/index.ts",
+      "require": "./dist/v2.js",
+      "default": "./src/v2/index.ts"
     }
   },
   "files": [
@@ -40,7 +47,8 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --splitting",
+    "build": "tsup src/index.ts src/v2/index.ts --format cjs,esm --dts --splitting",
+    "build:v2": "tsup src/v2/index.ts --format cjs,esm --dts --out-dir dist --entry.v2=src/v2/index.ts",
     "build:all": "npm run build && npm run build:react && npm run build:next && npm run build:express && npm run build:universal",
     "build:react": "tsup src/react/index.ts --format cjs,esm --dts --out-dir dist --entry.react=src/react/index.ts",
     "build:next": "tsup src/next/index.ts --format cjs,esm --dts --out-dir dist --entry.next=src/next/index.ts",

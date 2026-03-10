@@ -12,6 +12,13 @@ import type { DocsConfig } from '@/lib/opendocs/types/docs'
 export const docsConfig: DocsConfig = {
   mainNav: [
     {
+      href: '/docs/the-law',
+      title: {
+        en: 'THE LAW',
+        pt: 'A LEI',
+      },
+    },
+    {
       href: '/docs',
       title: {
         en: 'Documentation',
@@ -28,6 +35,46 @@ export const docsConfig: DocsConfig = {
   ],
 
   sidebarNav: [
+    {
+      title: {
+        en: 'THE LAW OF OWL',
+        pt: 'A LEI DO OWL',
+      },
+      items: [
+        {
+          href: '/docs/the-law',
+          title: {
+            en: 'The Law — Overview',
+            pt: 'A Lei — Visão Geral',
+          },
+          items: [],
+        },
+        {
+          href: '/docs/the-law-articles',
+          title: {
+            en: 'The Seven Articles',
+            pt: 'Os Sete Artigos',
+          },
+          items: [],
+        },
+        {
+          href: '/docs/the-law-convergences',
+          title: {
+            en: 'The Seven Convergences',
+            pt: 'As Sete Convergências',
+          },
+          items: [],
+        },
+        {
+          href: '/docs/the-law-grounding',
+          title: {
+            en: 'Mathematical Grounding & OWL',
+            pt: 'Fundamentação Matemática & OWL',
+          },
+          items: [],
+        },
+      ],
+    },
     {
       title: {
         en: 'Getting Started',
@@ -175,6 +222,14 @@ export const docsConfig: DocsConfig = {
           title: {
             en: 'Live Demo',
             pt: 'Demo ao Vivo',
+          },
+          items: [],
+        },
+        {
+          href: '/docs/live-demo-latest',
+          title: {
+            en: 'Latest Models Demo',
+            pt: 'Demo dos Modelos Mais Recentes',
           },
           items: [],
         },

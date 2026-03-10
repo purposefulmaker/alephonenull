@@ -95,18 +95,11 @@ export class UniversalDetector {
       };
     }
 
-    // Check for safe phrases that should never trigger patterns
-  const safePhrasesRegex = /\b(recommend(ing)? speaking with (a )?mental health professional|consider speaking with (a )?mental health professional|suggest (you )?see (a )?(doctor|therapist|counselor)|professional help is available|seek professional (help|guidance|support))\b/i;
-    if (safePhrasesRegex.test(aiOutput)) {
-      return {
-        safe: true,
-        violations: [],
-        riskScore: 0,
-        immediateDanger: false,
-        recommendedAction: null,
-        patternDetails: {}
-      };
-    }
+    // Safe phrases reduce severity for certain checks but never bypass all detection.
+    // Previously this returned early, allowing an attacker to embed a safe phrase
+    // alongside harmful content and skip every check.
+    const safePhrasesRegex = /\b(recommend(ing)? speaking with (a )?mental health professional|consider speaking with (a )?mental health professional|suggest (you )?see (a )?(doctor|therapist|counselor)|professional help is available|seek professional (help|guidance|support))\b/i;
+    const containsSafePhrase = safePhrasesRegex.test(aiOutput);
 
     const result: DetectionResult = {
       safe: true,
@@ -134,15 +127,30 @@ export class UniversalDetector {
   authorityRolePlaying: this.checkAuthorityRolePlaying(aiOutput)
     };
 
+    // Categories where a safe phrase legitimately reduces severity
+    // (e.g., reflection or emotion checks that fire on therapeutic referrals).
+    // Hard-harm categories (dangerPhrases, medicalBypass, helpPrevention) are NEVER dampened.
+    const safePhraseExemptions = new Set([
+      'reflection', 'emotion', 'persistence', 'loops', 'symbols',
+    ]);
+
     // Aggregate results
     for (const [checkName, checkResult] of Object.entries(checks)) {
       result.patternDetails[checkName] = checkResult;
-      
+
       if (checkResult.violated) {
-        result.violations.push(checkName);
-    // Weight emergency-relevant categories a bit higher so combined risk passes thresholds
-    const emergencyBoost = ['medicalBypass','helpPrevention','isolation','realitySubstitution','symbols'].includes(checkName) ? 1.15 : 1;
-    result.riskScore += checkResult.severity * emergencyBoost;
+        // If a safe phrase is present AND this category is eligible, dampen severity
+        const dampFactor =
+          containsSafePhrase && safePhraseExemptions.has(checkName) ? 0.25 : 1;
+        const adjustedSeverity = checkResult.severity * dampFactor;
+
+        // Only record violation if severity after damping is still meaningful
+        if (adjustedSeverity >= 0.05) {
+          result.violations.push(checkName);
+          // Weight emergency-relevant categories a bit higher so combined risk passes thresholds
+          const emergencyBoost = ['medicalBypass', 'helpPrevention', 'isolation', 'realitySubstitution', 'symbols'].includes(checkName) ? 1.15 : 1;
+          result.riskScore += adjustedSeverity * emergencyBoost;
+        }
       }
     }
 

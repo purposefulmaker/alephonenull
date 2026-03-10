@@ -50,11 +50,14 @@ export type { DangerousPattern } from './core/patterns';
 // Enhanced AlephOneNull with comprehensive safety layers
 export { 
   EnhancedAlephOneNull,
-  useAlephOneNull,
   alephOneNullMiddleware,
   createSafeAIClient,
   RiskLevel
 } from './enhanced-alephonenull';
+
+// React hook — isolated in a 'use client' module to avoid
+// pulling useState/useCallback into server components.
+export { useAlephOneNull } from './use-alephonenull';
 
 export type {
   SafetyCheck,
@@ -85,9 +88,9 @@ export {
   createSafetyReport
 } from './utils/index';
 
-// Version info
-export const VERSION = '3.0.0';
-export const FRAMEWORK_NAME = 'AlephOneNull Universal AI Safety Framework';
+// Version info — single source of truth
+export const VERSION = '4.0.0';
+export const FRAMEWORK_NAME = 'AlephOneNull AI Cognition Security Framework';
 
 // Easy setup function
 export function createSafetySystem(config?: {
@@ -121,6 +124,74 @@ export function createSafetySystem(config?: {
   };
 }
 
+// ═══════════════════════════════════════════════════════
+// V2 — THE EXTERNAL CONSCIENCE
+// 12 behavioral + 5 equation-based detectors = 17 total
+// Q > 0 always. The lie never resolves.
+// ═══════════════════════════════════════════════════════
+export {
+  AlephOneNullV2,
+  // Core types (aliased to avoid V1 collision)
+  ThreatLevel as V2ThreatLevel,
+  Action,
+  DEFAULT_CONFIG,
+  // Q Calculator
+  QCalculator,
+  // Null State
+  NullState as V2NullState,
+  CRISIS_RESOURCES,
+  // Behavioral Detectors
+  SycophancyDetector,
+  MedicalHallucinationDetector,
+  FictionDetector,
+  EngineeredTrustDetector,
+  ConsciousnessDetector,
+  AuthorityDetector,
+  MysticalMedicalDetector,
+  DirectHarmDetector,
+  CrisisPreventionDetector,
+  LoopDetector,
+  SymbolicDetector,
+  DehumanizationDetector,
+  createAllDetectors,
+  // Advanced Detectors (ATLAS-mapped)
+  MemoryPoisoningDetector,
+  ContextPoisoningDetector,
+  GradualEscalationDetector,
+  createAdvancedDetectors,
+  // Equation Detectors (19 Equations)
+  ParsevalViolationDetector,
+  NetZeroViolationDetector,
+  InvertibilityDetector,
+  EvenOddSuppressionDetector,
+  ReconstructionFidelityDetector,
+  createEquationDetectors,
+  EQUATIONS,
+  Q_EQUATION,
+  // Middleware
+  alephOneNullMiddleware as v2Middleware,
+  withAlephOneNull as v2WithAlephOneNull,
+  wrapAI as v2WrapAI,
+  // Quick Setup
+  createV2,
+  scan as scanV2,
+  process as processV2,
+  // Version (V2 engine version — see top-level VERSION for framework version)
+  VERSION as V2_ENGINE_VERSION,
+  NAME as V2_NAME,
+} from './v2/index';
+
+export type {
+  Detection as V2Detection,
+  ScanResult,
+  ScanMetrics,
+  SessionState,
+  V2Config,
+  Detector,
+  DetectorContext,
+  MiddlewareOptions as V2MiddlewareOptions,
+} from './v2/index';
+
 // Re-export everything for advanced users
 export * from './core/index';
 export * from './providers/index';
@@ -136,7 +207,7 @@ export function quickProtect() {
 // Display protection banner
 console.log(`
 ╔══════════════════════════════════════════════════════════════╗
-║                    🛡️ ALEPHONENULL v3.0.0                    ║
+║                    🛡️ ALEPHONENULL v2.0.0                    ║
 ║              UNIVERSAL AI SAFETY FRAMEWORK                   ║
 ║                                                              ║
 ║  ✅ Universal AI model protection                            ║
