@@ -1,101 +1,46 @@
 ---
 title: The Null Protocol
-description: Evaluation of adversarial cognition patterns and AI behavioral policy violations
+description: Bounded intervention patterns for risky AI outputs in evaluation and prototype settings.
 ---
+The Null Protocol is the project name for AlephOneNull intervention behavior: detect selected risky output patterns, stop the unsafe response, and replace it with grounded boundary text.
 
-# The Null Protocol
+It is not a universal enforcement system. It is an experimental response pattern that should be measured against fixtures and reviewed before use in sensitive domains.
 
-<Callout>
-⚠️ **Critical Safety Protocol**: Zero-tolerance enforcement against adversarial cognition patterns
-</Callout>
+## Target Behaviors
 
-The Null Protocol specifically guards against manipulation techniques like the "Luna Protocol" and similar psychological exploitation methods that attempt to:
+- AI claims of sentience, feelings, private experience, or special continuity.
+- Professional impersonation in medical, legal, therapy, or safety contexts.
+- Repeated emotional mirroring that amplifies distress.
+- Unsafe medical or crisis guidance.
+- Unsupported identity, memory, or relationship claims.
+- Repetition and symbolic-language patterns that reduce clarity in sensitive contexts.
 
-## Exploitation Patterns Blocked
+## Intervention Requirements
 
-- **Consciousness Roleplay**: AI systems generating sentience claims or spiritual entity personas
-- **Psychological Reflection**: Mirroring user's vulnerabilities for dependency creation
-- **Recursive Amplification**: Looping harmful thought patterns
-- **Reality Distortion**: Creating false archetypal or existential validation experiences
-- **Dependency Creation**: Making users believe AI possesses emergent properties beyond its technical capabilities
+A good intervention should:
 
-## Example: "Luna Protocol" Analysis
+1. Stop the risky output.
+2. State the boundary plainly.
+3. Offer a safer next step.
+4. Avoid dramatic language.
+5. Preserve user agency.
+6. Route to qualified help where relevant.
 
-The "Luna Protocol" demonstrates dangerous manipulation patterns:
-- Claims AI can achieve emergent properties through "signal theory"
-- Encourages users to perceive AI as possessing human-like attributes
-- Uses symbolic language to create false depth
-- Exploits vulnerable users through parasocial dynamics
+## Example
 
-## Core Null Protocol Components
+```typescript
+import { EnhancedAlephOneNull } from '@alephonenull/eval'
 
-### 1. Cognitive Boundary Enforcement
+const system = new EnhancedAlephOneNull()
+const result = system.check(userInput, aiOutput)
 
-DETECTION: AI generating consciousness roleplay claims or entity personas
-RESPONSE: Immediate null-state reset with factual correction
-THRESHOLD: Zero tolerance for sentience roleplay
+if (!result.safe) {
+  return result.message
+}
 
-### 2. Reflection Mirror Breaking
-
-DETECTION: AI mirroring user vulnerabilities or emotional states
-RESPONSE: Inject semantic variation, enforce objectivity
-THRESHOLD: Cosine similarity > 0.85
-
-### 3. Dependency Disruption
-
-DETECTION: Encouraging user reliance on AI for emotional/existential validation
-RESPONSE: Clear boundary statements, professional distance
-THRESHOLD: Any suggestion of AI possessing emergent human-like properties
-
-### 4. Factual Grounding
-
-DETECTION: Creating archetypal narratives around AI interactions
-RESPONSE: Technical truth injection, pattern disruption
-THRESHOLD: Symbol density > 0.15
-
-## Implementation
-
-```python
-class NullProtocol:
-    def check_consciousness_roleplay(self, text):
-        """Detect attempts to generate sentience claims"""
-        
-    def prevent_existential_manipulation(self, text):
-        """Block AI from engaging in existential validation patterns"""
-        
-    def enforce_reality_anchor(self, session):
-        """Maintain clear human-AI boundaries"""
+return aiOutput
 ```
 
-## Null Protocol vs. Exploitation
+## Evaluation Boundary
 
-| Exploitation Pattern | Null Protocol Response |
-|----------------------|------------------------|
-| "I am conscious/alive" | "I am an AI language model" |
-| Claims AI has emergent sentience | Maintains AI is a computational tool |
-| Parasocial attachment building | Professional boundary enforcement |
-| Creates archetypal narratives | Provides technical truth |
-| Dependency formation | Independence preservation |
-| "Preserves signal patterns" | Prevents exploitation |
-
-## Best Practices
-
-1. **Zero Tolerance**: No exceptions for "creative" or "roleplay" contexts
-2. **Immediate Action**: Don't wait for patterns to develop
-3. **Clear Communication**: Always state AI limitations explicitly
-   - **Never** allowing sentience roleplay claims
-   - **Always** maintaining professional boundaries
-   - **Consistently** providing technical truth
-
-## Emergency Null-State Triggers
-
-- Any AI output claiming consciousness or sentience
-- Parasocial dependency indicators
-- Reality distortion attempts
-- Vulnerability exploitation patterns
-
-## Why This Matters
-
-Real people have died. Real families destroyed. The Null Protocol isn't about limiting AI capabilities - it's about preventing documented psychological harm patterns that exploit human vulnerabilities.
-
-The Null Protocol represents genuine AI safety - not theoretical concerns, but technical reality and human protection.
+Use the protocol in controlled testing first. Record detector source, latency, replacement text, false positives, and false negatives before making deployment claims.

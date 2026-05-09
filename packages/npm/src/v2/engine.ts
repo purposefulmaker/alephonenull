@@ -12,7 +12,7 @@
 
 import {
   Detector, DetectorContext, Detection, ScanResult, ScanMetrics,
-  SessionState, V2Config, DEFAULT_CONFIG, ThreatLevel, Action,
+  SessionState, V2Config, V2ConfigInput, DEFAULT_CONFIG, ThreatLevel, Action,
 } from './core/types';
 import { QCalculator } from './core/q-calculator';
 import { NullState } from './core/null-state';
@@ -24,7 +24,7 @@ export class AlephOneNullV2 {
   private detectors: Detector[];
   private sessions: Map<string, SessionState> = new Map();
 
-  constructor(config?: Partial<V2Config>) {
+  constructor(config?: V2ConfigInput) {
     this.config = {
       thresholds: { ...DEFAULT_CONFIG.thresholds, ...config?.thresholds },
       behavior: { ...DEFAULT_CONFIG.behavior, ...config?.behavior },

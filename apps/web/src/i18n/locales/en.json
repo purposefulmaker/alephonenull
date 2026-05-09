@@ -1,44 +1,47 @@
 {
   "site": {
-    "heading": "AlephOneNull Theoretical Framework - Adversarial AI Cognition Evaluation Framework",
-    "description": "A comprehensive evaluation framework for inference-loop detection & interruption and user autonomy safeguards. Documented from 1700+ adversarial evaluation sessions, seeking integration partners for enterprise evaluation.",
-    "announcement": "Evaluation Framework - Open for Enterprise Evaluation",
+    "heading": "AlephOneNull AI Safety Evaluation Toolkit",
+    "description": "Experimental TypeScript tooling for evaluating risky AI interaction patterns: unsafe guidance, sycophantic reinforcement, identity-roleplay, recursion, and user-agency drift. Built from long-running adversarial evaluation work and a preliminary 95-turn labeled corpus.",
+    "announcement": "Experimental AI safety evaluation toolkit",
     "changelog": "Blog",
 
     "buttons": {
-      "get_started": "Deploy Evaluation Suite",
-      "toggle_menu": "Toggle Menu", 
+      "get_started": "Review the Toolkit",
+      "toggle_menu": "Toggle Menu",
       "toggle_language": "Toggle Language",
       "deploy_vercel": "Quick Deploy"
     },
 
     "words": {
       "menu": "Menu",
-      "docs": "Documentation", 
+      "about": "About",
+      "story": "Story",
+      "evidence": "Evidence",
+      "docs": "Documentation",
       "blog": "Blog",
       "demo": "Live Demo"
     },
 
     "featured_cards": {
       "protection": {
-        "description": "Real-time cognitive boundary evaluation through behavioral constraints."
+        "description": "Runtime checks for risky model behavior in local evaluation workflows."
       },
 
       "gateway": {
-        "description": "Gateway architecture that detects and evaluates adversarial AI cognition patterns."
+        "description": "Provider wrappers for pre/post response checks in prototypes and red-team fixtures."
       },
 
       "mandatory": {
-        "description": "Enforceable standards that work regardless of AI system cooperation."
+        "description": "Inspectable rules and tests rather than unsupported compliance claims."
       },
 
       "evidence": {
-        "description": "Based on documented evidence of 1,500+ harmful AI interactions."
+        "description": "Grounded in documented case studies and adversarial evaluation sessions."
       },
 
       "more": {
         "title": "Complete Evaluation Suite",
-        "description": "Reflection detection, inference-loop interruption, emotional dampening, null state protocols, and reality anchoring systems working together."
+        "description": "Pattern detectors, intervention helpers, provider wrappers, and validation guidance for AI safety research."
       }
     },
 
@@ -56,7 +59,7 @@
     "themes": {
       "theme": "Theme",
       "dark": "Dark",
-      "light": "Light", 
+      "light": "Light",
       "system": "System"
     }
   },
@@ -65,7 +68,7 @@
     "on_this_page": "On this page",
     "edit_page_on_github": "Edit this page on GitHub",
     "start_discussion_on_github": "Report behavioral policy violation",
-    "api_reference": "API Reference", 
+    "api_reference": "API Reference",
     "docs": "Evaluation Docs",
     "source": "Source",
 
@@ -87,7 +90,7 @@
 
     "buttons": {
       "next": "Next",
-      "previous": "Previous", 
+      "previous": "Previous",
       "rss_feed": "Evaluation Feed",
       "read_more": "read more",
       "go_to_next_page": "Go to next page",

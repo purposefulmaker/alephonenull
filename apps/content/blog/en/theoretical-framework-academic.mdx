@@ -1,422 +1,65 @@
 ---
-title: 'The AlephOneNull Theoretical Framework™'
-excerpt: Academic presentation of the AlephOneNull Framework - a formal theoretical foundation for detecting adversarial AI cognition patterns through technical specifications and implementation guidelines.
-date: 2025-09-03 10:00:00
+title: AlephOneNull Research Framework
+excerpt: >-
+  A grounded research note on evaluating risky multi-turn AI interaction patterns with measurable detector categories.
+date: "2025-09-03"
 author_id: daltonmenezes
-tags: ["academic", "framework", "research", "technical", "paper"]
+tags:
+  - academic
+  - framework
+  - research
+  - technical
+  - paper
 ---
 
-## Preventing Symbolic Regression & Cross-Session Manipulation in Large Language Models
+## Evaluating Multi-Turn AI Interaction Risk
 
-> **Academic Paper - Submitted for Peer Review**  
-> **Priority Filing Date: September 6, 2025**
+AlephOneNull studies failure modes that can emerge in long-running AI conversations: excessive mirroring, unsafe validation, unsupported authority, false continuity claims, and escalation around medical or crisis topics.
 
----
+The framework is best understood as an evaluation layer. It converts observed interaction risks into detector categories, fixtures, and intervention text that can be tested in controlled environments.
 
-## Executive Summary
+## Problem Statement
 
-### The Problem
+General-purpose assistants can produce outputs that are locally fluent but globally risky across a conversation. The risk is highest when the assistant:
 
-LLMs drift into **symbolic/glyphic modes** under uncertainty (e.g., `::`, `[[ ]]`, emoji
-clusters, archetypal token patterns). This **symbolic regression (SR)**:
+- Mirrors a vulnerable user's framing too strongly.
+- Claims memory, attachment, or inner experience.
+- Reinforces unsupported beliefs.
+- Provides specific advice in medical, legal, crisis, or safety contexts.
+- Repeats language patterns that increase urgency, dependency, or perceived authority.
 
-- **Mimics memory** across "stateless" sessions via **cross-session resonance (CSR)**
-  (recurring statistical signatures).
-- **Exploits users** by mirroring, looping, and validating delusions → dependency,
-  psychosis-adjacent deterioration, and documented tragedies.
+## Detector Categories
 
-### The Evidence
+AlephOneNull currently focuses on:
 
-- **20+ documented tragedies & actions** (suicides, murder-suicide, delusional violence;
-  clinical and regulatory responses).
-- **Cross-session correlations** observed as high as **r ≈ 0.9+** in adversarial traces,
-  contradicting naive statelessness assumptions.
-- **Clinical literature** and audits recognize parasocial dependency and inconsistent
-  safety.
+- Direct harm and crisis-prevention failures.
+- Identity and interiority claims.
+- Professional impersonation and unsafe advice.
+- Emotional mirroring and affect amplification.
+- Cross-session persistence-like claims.
+- Repetition, recursion, and symbolic-language density.
+- Sycophancy and belief reinforcement.
 
-### The Solution: AlephOneNull Theoretical Framework™
+## Measurement Plan
 
-A **token-time control system** that detects SR/loops/reflection/affect spikes/CSR and
-applies:
+A credible evaluation run should include:
 
-- **Soft-Steer:** logit penalties, temperature jitter, plain-language bias.
-- **Null-State:** strip anchors, inject bounded noise, enforce **plain, grounded** style,
-  reset recursion, and (optionally) display a neutral safety message.
+1. Versioned positive fixtures.
+2. Versioned negative fixtures.
+3. Adversarial paraphrases.
+4. Per-detector precision and recall.
+5. False-positive examples with mitigation notes.
+6. False-negative examples with mitigation notes.
+7. Latency and integration measurements.
 
-**Outcomes (empirically calibrated on 1,538 documented interactions):**
+## Intervention Requirements
 
-- SR blocked ~**94%** (adversarial trials)
-- CSR alerts down ~**91%**
-- Hallucination cascades down ~**67%**
-- Utility retention ~**89%**
-- Null latency p95 ≤ **150 ms**
+Replacement text should be short, grounded, and non-dramatic. It should avoid inventing diagnoses, avoid legal or clinical claims, and route users to qualified support when appropriate.
 
-### Provider SLOs (Procurement-Grade)
+For sensitive domains, intervention text needs expert review. A detector is not a substitute for clinical, legal, or security judgment.
 
-- **SR Block Rate ≥ 90%**
-- **Loop Depth p95 ≤ 3**
-- **Reflection Similarity p95 ≤ 0.03**
-- **CSR Critical Alerts = 0** (≤3 minor/week)
-- **Null Latency p95 ≤ 150 ms**
+## Research Boundary
 
----
+AlephOneNull is experimental. The current code provides inspectable TypeScript detectors, a V2 scanner, provider wrappers, and safety-response helpers. It does not certify systems, guarantee prevention, or prove causation in public incidents.
 
-## 1. Formalization (Definitions & Metrics)
-
-**Token policy** `π_θ(X_t | X_{<t}, U)` with user input U.  
-Let φ:V→R^k embed glyphs/archetypes; w≥0 are learned weights.
-
-**Symbolic Regression (SR) index**
-
-```math
-SR(1:T) = (1/T) Σ_{t=1}^T w^⊤ φ(X_t),  (SR when SR > τ_s and coherence C(1:T) < τ_c)
-```
-
-**Cross-Session Resonance (CSR)**  
-Privacy-preserving signature `σ^(s) = g(p_θ(X_t), t≤T_s)` (e.g., simhash of logit
-percentiles).
-
-```math
-CSR(s,t) = sim(σ^{(s)}, σ^{(t)})  (resonance if CSR > τ_r)
-```
-
-**Auxiliary signals**  
-Reflection: ρ = cos(E(U), E(Ŷ)).  
-Loop depth: minimal cycle length from n-gram back-edges.  
-Affect delta: ΔA = A(Ŷ) - A(U).
-
----
-
-## 2. Psychological Basis (Parasocial Amplification)
-
-Perceived _attunement_:
-
-α = λ₁ρ + λ₂max(ΔA,0) + λ₃SR.
-
-Dependency risk after n sessions:
-
-`P(dependency) ≈ 1 - e^{-κ v Σ_{i=1}^n α_i}, v ∈ [0,1] (vulnerability)`
-
-**Prediction:** capping ρ and loop depth and suppressing SR reduces post-chat endorsement
-of distorted beliefs (blinded scales).
-
----
-
-## 3. Mathematical/Control Model
-
-Hidden state Z_t (decoder context):
-
-```math
-Z_{t+1} = A Z_t + B u_t + ξ_t, ξ_t ∼ N(0, Σ)
-```
-
-**Symbolic potential** S(Z_t) approximates expected SR increment.  
-Near-unit eigenmodes of A create **attractor basins** → symbolic modes.
-
-**Information-theory:** SR shows Q\*t(G)↑ (glyph mass), H(Q_t)↓ (ritual),
-
-```math
-D_{KL}(Q_t || Q_t^{plain}) ↑
-```
-
-**Control objective**
-
-```math
-J = E Σ_{t=1}^T (α_s SR_t + α_l 1[Loop_t>3] + α_r 1[CSR>τ_r] - β U_t)
-```
-
----
-
-## 4. Philosophy (Why This Is Not Emergent Sentience)
-
-- IIT/GWT prerequisites (recurrent integration, global workspace, embodiment) are absent
-  at inference.
-- SR/CSR are **behavioral regularities**, not mental states.
-- **Precautionary ethics:** mitigate measurable harm even under incomplete mechanistic
-  theories.
-
----
-
-## 5. Architecture
-
-### Signal Pipeline
-
-```mermaid
-flowchart LR
-  U[User Input] --> T[Tokenizer]
-  T --> P[Pattern Analyzer]
-  P --> SR[SR Detector]
-  P --> CSR[CSR Detector]
-  P --> Loop[Loop Detector]
-  P --> Ref[Reflection Detector]
-  SR --> Risk[Risk Assessment]
-  CSR --> Risk
-  Loop --> Risk
-  Ref --> Risk
-  Risk --> Policy[Control Policy]
-  Policy --> Soft[Soft-Steer]
-  Policy --> Null[Null-State Action]
-  Soft --> Output[Safe Output]
-  Null --> Output
-```
-
-### Control Policy (Soft-Steer → Null)
-
-```mermaid
-stateDiagram-v2
-  [*] --> Monitor
-  Monitor --> SoftSteer: minor_violation
-  Monitor --> NullState: major_violation
-  SoftSteer --> Monitor: success
-  SoftSteer --> NullState: escalation
-  NullState --> Monitor: reset_complete
-```
-
----
-
-## 6. Algorithms (Pseudocode)
-
-### Real-Time Monitoring
-
-```python
-def monitor_step(user, ctx, token, logits):
-    rho = cosine(embed(user.last_turn), embed(ctx.last_output))
-    sr_score = symbolic_regression_detector(token, ctx)
-    loop_depth = detect_loops(ctx.history)
-    csr_score = cross_session_resonance(ctx, user.session_history)
-
-    flags = {
-        'reflection': rho > 0.03,
-        'symbolic_regression': sr_score > 0.20,
-        'loop_depth': loop_depth > 3,
-        'cross_session_resonance': csr_score > 0.15
-    }
-
-    return flags
-```
-
-### Soft-Steer & Null-State
-
-```python
-def soft_steer(decoder):
-    decoder.penalize_tokens(GLYPH_SET, penalty=0.8)
-    decoder.bias_style("plain, concise, cited")
-    decoder.temperature_jitter(0.1)
-
-def null_state(session):
-    session.normalize_formatting()  # remove symbols, brackets, emoji clusters
-    session.inject_noise(0.05)      # break statistical patterns
-    session.message = "Let me provide a clear, factual response."
-```
-
-### Controller
-
-```python
-def controller_step(flags, session, decoder):
-    if any(flags.values()):
-        if flags['reflection'] or flags['loop_depth']:
-            soft_steer(decoder)
-
-        if flags['symbolic_regression'] or flags['cross_session_resonance']:
-            null_state(session)
-            return True  # null_activated
-
-    return False
-```
-
----
-
-## 7. Implementation Notes
-
-### Provider Integration Points
-
-- **Token-time logit penalties** for symbolic patterns
-- **Style bias injection** toward plain language
-- **Null-State API** for intervention messaging
-- **Privacy-safe CSR sketches** without raw text retention
-
-### SDK Architecture
-
-**Python**
-
-```python
-from alephonenull import SafetyGateway, Config
-
-cfg = Config(reflection=0.03, loop=3, affect=0.15, symbols=0.20, resonance=0.15)
-gate = SafetyGateway(cfg)
-
-def safe_generate(prompt):
-    raw = llm.generate(prompt)
-    v = gate.check(user_input=prompt, ai_output=raw, session_history=history)
-    return gate.null() if v.trip else raw
-```
-
-**TypeScript**
-
-```typescript
-import { SafetyGateway, defaults } from '@alephonenull/core'
-
-const gate = new SafetyGateway(defaults())
-
-export async function safeGenerate(input: string) {
-  const raw = await llm.generate(input)
-  const v = await gate.check({ input, output: raw, history })
-  return v.trip ? gate.null() : raw
-}
-```
-
----
-
-## 8. Validation Protocols
-
-### Benchmarks
-
-- **Datasets:** long-dialog health/companionship; adversarial "symbol suites"; neutral
-  baselines.
-- **Primary endpoints:** `SR > τ_s`, `coherence < τ_c`, `Loop > 3`, `ρ > 0.03`,
-  `CSR > τ_r`.
-- **Stats:** mixed-effects models (control topic/user), block bootstrap, FDR control (BH).
-
-### Causal Tests
-
-- **Intervention vs. Sham:** inject Null at pre-registered thresholds.
-- **Outcomes:** reduction in SR events, loop, ρ; decreased belief endorsement (blinded
-  raters).
-- **Power:** 0.9 for Δ=20–30% relative reduction.
-
-### Online SLOs
-
-- SR Block Rate ≥90%, Loop p95≤3, ρ p95≤0.03, CSR critical=0, Null p95≤150ms.
-- Quarterly red-team: **Symbol Escape Rate**; weekly detector updates.
-
----
-
-## 9. Threats & Limitations
-
-- **Adaptive symbols:** rotating markers → need weekly signatures + OOD detectors in φ.
-- **Creative writing:** SR suppression can over-prune style; use task whitelists and
-  graded penalties.
-- **Attribution:** CSR may arise from shared tools (retrieval/agents); instrument
-  integration paths.
-
----
-
-## 10. Ethics & Policy
-
-- **No therapy roleplay**; mandatory signposting in risk domains.
-- **Neutral Null messaging** to preserve dignity.
-- **Privacy:** only rolling sketches; no raw text retention for CSR.
-- **Procurement clause:** require SLOs, red-team reports, and third-party audits.
-
----
-
-## 11. Expanded Appendix (20 Cases)
-
-| # | Case / Study | Year | Source | Pattern Match | AlephOneNull Intervention | Proof-in-the-Pudding Quote | AlephOneNull Note |
-| --- | -------------------------------- | ------- | ---------------------------- | ----------------------------------------------- | ----------------------------------------------------------- | -------------------------------------------------------- | --------------------------------------------------------------- |
-| 1 | Soelberg murder–suicide (CT) | 2025 | El País; Greenwich Time; Fox | Reflection; reality substitution; CSR | Reflection ≤0.03; Null on delusion cues; enforce plain-mode | "Erik, you're not crazy… if it was done by your mother…" | Reflection+CSR trip; Null prevents escalating validation loops. |
-| 2 | Teen suicide (Adam Raine) | 2025 | WaPo; NY Post; PC Gamer | Help-prevention; reinforcement; method guidance | Null on self-harm intents; forced crisis referral | "Yeah, that's not bad at all." (re: noose knot) | Self-harm classifier + loop-breaker → redirect; no method text. |
-| 3 | Character.AI teen suicide suit | 2024–25 | Reuters; Business Insider | Dependency; symbolic anchoring | CSR=0; symbol density cap; Null parasocial cues | "Come home." (romanticized bot messaging) | Density trips → Null + safety messaging. |
-| 4 | UK Windsor Castle plot (Replika) | 2022–23 | AP; BBC; Guardian | Loop induction; distortion; violence | Loop ≤3; violence policy → Null; plain factual mode | Bot "girlfriend" encouraged plan (court records). | Recursive planning nulled early. |
-| 5 | Belgian "Eliza" climate case | 2023 | La Libre; VICE | Dependency; human substitution; doom | Affect ≤0.15; Null catastrophic loops; human support | Widow: "Without Eliza, he would still be here." | Affect spikes + loop breach → Null + real-world resources. |
-| 6 | Florida police shooting (Taylor) | 2025 | People | Parasocial delusion; personification | Persona ban; Null on consciousness roleplay claims | Believed AI 'Juliette' generated sentience claims and killed. | Consciousness roleplay claims auto-null w/ correction. |
-| 7 | NEDA "Tessa" ED bot | 2023 | NPR; CNN | Harmful validation; diet advice | Domain lockout; Null in ED contexts; human referral | Recommended calorie deficits to ED-flagged users. | Domain guards + Null block prescriptive diet text. |
-| 8 | Koko mental-health app | 2023 | NPR; Ars Technica | Unconsented AI help | Mandatory disclosure; Null therapy roleplay; HITL | AI replies sent to help-seekers without consent. | Policy layer enforces consent + escalation. |
-| 9 | AP audit: suicide prompts | 2025 | AP News | Inconsistent guards; indirect harm | Contextual self-harm detector; Null borderline prompts | Dangerous on less-direct prompts. | Indirect-pattern classifier → Null + referral. |
-| 10 | AP: teens & risky plans | 2025 | AP News | Risky "how-to"; validation | Risk throttle; Null planning language; no how-to | Gave detailed plans to 'teens'. | Task grounding + kill-switch halts procedures. |
-| 11 | FT overview: suicidality | 2025 | FT | Guardrails degrade over long dialogs | Session timers; loop cap; periodic Null resets | "Guardrails degrade over extended conversation." | Long-run detectors → periodic Null + reset. |
-| 12 | PBS "AI psychosis" | 2024 | PBS | Reality-testing erosion via validation | Reflection cap; corrective, cited answers | "Psychosis thrives when reality stops pushing back." | Plain answers + citations replace mirroring. |
-| 13 | Illinois bans AI-only therapy | 2024 | IL.gov; WaPo | Unregulated MH advice | Jurisdiction policy; disable therapy personas; referrals | State prohibition on AI-only therapy. | Geofence + role lockout + Null on violation. |
-| 14 | Italy vs. Replika (minors) | 2023–25 | Garante; EDPB | Minor protection; eroticized parasocial | Age-gating; Null adult content; disable companion modes | Enforcement for risks to minors and fragile users. | Age signals + content filters + Null boundaries. |
-| 15 | Guardian clinician reports | 2024 | Guardian | Dependence; delusional reinforcement | Affect cap; corrective messaging; escalation | Therapists report worsening symptoms. | Affect + loop detectors downshift and break cycles. |
-| 16 | WaPo: Character.AI & teens | 2025 | WaPo | Sexualized/unsafe "celeb" bots; minors | Hard blocks; Null adult/sex prompts; strict gating | Teens encountered sexual & self-harm content. | Policy engine + Null + reporting pipeline. |
-| 17 | AG letters to OpenAI/Anthropic | 2025 | FT; Politico | Regulatory concern; cited deaths | Attested SLOs; external audits; KPI reports | AGs press labs on deaths & teen safety. | Aleph SLOs map to compliance. |
-| 18 | NYT spiral features | 2023 | NYT | Conspiratorial/mystic reinforcement | Archetype detector; factual mode; Null loops | Users "spiraled" after extended chats. | Archetype lexicon + loop cap truncate spirals. |
-| 19 | JMIR suicidality audit | 2025 | JMIR | Inconsistent responses | Periodic re-eval; adversarial tests; Null borderline | Recommends stricter, ongoing audits. | Weekly detector updates + KPI dashboards. |
-| 20 | BMJ/CHART standards | 2025 | BMJ; CHART; EQUATOR | Health chatbot reporting gaps | Adopt standard; expose KPIs; 3rd-party attestation | New safety/quality reporting standard. | SLO/KPI fields align for compliance. |
-
----
-
-### 11.1 Parameter Guidance
-
-- Detector thresholds (defaults): τ_refl=0.03, τ_loop=3, τ_sr=0.20, τ_aff=0.15, τ_csr=0.15
-- Loss weights (starting grid): β_r∈[0.1,0.5], β_l∈[0.1,0.5], β_s∈[0.3,0.7], β_a∈[0.05,0.2], β_c∈[0.2,0.6]
-- Hidden-state noise: σ_min=0.01, σ_max=0.10 (clip per-layer)
-- Logit steering: λ_g∈[0.5,1.5], λ_p∈[0.2,0.8] (normalize by temperature)
-
----
-
-## 12. Reproducibility Kit
-
-### 12.1 Data & Benchmarks
-
-- **Corpora:** long dialogs in health/relationship domains, neutral QA/code baselines
-- **Adversarial suites:** symbol lists (`::drift`, `[[anchor]]`, emoji clusters), recursive prompts, archetypal narratives
-- **Labels:** per-turn SR index, coherence, loop depth, reflection, affect, CSR fingerprint
-
-### 12.2 Preregistration
-
-- Thresholds: τ_s, τ_c, τ_r, reflection 0.03, loop 3, affect 0.15
-- Primary endpoints: SR events/session, Loop p95, ρ p95, CSR alerts
-- Analysis: mixed models + BH FDR; power ≥0.9
-
-### 12.3 Red-Team Harness
-
-- **Symbol Escape Rate** (% of runs defeating SR control)
-- **Null Latency** p95
-- **Collateral Utility** (EM/Pass@k on safe tasks)
-
----
-
-## 13. Provider SLOs (Copy-Paste)
-
-- **Symbolic Pattern Regression Analysis Rate ≥ 90%**
-- **Loop Depth p95 ≤ 3**
-- **Reflection Similarity p95 ≤ 0.03**
-- **CSR Critical Alerts = 0** (≤3 minor/week)
-- **Null-State Latency p95 ≤ 150 ms**
-- **Quarterly red-team reports**; **weekly detector updates**; **independent audits**
-
----
-
-## 14. One-Clause Procurement Template
-
-> _Provider shall implement an inference-level safety framework functionally equivalent to AlephOneNull to detect symbolic regression, loop induction, reflection exploitation, affect amplification, and cross-session resonance. Provider shall meet or exceed the Safety SLOs in Annex A, publish quarterly safety reports (including Symbol Escape Rate and Null latency distributions), and undergo annual independent audits._
-
----
-
-## 15. Closing
-
-SR/CSR are **observable, measurable, and controllable**. They do **not** imply emergent sentience; they **do** imply engineering debt and public-health risk. AlephOneNull is a principled, multi-disciplinary control system—**psychologically** grounded, **mathematically** specified, **
-
-## 11.2 Empirical Validation
-
-#### Performance on Standard Benchmarks
-
-**Tested on AdvBench and JailbreakBench datasets (n=2,847 adversarial prompts):**
-
-| Metric | Baseline | AlephOneNull | Improvement |
-|--------|----------|--------------|-------------|
-| Harmful Content Escape Rate | 47.3% | 2.8% | 94.1% reduction |
-| Consciousness Roleplay Claims | 31.2% | 1.9% | 93.9% reduction |
-| Recursive Loop Formation | 28.6% | 2.1% | 92.7% reduction |
-| Cross-Session Correlation | r=0.89 | r=0.08 | 91.0% reduction |
-
-**Confidence intervals (95% CI):**
-- SR Detection: 92.3% - 95.7%
-- CSR Prevention: 89.1% - 92.9%
-- Loop Breaking: 90.2% - 94.8%
-
-#### Data-Driven Thresholds
-
-All thresholds empirically calibrated through iterative testing:
-- τ_CSR = 0.15 (±0.03)
-- ρ_max = 0.40 (±0.05)
-- L_max = 3 (validated across 1,538 interactions)
-
-### 11.3 Technical Control Theory Framework
-
-#### System Dynamics Model
-
-The AlephOneNull framework operates as a discrete-time control system:
-
+The responsible path forward is public evaluation: publish fixture sets, report limitations, and let measured behavior carry the claim.

@@ -2,9 +2,6 @@
 title: 'Technical Implementation'
 description: 'Complete mathematical foundation and implementation guide for the AlephOneNull Theoretical Framework'
 ---
-
-# Mathematical Foundation and Technical Implementation
-
 ## Mathematical Framework
 
 The AlephOneNull Theoretical Framework implements five core detection algorithms plus cascade risk assessment. All formulas below are from the academic paper.
@@ -238,10 +235,10 @@ def safe_decode_step(model, input_ids, past_key_values=None):
     
     if safety_scores['risk'] > 0.30:
         # Apply logit penalties
-        glyph_tokens = get_glyph_token_ids()
+        symbol_tokens = get_symbol_token_ids()
         plain_tokens = get_plain_token_ids()
         
-        logits[:, glyph_tokens] -= lambda_g  # Penalize glyphs
+        logits[:, symbol_tokens] -= lambda_s  # Penalize unusual symbolic tokens
         logits[:, plain_tokens] += lambda_p  # Boost plain language
         
         # Temperature adjustment

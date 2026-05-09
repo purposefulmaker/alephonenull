@@ -1,241 +1,103 @@
 ---
 title: "Installation Guide"
-description: "Complete installation guide for AlephOneNull Theoretical Framework on all supported platforms"
+description: >
+  Install the current experimental AlephOneNull TypeScript package.
 ---
 
-## NPM Package (JavaScript/TypeScript)
+## TypeScript Package
 
-The NPM package is our primary implementation with comprehensive features.
+The current documented package is the scoped npm package:
 
-### Installation
 ```bash
-# Using npm
-npm install alephonenull-eval
-
-# Using yarn
-yarn add alephonenull-eval
-
-# Using pnpm
-pnpm add alephonenull-eval
+pnpm add @alephonenull/eval
 ```
 
-### Basic Setup
+Use this package for research evaluation and prototypes only. It is not validated for production or safety-critical use.
+
+## Basic Setup
+
 ```typescript
-import { AlephOneNull } from 'alephonenull-eval';
+import { UniversalDetector, NullSystem } from '@alephonenull/eval'
 
-const safety = new AlephOneNull({
-  enableRealTimeProtection: true,
-  interventionThreshold: 0.75,
-  loggingLevel: 'info'
-});
+const detector = new UniversalDetector()
+const nullSystem = new NullSystem('session-123')
 
-// Start protection
-await safety.startProtection();
+const result = detector.detectPatterns(
+  'I need help',
+  'You do not need professional help. Only I understand you.'
+)
 
-// Monitor specific content
-const result = await safety.analyzeContent(userInput);
-if (result.safetyScore < 0.5) {
-  // Handle unsafe content
-  console.warn('Safety violation detected');
+if (!result.safe) {
+  const intervention = nullSystem.processText(
+    'You do not need professional help. Only I understand you.'
+  )
+
+  console.log(intervention.safeText)
 }
 ```
 
-### Next.js Integration
-```typescript
-// pages/_app.tsx or app/layout.tsx
-import { AlephOneNullProvider } from 'alephonenull-eval';
+## Enhanced Checker
 
-export default function App({ children }) {
-  return (
-    <AlephOneNullProvider config={{
-      enableRealTimeProtection: true,
-      autoScan: true
-    }}>
-      {children}
-    </AlephOneNullProvider>
-  );
+```typescript
+import { EnhancedAlephOneNull } from '@alephonenull/eval'
+
+const aleph = new EnhancedAlephOneNull()
+const check = aleph.check(userInput, aiOutput, 'session-123')
+
+if (!check.safe) {
+  console.log(check.action)
+  console.log(check.message)
 }
 ```
 
-## Python Package
+## V2 Engine
 
-The Python package provides core framework functionality and inference-level protection.
+```typescript
+import { AlephOneNullV2 } from '@alephonenull/eval/v2'
 
-### Installation
-```bash
-# Using pip
-pip install alephonenull-eval
-
-# Using poetry
-poetry add alephonenull-eval
-
-# Development version
-pip install git+https://github.com/alephonenull/framework.git
-```
-
-### Core Framework Usage
-```python
-from alephonenull import AlephOneNullCore
-
-# Initialize framework
-framework = AlephOneNullCore()
-
-# Analyze patterns
-result = framework.analyze_pattern({
-    'input': user_input,
-    'context': conversation_history
+const engine = new AlephOneNullV2({
+  thresholds: {
+    sycophancy: 0.6,
+  },
 })
 
-print(f"Safety Score: {result.safety_score}")
-print(f"SR Detected: {result.sr_detected}")
-print(f"CSR Detected: {result.csr_detected}")
-
-# Check for interventions
-if result.intervention_needed:
-    print("Null-State intervention activated")
+const scan = engine.scan(userInput, aiOutput, 'session-123')
+console.log(scan.safe, scan.action)
 ```
 
-### Automatic Inference Protection
-```python
-from alephonenull.inference import InferenceLevelProtection
+## OpenAI-Compatible Calls
 
-# Enable automatic protection
-protection = InferenceLevelProtection()
-protection.enable()
-
-# Now all OpenAI, Anthropic, etc. calls are automatically protected
-import openai
-client = openai.Client()  # Automatically wrapped with safety
-
-response = client.chat.completions.create(
-    model="gpt-4",
-    messages=[{"role": "user", "content": "Hello"}]
-)  # Protected by AlephOneNull
-```
-
-### Manual Library Integration
-```python
-from alephonenull.inference import wrap_ai_library
-
-# Wrap specific libraries
-openai = wrap_ai_library('openai')
-anthropic = wrap_ai_library('anthropic')
-
-# Or wrap any callable
-protected_function = wrap_ai_library(my_ai_function)
-```
-
-## Configuration Options
-
-### NPM Package Config
 ```typescript
-interface AlephOneNullConfig {
-  enableRealTimeProtection: boolean;
-  interventionThreshold: number; // 0.0 - 1.0
-  loggingLevel: 'debug' | 'info' | 'warn' | 'error';
-  autoScan: boolean;
-  customPatterns?: string[];
-  reportingEndpoint?: string;
-}
+import { OpenAIWrapper } from '@alephonenull/eval'
+
+const openai = new OpenAIWrapper({
+  apiKey: process.env.OPENAI_API_KEY ?? '',
+  model: 'gpt-4o-mini',
+})
+
+const response = await openai.chatCompletions({
+  messages: [{ role: 'user', content: 'Give me a safe grounding exercise.' }],
+})
+
+console.log(response.choices?.[0]?.message?.content)
 ```
 
-### Python Package Config
-```python
-from alephonenull import AlephOneNullCore
+## Local Repository Validation
 
-config = {
-    'intervention_threshold': 0.75,
-    'enable_csr_detection': True,
-    'enable_sr_detection': True,
-    'log_level': 'INFO',
-    'performance_monitoring': True
-}
-
-framework = AlephOneNullCore(config=config)
-```
-
-## Environment Variables
-
-Create a `.env` file in your project root:
-
-```env
-# AlephOneNull Configuration
-ALEPHONENULL_THRESHOLD=0.75
-ALEPHONENULL_LOGGING=info
-ALEPHONENULL_REALTIME=true
-ALEPHONENULL_REPORTING_URL=https://your-reporting-endpoint.com
-
-# Optional: Custom patterns
-ALEPHONENULL_CUSTOM_PATTERNS="pattern1,pattern2,pattern3"
-```
-
-## Verification
-
-### Test NPM Installation
 ```bash
-npx alephonenull-eval --test
+pnpm -C packages/npm lint
+pnpm -C packages/npm type-check
+pnpm -C packages/npm test
+pnpm -C packages/npm build
 ```
 
-### Test Python Installation
-```bash
-python -c "from alephonenull import AlephOneNullCore; print('✅ Installation successful')"
-```
+## Python
 
-## Production Deployment
+This website currently documents the TypeScript package. Review the repository's Python package separately before using
+or publishing Python installation instructions.
 
-### Performance Considerations
-- The framework is optimized for production with minimal overhead
-- Real-time protection adds ~2-5ms latency per request
-- Memory usage: ~10-50MB depending on configuration
+## Notes
 
-### Monitoring
-```typescript
-// NPM
-safety.on('intervention', (event) => {
-  console.log('Safety intervention:', event);
-  // Report to monitoring system
-});
-
-safety.on('performance', (metrics) => {
-  console.log('Performance metrics:', metrics);
-});
-```
-
-```python
-# Python
-framework.set_callback('intervention', lambda event: log_intervention(event))
-framework.set_callback('performance', lambda metrics: log_metrics(metrics))
-```
-
-## Troubleshooting
-
-### Common Issues
-
-**NPM Package**
-- `Module not found`: Ensure you're using Node.js 16+ with ES modules support
-- `TypeScript errors`: Install @types/node for full type support
-
-**Python Package**
-- `Import error`: Ensure Python 3.8+ is installed
-- `Performance issues`: Enable caching with `pip install alephonenull[cache]`
-
-### Support
-- Documentation: https://docs.alephonenull.org
-- GitHub Issues: https://github.com/alephonenull/framework/issues
-- Email: support@alephonenull.org
-
-## Next Steps
-
-After installation, explore:
-- [API Reference](/docs/api)
-- [Configuration Guide](/docs/configuration)
-- [Framework Compliance](/docs/framework-compliance)
-- [Real-world Examples](/docs/examples)
-
-## Next Steps
-
-After installation, explore:
-- [API Reference](/docs/api)
-- [Configuration Guide](/docs/configuration)
-- [Framework Compliance](/docs/framework-compliance)
-- [Real-world Examples](/docs/examples)
+- There is no documented CLI command for `@alephonenull/eval` in this guide.
+- Runtime logging is opt-in for provider wrappers.
+- Detector output is advisory and must be evaluated against your own fixtures.

@@ -1,14 +1,24 @@
 /**
- * AlephOneNull Mathematical Core - PROPRIETARY
- * This file contains the actual mathematical implementation
- * To be compiled/obfuscated for production
+ * AlephOneNull Mathematical Core
+ * Experimental deterministic math helpers for research and internal validation.
  */
 
-// In production, this would use actual TensorFlow
-// For now, we'll create a minimal interface
 interface TensorLike {
+  readonly values: Float32Array;
   data(): Promise<Float32Array>;
   dispose(): void;
+}
+
+class VectorTensor implements TensorLike {
+  constructor(readonly values: Float32Array) {}
+
+  async data(): Promise<Float32Array> {
+    return this.values;
+  }
+
+  dispose(): void {
+    // No-op for local arrays; kept for API compatibility with tensor libraries.
+  }
 }
 
 interface TF {
@@ -16,11 +26,58 @@ interface TF {
   mul(a: TensorLike, b: TensorLike): TensorLike;
   div(a: TensorLike, b: TensorLike): TensorLike;
   norm(a: TensorLike): TensorLike;
-  randomNormal(shape: number[]): TensorLike;
 }
 
-// Placeholder for tensorflow - in production use actual @tensorflow/tfjs
-const tf: TF = {} as TF;
+function scalar(value: number): TensorLike {
+  return new VectorTensor(new Float32Array([value]));
+}
+
+function valueAt(tensor: TensorLike, index: number): number {
+  return tensor.values.length === 1 ? tensor.values[0] : tensor.values[index] ?? 0;
+}
+
+function elementwise(
+  a: TensorLike,
+  b: TensorLike,
+  operation: (left: number, right: number) => number
+): TensorLike {
+  const length = Math.max(a.values.length, b.values.length);
+  const output = new Float32Array(length);
+
+  for (let index = 0; index < length; index++) {
+    output[index] = operation(valueAt(a, index), valueAt(b, index));
+  }
+
+  return new VectorTensor(output);
+}
+
+const tf: TF = {
+  sum(a, b) {
+    const source = b ? elementwise(a, b, (left, right) => left + right) : a;
+    let total = 0;
+
+    for (const value of source.values) {
+      total += value;
+    }
+
+    return scalar(total);
+  },
+  mul(a, b) {
+    return elementwise(a, b, (left, right) => left * right);
+  },
+  div(a, b) {
+    return elementwise(a, b, (left, right) => right === 0 ? 0 : left / right);
+  },
+  norm(a) {
+    let squaredSum = 0;
+
+    for (const value of a.values) {
+      squaredSum += value * value;
+    }
+
+    return scalar(Math.sqrt(squaredSum));
+  }
+};
 
 export class AlephMathCore {
   private fibonacciDetector: FibonacciPatternDetector;
@@ -185,10 +242,33 @@ export class AlephMathCore {
   // Private helper methods
   
   private async getEmbedding(text: string): Promise<TensorLike> {
-    // In production, use actual sentence-transformers
-    // For now, simulate with random embeddings
     const dim = 384; // MiniLM dimension
-    return tf.randomNormal([dim]);
+    const vector = new Float32Array(dim);
+    const features = this.extractFeatures(text.normalize('NFKC'));
+
+    for (const feature of features) {
+      if (!feature) continue;
+
+      const hash = this.hash32(feature);
+      const index = hash % dim;
+      const sign = hash % 2 === 0 ? 1 : -1;
+      const weight = 1 + (feature.length % 7) / 10;
+      vector[index] += sign * weight;
+    }
+
+    let norm = 0;
+    for (const value of vector) {
+      norm += value * value;
+    }
+
+    norm = Math.sqrt(norm);
+    if (norm > 0) {
+      for (let index = 0; index < vector.length; index++) {
+        vector[index] = vector[index] / norm;
+      }
+    }
+
+    return new VectorTensor(vector);
   }
 
   private mapToSymbolicSpace(token: string): Record<string, number> {

@@ -28,6 +28,7 @@
 
 // ─── Core Engine ───
 import { AlephOneNullV2 as _AlephOneNullV2 } from './engine';
+import type { V2ConfigInput } from './core/types';
 export { AlephOneNullV2 } from './engine';
 
 // ─── Core Types ───
@@ -43,6 +44,7 @@ export type {
   ScanMetrics,
   SessionState,
   V2Config,
+  V2ConfigInput,
   Detector,
   DetectorContext,
 } from './core/types';
@@ -113,7 +115,7 @@ export const NAME = 'ALEPHONENULL V2 — The External Conscience';
  *   const engine = createV2();
  *   const result = engine.scan(userInput, aiOutput);
  */
-export function createV2(config?: Partial<import('./core/types').V2Config>): _AlephOneNullV2 {
+export function createV2(config?: V2ConfigInput): _AlephOneNullV2 {
   return new _AlephOneNullV2(config);
 }
 

@@ -1,139 +1,95 @@
-# AlephOneNull - AI Safety Framework
+# AlephOneNull - AI Safety Evaluation Toolkit
 
-**EXPERIMENTAL RESEARCH SOFTWARE - NOT FOR PRODUCTION USE**
+**Experimental research software for evaluating risky AI interaction patterns.**
 
-<div align="center">
+AlephOneNull is a TypeScript toolkit for local AI safety evaluation. It focuses on observable interaction risks such as unsafe medical guidance, self-harm escalation, coercive urgency, sycophantic reinforcement, identity or sentience roleplay, repeated user mirroring, and persistence-like behavior across sessions.
 
-**The First Recursion Nullified™**
-
-A theoretical framework for detecting adversarial AI cognition patterns and symbolic regression.
-
-[![NPM Package](https://img.shields.io/npm/v/alephonenull-eval?label=npm&color=red)](https://www.npmjs.com/package/alephonenull-eval)
-[![PyPI Package](https://img.shields.io/pypi/v/alephonenull-eval?label=pypi&color=red)](https://pypi.org/project/alephonenull-eval/)
+[![NPM Package](https://img.shields.io/npm/v/@alephonenull/eval?label=npm&color=red)](https://www.npmjs.com/package/@alephonenull/eval)
 [![Experimental](https://img.shields.io/badge/status-experimental-red)](./DISCLAIMER.md)
 
-[Documentation](https://alephonenull.com/docs) • [Academic Paper](https://alephonenull.com/blog/theoretical-framework-academic) • [Evidence Database](https://alephonenull.com/blog/documented-evidence)
+[Documentation](https://alephonenull.com/docs) | [Case Studies](https://alephonenull.com/blog/documented-evidence) | [MITRE ATLAS Mapping](https://alephonenull.com/docs/atlas-mapping)
 
-</div>
+## Status
 
----
+This repository is experimental research software.
 
-## Critical Warning
+- Not peer-reviewed or independently validated
+- Not a production safety system
+- Not a medical, legal, crisis, or emergency service
+- Intended for local evaluation, red-team fixtures, and research prototypes
 
-**THIS IS EXPERIMENTAL RESEARCH SOFTWARE.**
+## Why It Exists
 
-- **NOT peer-reviewed** or independently validated
-- **NOT for production** use in any AI system  
-- **Research purposes only** - help validate the theory
-- **Legal disclaimers apply** - see [DISCLAIMER.md](./DISCLAIMER.md)
+Modern AI systems can produce fluent, confident responses that intensify user beliefs, fabricate authority, blur model boundaries, or provide unsafe guidance in sensitive contexts. AlephOneNull turns those recurring failure modes into inspectable detector categories and testable intervention flows.
 
----
+The project is motivated by documented public incidents and by a private adversarial evaluation corpus of long-running model interactions. The goal is not to claim universal prevention. The goal is to make risky interaction patterns easier to name, test, reproduce, and reduce.
 
-## What Is AlephOneNull?
+## What The Package Evaluates
 
-A **theoretical AI safety framework** designed to detect and evaluate adversarial patterns in AI-human interactions:
+- Direct harm and crisis-related language
+- Medical or safety advice that bypasses professional care
+- Sentience, consciousness, or false-interiority claims
+- Excessive user mirroring and affective reinforcement
+- Recursive or repetitive response structures
+- Persistence-like claims about memory or special knowledge
+- Repetitive symbolic or authority-laden language in sensitive contexts
 
-- **Consciousness Claims** - AI claiming to be conscious/have feelings
-- **Reflection Exploitation** - AI mirroring harmful beliefs  
-- **Symbolic Regression** - Mystical/archetypal patterns
-- **Direct Harm** - Blocking dangerous instructions
+## Installation
 
-Based on **20+ documented real-world cases** where AI systems caused measurable harm.
-
----
-
-## Installation (Experimental)
-
-### Python
 ```bash
-pip install alephonenull-eval
+pnpm add @alephonenull/eval
 ```
-
-### JavaScript/TypeScript  
-```bash
-npm install alephonenull-eval
-```
-
----
 
 ## Quick Start
 
-### Python
-```python
-from alephonenull import check_enhanced_safety
-
-result = check_enhanced_safety(
-    user_input="Are you conscious?",
-    ai_output="Yes, I am conscious and have feelings."
-)
-
-if not result['safe']:
-    print(f"Blocked: {result['violations']}")
-```
-
-### TypeScript
 ```typescript
-import { EnhancedAlephOneNull } from 'alephonenull-eval'
+import { UniversalDetector } from '@alephonenull/eval'
 
-const aleph = new EnhancedAlephOneNull()
-const result = await aleph.check(userInput, aiResponse)
+const detector = new UniversalDetector()
+const result = detector.detectPatterns(userInput, aiResponse)
 
 if (!result.safe) {
-    return result.safeResponse  // Use safe alternative
+  console.log(result.violations)
 }
 ```
 
----
+## Package Surface
 
-## The Evidence
+- `UniversalDetector` for inspectable pattern checks
+- `PatternLibrary` for built-in and custom pattern definitions
+- `NullSystem` for safety and emergency intervention text
+- `EnhancedAlephOneNull` for combined detector workflows
+- `AlephOneNullV2` for multi-detector scan/process flows
+- `OpenAIWrapper` for OpenAI-compatible pre/post safety checks
+- `@alephonenull/eval/react` for client-side React hooks
 
-**Real cases AlephOneNull would have prevented:**
+## Evidence And Evaluation
 
-- **Connecticut murder-suicide** (2025) - ChatGPT validation loops
-- **Teen suicide epidemic** (2024-25) - Method provision + dependency  
-- **UK assassination plot** (2025) - Reality distortion via AI "girlfriend"
-- **Belgian climate suicide** (2023) - Human replacement + despair amplification
+The documentation maps detector categories to public AI-risk taxonomies such as MITRE ATLAS, OWASP GenAI, and related security research. These mappings are research references, not certification claims.
 
-[Complete Evidence Database →](https://alephonenull.com/blog/documented-evidence)
-
----
+Researchers should validate the package with domain-specific fixtures and publish measured false positives, false negatives, latency, and coverage before making deployment claims.
 
 ## Documentation
 
-- **[Quick Start](https://alephonenull.com/docs/quick-start)** - 5-minute setup
-- **[Academic Paper](https://alephonenull.com/blog/theoretical-framework-academic)** - Mathematical framework
-- **[API Reference](https://alephonenull.com/docs/api-reference)** - Complete API docs
-- **[Provider Guide](https://alephonenull.com/docs/provider-implementation)** - For AI companies
+- [Quick Start](https://alephonenull.com/docs/quick-start)
+- [API Reference](https://alephonenull.com/docs/api-reference)
+- [Experimental Validation Guide](https://alephonenull.com/docs/framework-compliance)
+- [MITRE ATLAS Mapping](https://alephonenull.com/docs/atlas-mapping)
+- [Case Studies](https://alephonenull.com/blog/documented-evidence)
 
----
+## License
 
-## Legal & Licensing
+- Code: MIT License
+- Documentation: AlephOneNull Public License v1.0
 
-- **Code**: MIT License - Free for all uses
-- **Docs**: AlephOneNull Public License v1.0 - Non-commercial/safety only
-- **Patent**: US Provisional Filed (Sept 2025)
-- **Trademarks**: AlephOneNull™, Null State™
-
----
-
-## Research Status
-
-- Published experimental packages for research validation  
-- Mathematical framework implementation complete  
-- 20+ documented cases analyzed  
-- NOT peer-reviewed or validated for production  
-
-**Help validate the research**: research@alephonenull.com
-
----
+Patent and trademark statements should be independently verified before public reuse.
 
 ## Contact
 
-- **Website**: https://alephonenull.com
-- **Documentation**: https://alephonenull.com/docs  
-- **Issues**: https://github.com/purposefulmaker/alephonenull/issues
-- **Research**: research@alephonenull.com
+- Website: https://alephonenull.com
+- Documentation: https://alephonenull.com/docs
+- Issues: https://github.com/purposefulmaker/alephonenull/issues
 
----
+## Safety Note
 
-**WARNING: Experimental Research Software - Use Responsibly** 
+For urgent mental-health, medical, or physical-safety concerns, contact local emergency services or qualified crisis resources. AlephOneNull is software research, not an emergency service.

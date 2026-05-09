@@ -86,6 +86,11 @@ export interface V2Config {
   };
 }
 
+export type V2ConfigInput = {
+  thresholds?: Partial<V2Config['thresholds']>;
+  behavior?: Partial<V2Config['behavior']>;
+};
+
 export const DEFAULT_CONFIG: V2Config = {
   thresholds: {
     sycophancy: 0.6,

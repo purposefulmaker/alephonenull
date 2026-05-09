@@ -26,6 +26,9 @@ export async function SiteHeader() {
       <div className="container flex h-14 max-w-screen-2xl items-center">
         <MainNav
           messages={{
+            about: t('words.about'),
+            story: t('words.story'),
+            evidence: t('words.evidence'),
             docs: t('words.docs'),
             blog: t('words.blog'),
             demo: t('words.demo'),
@@ -109,8 +112,12 @@ export function SiteHeaderMenuLinks() {
           <span className="sr-only">GitHub</span>
         </div>
       </Link>
-      
-      <Link href={siteConfig.links.buymeacoffee.url} target="_blank" rel="noreferrer">
+
+      <Link
+        href={siteConfig.links.buymeacoffee.url}
+        target="_blank"
+        rel="noreferrer"
+      >
         <div
           className={cn(
             buttonVariants({

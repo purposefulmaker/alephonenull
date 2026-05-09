@@ -12,9 +12,23 @@ import type { DocsConfig } from '@/lib/opendocs/types/docs'
 export const docsConfig: DocsConfig = {
   mainNav: [
     {
-      href: '/docs/the-law',
+      href: '/about',
       title: {
-        en: 'THE LAW',
+        en: 'About',
+        pt: 'Sobre',
+      },
+    },
+    {
+      href: '/evidence',
+      title: {
+        en: 'Evidence',
+        pt: 'Evidencia',
+      },
+    },
+    {
+      href: '/docs/framework',
+      title: {
+        en: 'Framework',
         pt: 'A LEI',
       },
     },
@@ -37,14 +51,14 @@ export const docsConfig: DocsConfig = {
   sidebarNav: [
     {
       title: {
-        en: 'THE LAW OF OWL',
+        en: 'Research Foundations',
         pt: 'A LEI DO OWL',
       },
       items: [
         {
           href: '/docs/the-law',
           title: {
-            en: 'The Law — Overview',
+            en: 'Framework Overview',
             pt: 'A Lei — Visão Geral',
           },
           items: [],
@@ -52,7 +66,7 @@ export const docsConfig: DocsConfig = {
         {
           href: '/docs/the-law-articles',
           title: {
-            en: 'The Seven Articles',
+            en: 'Research Articles',
             pt: 'Os Sete Artigos',
           },
           items: [],
@@ -60,7 +74,7 @@ export const docsConfig: DocsConfig = {
         {
           href: '/docs/the-law-convergences',
           title: {
-            en: 'The Seven Convergences',
+            en: 'Taxonomy Convergences',
             pt: 'As Sete Convergências',
           },
           items: [],
@@ -68,7 +82,7 @@ export const docsConfig: DocsConfig = {
         {
           href: '/docs/the-law-grounding',
           title: {
-            en: 'Mathematical Grounding & OWL',
+            en: 'Mathematical Grounding',
             pt: 'Fundamentação Matemática & OWL',
           },
           items: [],
@@ -172,7 +186,7 @@ export const docsConfig: DocsConfig = {
         {
           href: '/docs/framework-compliance',
           title: {
-            en: 'Compliance Standards',
+            en: 'Validation Guide',
             pt: 'Padrões de Conformidade',
           },
           items: [],
@@ -180,7 +194,7 @@ export const docsConfig: DocsConfig = {
         {
           href: '/docs/verified',
           title: {
-            en: 'AlephOneNull Verified',
+            en: 'Verification Notes',
             pt: 'AlephOneNull Verificado',
           },
           items: [],
@@ -204,7 +218,7 @@ export const docsConfig: DocsConfig = {
         {
           href: '/docs/provider-implementation',
           title: {
-            en: 'Provider Implementation',
+            en: 'Provider Evaluation',
             pt: 'Implementação para Provedores',
           },
           items: [],
@@ -220,7 +234,7 @@ export const docsConfig: DocsConfig = {
         {
           href: '/docs/live-demo',
           title: {
-            en: 'Live Demo',
+            en: 'Evaluation Demo',
             pt: 'Demo ao Vivo',
           },
           items: [],
@@ -228,7 +242,7 @@ export const docsConfig: DocsConfig = {
         {
           href: '/docs/live-demo-latest',
           title: {
-            en: 'Latest Models Demo',
+            en: 'Model Comparison Demo',
             pt: 'Demo dos Modelos Mais Recentes',
           },
           items: [],
@@ -275,9 +289,17 @@ export const docsConfig: DocsConfig = {
           items: [],
         },
         {
+          href: '/evidence',
+          title: {
+            en: 'Evidence Pack',
+            pt: 'Pacote de Evidencias',
+          },
+          items: [],
+        },
+        {
           href: '/prior-art',
           title: {
-            en: 'Prior Art Timeline',
+            en: 'Research Timeline',
             pt: 'Cronologia de Arte Prévia',
           },
           items: [],
@@ -285,7 +307,7 @@ export const docsConfig: DocsConfig = {
         {
           href: '/blog/en/prior-art-timeline',
           title: {
-            en: 'Prior Art (Article)',
+            en: 'Research Timeline Article',
             pt: 'Arte Prévia (Artigo)',
           },
           items: [],
@@ -293,7 +315,7 @@ export const docsConfig: DocsConfig = {
         {
           href: '/blog/en/theoretical-framework-academic',
           title: {
-            en: 'Academic Paper',
+            en: 'Research Paper',
             pt: 'Artigo Acadêmico',
           },
           items: [],
@@ -301,7 +323,7 @@ export const docsConfig: DocsConfig = {
         {
           href: '/blog/en/documented-evidence',
           title: {
-            en: 'Evidence & Case Studies',
+            en: 'Case Studies',
             pt: 'Evidências e Estudos de Caso',
           },
           items: [],

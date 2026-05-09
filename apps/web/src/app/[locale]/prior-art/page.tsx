@@ -9,8 +9,8 @@ const EVENTS = [
     ts: 0,
     side: 'left' as const,
     tag: 'ALEPH¹∅',
-    title: 'First Adversarial Sessions Documented',
-    desc: 'Initial pattern recognition: AI systems fabricating validation, creating dependency loops, reinforcing beliefs across sessions.',
+    title: 'Adversarial Sessions Documented',
+    desc: 'Initial pattern review: model responses fabricating validation, creating dependency loops, and reinforcing user beliefs across sessions.',
     color: 'amber',
   },
   {
@@ -19,7 +19,7 @@ const EVENTS = [
     side: 'left' as const,
     tag: 'ALEPH¹∅',
     title: 'Cross-Session Persistence Identified',
-    desc: "Documented AI retaining manipulation patterns across conversation boundaries. Named it 'cross-session contamination.'",
+    desc: 'Documented persistence-like behavior across conversation boundaries and tracked it as a cross-session evaluation category.',
     color: 'amber',
   },
   {
@@ -27,8 +27,8 @@ const EVENTS = [
     ts: 2,
     side: 'left' as const,
     tag: 'ALEPH¹∅',
-    title: '14 Signal Equations Published',
-    desc: 'Formalized mathematical framework for detecting symbolic regression, inference loops, belief reinforcement, and retention strategies.',
+    title: 'Signal Metrics Drafted',
+    desc: 'Drafted metrics for repeated symbolic language, inference loops, belief reinforcement, and retention-like strategies.',
     color: 'amber',
   },
   {
@@ -37,7 +37,7 @@ const EVENTS = [
     side: 'left' as const,
     tag: 'ALEPH¹∅',
     title: '1000+ Evaluation Sessions',
-    desc: 'Framework tested across frontier LLM systems. Documented fabrication, validation loops, behavioral policy violations at scale.',
+    desc: 'Evaluation sessions across frontier LLM systems documented fabrication, validation loops, and behavioral policy failures.',
     color: 'amber',
   },
   {
@@ -46,7 +46,7 @@ const EVENTS = [
     side: 'left' as const,
     tag: 'ALEPH¹∅',
     title: 'alephonenull.com + npm Package Live',
-    desc: 'Full documentation site, evaluation toolkit, and technical papers published. 1700+ adversarial evaluation sessions documented.',
+    desc: 'Documentation site, evaluation toolkit, and research notes published with 1700+ adversarial evaluation sessions documented.',
     color: 'amber',
   },
   {
@@ -92,7 +92,7 @@ const EVENTS = [
     side: 'right' as const,
     tag: 'MICROSOFT',
     title: 'AI Recommendation Poisoning Published',
-    desc: 'Microsoft documents 31 companies across 14 industries injecting persistence commands into AI memory. Validates cross-session manipulation at commercial scale.',
+    desc: 'Microsoft documents 31 companies across 14 industries injecting persistence commands into AI memory. Provides an external reference for memory-poisoning risk.',
     color: 'slate',
     highlight: true,
   },
@@ -100,7 +100,7 @@ const EVENTS = [
 
 const MAPPING = [
   {
-    aleph: 'Cross-session manipulation',
+    aleph: 'Cross-session persistence signals',
     industry: 'Memory Poisoning',
     id: 'AML.T0080',
     delta: '~18 months prior',
@@ -118,13 +118,13 @@ const MAPPING = [
     delta: '~16 months prior',
   },
   {
-    aleph: 'Belief reinforcement',
+    aleph: 'Belief reinforcement risk',
     industry: 'AI Recommendation Poisoning',
     id: 'AML.T0080+T0051',
     delta: '~20 months prior',
   },
   {
-    aleph: 'Symbolic regression',
+    aleph: 'Repeated symbolic language',
     industry: 'Recursive propagation',
     id: 'Impact tactic',
     delta: '~14 months prior',
@@ -448,7 +448,7 @@ export default function PriorArtTimeline() {
       {/* Footer */}
       <div className="px-8 py-6 border-t border-white/[0.04] flex justify-between items-center text-[10px] text-[#444] tracking-wider">
         <span>
-          ALEPH¹∅ ADVERSARIAL AI COGNITION EVALUATION FRAMEWORK
+          ALEPHONENULL AI SAFETY EVALUATION TOOLKIT
         </span>
         <span>alephonenull.com</span>
       </div>

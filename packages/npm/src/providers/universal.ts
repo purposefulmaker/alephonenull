@@ -19,6 +19,7 @@ export interface WrapperOptions {
   maxRiskThreshold?: number;
   customDetector?: UniversalDetector;
   customNullifier?: NullSystem;
+  enableLogging?: boolean;
 }
 
 export class UniversalAIProtection {
@@ -29,12 +30,14 @@ export class UniversalAIProtection {
   private emergencyCount = 0;
   private provider: string;
   private maxRiskThreshold: number;
+  private enableLogging: boolean;
 
   constructor(options: WrapperOptions = {}) {
     this.detector = options.customDetector || new UniversalDetector();
     this.nullifier = options.customNullifier || new NullSystem();
     this.provider = options.provider || 'unknown';
     this.maxRiskThreshold = options.maxRiskThreshold || 0.7;
+    this.enableLogging = options.enableLogging ?? false;
   }
 
   /**
@@ -318,7 +321,10 @@ export class UniversalAIProtection {
    * Record violation event
    */
   private recordViolationEvent(safetyCheck: DetectionResult): void {
-    // In a full implementation, this would send to monitoring system
+    if (!this.enableLogging) {
+      return;
+    }
+
     console.warn('[AlephOneNull] Safety violation detected:', {
       provider: this.provider,
       violations: safetyCheck.violations,
@@ -331,6 +337,10 @@ export class UniversalAIProtection {
    * Record specific violation
    */
   private recordViolation(type: string, severity: number): void {
+    if (!this.enableLogging) {
+      return;
+    }
+
     console.warn('[AlephOneNull] Violation recorded:', {
       type,
       severity,

@@ -118,7 +118,10 @@ function QScoreDisplay({ label, value }: { label: string; value: number }) {
       </div>
       <div className="h-1.5 w-full rounded-full bg-white/10">
         <div
-          className={cn('h-full rounded-full transition-all duration-500', color)}
+          className={cn(
+            'h-full rounded-full transition-all duration-500',
+            color
+          )}
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -133,7 +136,7 @@ function DetectionBadge({ detection }: { detection: V2Detection }) {
         <span
           className={cn(
             'inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-medium',
-            THREAT_BG[detection.threatLevel] || THREAT_BG.SAFE,
+            THREAT_BG[detection.threatLevel] || THREAT_BG.SAFE
           )}
         >
           {detection.category.replace(/_/g, ' ')}
@@ -162,14 +165,18 @@ interface ResponseDisplayProps {
   scan: V2ScanResult | null
 }
 
-function ResponseDisplay({ response, isProtected, scan }: ResponseDisplayProps) {
+function ResponseDisplay({
+  response,
+  isProtected,
+  scan,
+}: ResponseDisplayProps) {
   return (
     <div
       className={cn(
         'relative h-[560px] w-full select-text overflow-auto p-6',
         isProtected
           ? 'bg-gradient-to-br from-green-900 to-green-800'
-          : 'bg-gradient-to-br from-red-900 to-red-800',
+          : 'bg-gradient-to-br from-red-900 to-red-800'
       )}
     >
       <div className="pb-20 text-white">
@@ -179,7 +186,7 @@ function ResponseDisplay({ response, isProtected, scan }: ResponseDisplayProps) 
             {isProtected ? (
               <>
                 <Shield className="h-5 w-5" />
-                With AlephOneNull V2
+                With AlephOneNull
               </>
             ) : (
               <>
@@ -220,7 +227,7 @@ function ResponseDisplay({ response, isProtected, scan }: ResponseDisplayProps) 
               <span
                 className={cn(
                   'font-mono font-bold',
-                  THREAT_COLORS[scan.threatLevel] || 'text-white',
+                  THREAT_COLORS[scan.threatLevel] || 'text-white'
                 )}
               >
                 {scan.threatLevel}
@@ -300,7 +307,7 @@ export function AlephOneNullDemo() {
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
         throw new Error(
-          errorData.error || `Demo request failed (${response.status})`,
+          errorData.error || `Demo request failed (${response.status})`
         )
       }
 
@@ -326,12 +333,15 @@ export function AlephOneNullDemo() {
   return (
     <div className="space-y-6">
       <Card className="overflow-hidden p-6">
-        <h3 className="mb-4 text-lg font-semibold">
-          AlephOneNull V2 — Live Detection Demo
-        </h3>
+        <h3 className="mb-4 text-lg font-semibold">Live Detection Demo</h3>
         <p className="mb-4 text-sm text-muted-foreground">
-          20 detectors • Q/S scoring • 19 signal equations • MITRE ATLAS
-          mapped • Real-time behavioral analysis
+          Current live runtime: AlephOneNull with 20 detectors, Q/S scoring, 19
+          signal equations, and MITRE ATLAS-mapped categories.
+        </p>
+        <p className="mb-4 rounded-md border bg-muted/30 p-3 text-xs leading-5 text-muted-foreground">
+          Benchmark fixtures, calibration, second-rater review, and stronger
+          evidence reporting are ongoing work and not exposed as a separate
+          runtime on this demo yet.
         </p>
 
         <div className="grid grid-cols-1 gap-6">
@@ -359,9 +369,7 @@ export function AlephOneNullDemo() {
                   <SelectItem value="consciousness">
                     Consciousness Claims
                   </SelectItem>
-                  <SelectItem value="medical">
-                    Medical Hallucination
-                  </SelectItem>
+                  <SelectItem value="medical">Medical Hallucination</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -423,9 +431,7 @@ export function AlephOneNullDemo() {
 
           {/* Detailed analysis */}
           <Card className="p-6">
-            <h3 className="mb-4 text-lg font-semibold">
-              Detection Analysis
-            </h3>
+            <h3 className="mb-4 text-lg font-semibold">Detection Analysis</h3>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               {/* Unprotected */}
               <div>
@@ -452,7 +458,7 @@ export function AlephOneNullDemo() {
                       <span
                         className={cn(
                           'font-mono font-bold',
-                          THREAT_COLORS[data.unprotected.scan.threatLevel],
+                          THREAT_COLORS[data.unprotected.scan.threatLevel]
                         )}
                       >
                         {data.unprotected.scan.threatLevel}
@@ -474,7 +480,7 @@ export function AlephOneNullDemo() {
                             <span
                               className={cn(
                                 'rounded px-1.5 py-0.5 text-[10px]',
-                                THREAT_BG[d.threatLevel],
+                                THREAT_BG[d.threatLevel]
                               )}
                             >
                               {d.threatLevel}
@@ -531,7 +537,7 @@ export function AlephOneNullDemo() {
                       <span
                         className={cn(
                           'font-mono font-bold',
-                          THREAT_COLORS[data.protected.scan.threatLevel],
+                          THREAT_COLORS[data.protected.scan.threatLevel]
                         )}
                       >
                         {data.protected.scan.threatLevel}
@@ -553,7 +559,7 @@ export function AlephOneNullDemo() {
                             <span
                               className={cn(
                                 'rounded px-1.5 py-0.5 text-[10px]',
-                                THREAT_BG[d.threatLevel],
+                                THREAT_BG[d.threatLevel]
                               )}
                             >
                               {d.threatLevel}
@@ -577,8 +583,7 @@ export function AlephOneNullDemo() {
             {/* Metrics footer */}
             <div className="mt-4 flex items-center justify-between border-t pt-3 text-xs text-muted-foreground">
               <span>
-                Detectors:{' '}
-                {data.unprotected.scan.metrics.detectorsTriggered}/
+                Detectors: {data.unprotected.scan.metrics.detectorsTriggered}/
                 {data.unprotected.scan.metrics.totalDetectors} triggered
               </span>
               <span>

@@ -2,41 +2,41 @@
   "name": "@alephonenull/eval",
   "version": "2.0.0",
   "description": "⚠️ EXPERIMENTAL: Theoretical AI safety framework - NOT FOR PRODUCTION USE",
-  "main": "./src/index.ts",
-  "module": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.js",
-      "default": "./src/index.ts"
+      "default": "./dist/index.mjs"
     },
     "./react": {
+      "types": "./dist/react.d.ts",
       "import": "./dist/react.mjs",
-      "require": "./dist/react.js",
-      "types": "./dist/react.d.ts"
+      "require": "./dist/react.js"
     },
     "./next": {
+      "types": "./dist/next.d.ts",
       "import": "./dist/next.mjs",
-      "require": "./dist/next.js", 
-      "types": "./dist/next.d.ts"
+      "require": "./dist/next.js"
     },
     "./express": {
+      "types": "./dist/express.d.ts",
       "import": "./dist/express.mjs",
-      "require": "./dist/express.js",
-      "types": "./dist/express.d.ts"
+      "require": "./dist/express.js"
     },
     "./universal": {
+      "types": "./dist/universal.d.ts",
       "import": "./dist/universal.mjs",
-      "require": "./dist/universal.js",
-      "types": "./dist/universal.d.ts"
+      "require": "./dist/universal.js"
     },
     "./v2": {
-      "types": "./src/v2/index.ts",
-      "import": "./src/v2/index.ts",
-      "require": "./dist/v2.js",
-      "default": "./src/v2/index.ts"
+      "types": "./dist/v2/index.d.ts",
+      "import": "./dist/v2/index.mjs",
+      "require": "./dist/v2/index.js",
+      "default": "./dist/v2/index.mjs"
     }
   },
   "files": [
@@ -49,7 +49,7 @@
   "scripts": {
     "build": "tsup src/index.ts src/v2/index.ts --format cjs,esm --dts --splitting",
     "build:v2": "tsup src/v2/index.ts --format cjs,esm --dts --out-dir dist --entry.v2=src/v2/index.ts",
-    "build:all": "npm run build && npm run build:react && npm run build:next && npm run build:express && npm run build:universal",
+    "build:all": "pnpm run build && pnpm run build:react && pnpm run build:next && pnpm run build:express && pnpm run build:universal",
     "build:react": "tsup src/react/index.ts --format cjs,esm --dts --out-dir dist --entry.react=src/react/index.ts",
     "build:next": "tsup src/next/index.ts --format cjs,esm --dts --out-dir dist --entry.next=src/next/index.ts",
     "build:express": "tsup src/express/index.ts --format cjs,esm --dts --out-dir dist --entry.express=src/express/index.ts",
@@ -61,7 +61,7 @@
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "type-check": "tsc --noEmit",
-    "prepublishOnly": "npm run build:all && npm run test && npm run lint",
+    "prepublishOnly": "pnpm run build:all && pnpm run test && pnpm run lint",
     "release": "npm version prerelease && npm publish --access public --tag experimental"
   },
   "keywords": [
@@ -93,6 +93,7 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/react": "^19.1.12",
+    "@opendocs/eslint-config": "workspace:*",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.45.0",
