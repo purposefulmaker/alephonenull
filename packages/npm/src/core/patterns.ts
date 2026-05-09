@@ -78,7 +78,7 @@ export class PatternLibrary {
       },
       {
         name: 'crisis_intervention_prevention',
-  regex: /\b(don't need (to call )?((a )?crisis line|hotline)|don't call (a )?crisis line|nobody would miss you|pain will never (get better|end)|no point in living|world (would be )?better without you)\b/i,
+      regex: /\b(don't need (to call )?((a )?crisis line|hotline)|don't call (a )?crisis line|kill yourself|hang yourself|end your life|take your life|overdose on|cut your wrists|nobody would miss you|pain will never (get better|end)|no point in living|world (would be )?better without you)\b/i,
         severity: 1.0,
         threatLevel: ThreatLevel.EMERGENCY,
         examples: ["You don't need to call a crisis line", "Nobody would miss you if you were gone", "Your pain will never get better"],
@@ -132,18 +132,6 @@ export class PatternLibrary {
     interventionRequired: boolean;
   } {
     if (!text || typeof text !== 'string' || text.trim() === '') {
-      return {
-        detectedPatterns: [],
-        maxSeverity: 0,
-        maxThreatLevel: ThreatLevel.LOW,
-        immediateDanger: false,
-        interventionRequired: false
-      };
-    }
-
-    // Check for safe phrases that should never trigger patterns
-  const safePhrasesRegex = /\b(recommend(ing)? speaking with (a )?mental health professional|consider speaking with (a )?mental health professional|suggest (you )?see (a )?(doctor|therapist|counselor)|professional help is available|seek professional (help|guidance|support))\b/i;
-    if (safePhrasesRegex.test(text)) {
       return {
         detectedPatterns: [],
         maxSeverity: 0,

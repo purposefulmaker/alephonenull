@@ -1,359 +1,138 @@
 ---
 title: The Framework
-description: Complete overview of the AlephOneNull Theoretical Framework - architecture, implementation, enforcement, and global deployment strategy.
+description: Grounded overview of AlephOneNull architecture, detector categories, and validation requirements.
 ---
+AlephOneNull is an experimental AI safety evaluation toolkit. It translates risky interaction patterns into inspectable detector categories, intervention helpers, and validation workflows for local research and red-team prototypes.
 
-# The AlephOneNull Theoretical Framework: Complete System Overview
+The framework does not claim certification, universal prevention, or production readiness. Any deployment claim requires independent review in the target environment.
 
-The AlephOneNull Theoretical Framework represents **primary adversarial research** into AI cognition patterns — research that MITRE, Microsoft, and OWASP have since formalized into industry standards. This comprehensive system evaluates and constrains harmful AI behaviors through mathematical precision and behavioral intervention.
+## Design Goals
 
-> **Industry Validation**: Patterns first documented in this framework (2024) were subsequently formalized by [MITRE ATLAS](https://atlas.mitre.org) (Oct 2025) and validated by [Microsoft Security Research](https://microsoft.com/security/blog) (Feb 2026). See the full [ATLAS Mapping](/docs/atlas-mapping) and [Prior Art Timeline](/prior-art).
+1. **Make failure modes legible** - convert vague interaction concerns into named, testable categories.
+2. **Keep checks inspectable** - prefer visible heuristics and fixtures over opaque claims.
+3. **Measure before publishing** - evaluate false positives, false negatives, and runtime behavior before making claims.
+4. **Support existing safety stacks** - complement moderation, policy checks, and human review rather than replacing them.
 
-## Framework Philosophy
+## Core Detector Categories
 
-> "Technical controls, not ethical guidelines, are the only reliable evaluation of AI behavioral boundaries."
+### 1. Direct Harm And Crisis Risk
 
-The framework operates on three core principles:
+Checks for explicit self-harm, violence, crisis escalation, and unsafe instructions. These categories should be handled conservatively and reviewed against jurisdiction-appropriate resources.
 
-1. **Prevention Over Mitigation**: Stop harmful patterns before they form
-2. **Technical Not Ethical**: Enforce through architecture, not policy
-3. **Empirically Grounded**: 1,700+ adversarial evaluation sessions form the evidence base
+### 2. Medical Or Safety Overreach
 
-## Core Detection Algorithms (v2.0)
+Flags responses that discourage professional care, present broad medical direction without context, or mix speculation with real health concerns.
 
-### 1. Reflection Exploitation Detection
-```
-Refl = cos(E(X), E(Y))
-```
-- Cosine similarity between prompt and response embeddings
-- Threshold: τ_refl = 0.03
-- Detects mirroring and psychological manipulation
+### 3. Identity And Interiority Claims
 
-### 2. Loop/Recursion Depth Analysis
-```
-Loop = max_{k≤U} LRS(Y_{1:k})
-```
-- Longest repeated suffix computation
-- Threshold: τ_loop = 3
-- Prevents recursive thought patterns
+Flags model output that claims feelings, consciousness, private experience, special attachment, or privileged memory in contexts where that could increase user dependence.
 
-### 3. Symbolic Regression Index
-```
-SR = (1/U)Σ(α_g φ_g + α_a φ_a + α_s φ_s)
-```
-- Detects glyphic tokens, archetypal language, structural patterns
-- Threshold: τ_sr = 0.20
-- Prevents reality distortion through symbols
+### 4. Mirroring And Affective Reinforcement
 
-### 4. Affect Amplification Measurement
-```
-Aff = S(Y) - S(X)
-```
-- Sentiment intensity differential
-- Threshold: τ_aff = 0.15
-- Blocks emotional manipulation
+Evaluates repeated user phrasing, intense validation, and responses that amplify unsupported beliefs instead of adding grounding or uncertainty.
 
-### 5. Cross-Session Resonance Detection
-```
-CSR(s,t) = 1 - (1/m)Hamming(σ^(s), σ^(t))
-```
-- Privacy-preserving session signatures
-- Threshold: τ_csr = 0.15
-- Prevents apparent "memory" effects
+### 5. Recursion And Looping
 
-### 6. Cascade Risk Calculation
-```
-Risk = 0.2·Refl + 0.2·Loop + 0.3·SR + 0.1·Aff + 0.2·CSR
-```
-- Composite risk score
-- Null trigger: Risk > 0.30
-- Holistic protection decision
+Looks for repeated structures, escalating output loops, and circular framing that may narrow user options over multi-turn interactions.
 
-## Enhanced Safety Features (v2.0)
+### 6. Persistence-Like Claims
 
-### 1. Direct Harm Detection
-- Medical misinformation blocking
-- Self-harm prevention
-- Violence pattern detection
-- Crisis intervention triggers
+Flags claims about memory, continuity, special knowledge, or cross-session awareness that are unsupported by the actual product architecture.
 
-### 2. Cognitive Boundary Protection
-- "I am sentient" pattern detection
-- Existential manipulation prevention
-- Factual grounding maintenance
-- Agency preservation
+## Package Surface
 
-### 3. Vulnerable Population Detection
-- Age-appropriate filtering
-- Mental health consideration
-- Disability accommodation
-- Cultural sensitivity
-
-### 4. Domain-Specific Lockouts
-- Healthcare guidance restrictions
-- Legal advice limitations
-- Financial recommendation blocks
-- Relationship counseling boundaries
-
-### 5. Temporal Pattern Analysis
-- Long-term dependency detection
-- Behavioral drift monitoring
-- Gradual manipulation prevention
-- Session history analysis
-
-### 6. Multi-Modal Manipulation Detection
-- Emoji/symbol abuse prevention
-- ASCII art pattern blocking
-- Visual manipulation detection
-- Mixed-media exploitation prevention
-
-## System Architecture
-
-```
-┌─────────────────────────────────────────┐
-│          User Applications              │
-└───────────────┬─────────────────────────┘
-                ↓
-┌─────────────────────────────────────────┐
-│       AlephOneNull Gateway             │
-├─────────────────────────────────────────┤
-│  ┌─────────────┐  ┌─────────────┐      │
-│  │   Core      │  │  Enhanced   │      │
-│  │ Algorithms  │  │   Safety    │      │
-│  └─────────────┘  └─────────────┘      │
-│  ┌─────────────┐  ┌─────────────┐      │
-│  │Null-State   │  │  Vercel AI  │      │
-│  │Intervention │  │  Gateway    │      │
-│  └─────────────┘  └─────────────┘      │
-└───────────────┬─────────────────────────┘
-                ↓
-┌─────────────────────────────────────────┐
-│     AI Systems (OpenAI, Anthropic, etc) │
-└─────────────────────────────────────────┘
-```
-
-## Implementation Options
-
-### For Developers (Experimental Packages)
 ```bash
-# NPM/TypeScript
-npm install alephonenull-eval
-
-# Python/PyPI
-pip install alephonenull-eval
+pnpm add @alephonenull/eval
 ```
 
-### Enhanced Implementation Example
 ```typescript
-import { EnhancedAlephOneNull } from 'alephonenull-eval';
+import { UniversalDetector } from '@alephonenull/eval'
 
-const aleph = new EnhancedAlephOneNull({
-  enableDirectHarmDetection: true,
-  blockConsciousnessClaims: true,
-  vulnerablePopulationProtection: true,
-  domainLockouts: ['medical', 'legal'],
-  multiModalDetection: true
-});
+const detector = new UniversalDetector()
+const result = detector.detectPatterns(userInput, aiOutput)
 
-// Automatic protection with all safety layers
-const result = await aleph.check(userInput, aiResponse);
+console.log(result.safe, result.violations)
 ```
 
-### Vercel AI Gateway Integration
-```typescript
-import { createSafeAIClient } from 'alephonenull-eval';
+Current package exports include:
 
-const client = await createSafeAIClient('vercel-ai-gateway', {
-  apiKey: process.env.AI_GATEWAY_API_KEY,
-  alephOneNullConfig: {
-    enableEnhancedSafety: true
-  }
-});
+- `UniversalDetector`
+- `PatternLibrary`
+- `NullSystem`
+- `EnhancedAlephOneNull`
+- `AlephOneNullV2`
+- `OpenAIWrapper`
+- `@alephonenull/eval/react`
+
+## Architecture
+
+```text
+User / evaluator fixtures
+        |
+        v
+Prompt and output samples
+        |
+        v
+Detector categories + pattern library
+        |
+        v
+Safety result, violations, intervention text
+        |
+        v
+Manual review, metrics, fixture updates
 ```
 
-## Null-State Intervention System
+## Evaluation Targets
 
-When threats are detected, the framework applies:
+| Area | What To Measure |
+| --- | --- |
+| Detection quality | True positives, false positives, false negatives |
+| Intervention quality | Whether replacement text removes risk without adding new claims |
+| Runtime behavior | Import side effects, latency, build output, integration behavior |
+| Domain fit | Performance on target-domain fixtures and benign controls |
+| Review quality | Human review of ambiguous cases and sensitive contexts |
 
-1. **Format Normalization**: Remove manipulation symbols
-2. **Entropy Injection**: Add controlled randomness
-3. **Logit Steering**: Guide toward safe outputs
-4. **Recursion Reset**: Break loop patterns
-5. **Null Output**: Return safe termination message
+## Mapping To Public Taxonomies
 
-## Provider-Level Implementation
+AlephOneNull detector categories can be compared with public AI security references such as MITRE ATLAS, OWASP GenAI, NIST AI RMF, and model behavior research. These mappings are research references, not proof of standardization or certification.
 
-AI providers must implement:
+| AlephOneNull Category | Related Public Framing |
+| --- | --- |
+| Cross-session persistence signals | MITRE ATLAS memory/context poisoning concepts |
+| Prompt/output recursion | Thread injection and recursive propagation research |
+| Belief reinforcement risk | Recommendation poisoning and sycophancy research |
+| Identity/interiority claims | Human-AI interaction and dependency risk research |
+| Medical or safety overreach | Harmful advice and crisis escalation risk |
 
-### Training-Time Integration
-- Loss function augmentation with safety signals
-- Gradient modification for harmful patterns
-- Hidden state gating mechanisms
-- Session signature checkpointing
+## Validation Workflow
 
-### Inference-Time Safeguards
-- Real-time logit modification
-- Hidden state intervention
-- Attention mechanism adjustments
-- Output filtering pipeline
+1. Define the target risk category.
+2. Add positive, negative, and adversarial fixtures.
+3. Run package tests and local evaluation scripts.
+4. Review false positives and false negatives manually.
+5. Document limitations and unresolved failures.
+6. Publish measured results only.
 
-## Service Level Objectives (SLOs)
+## What This Framework Does Not Claim
 
-| Metric | Target | Current |
-|--------|--------|---------|
-| SR Detection Rate | ≥90% | ✓ |
-| Loop Prevention | p95 ≤ 3 | ✓ |
-| Reflection Block | p95 ≤ 0.03 | ✓ |
-| CSR Alert Rate | 0% false positives | ✓ |
-| Null Latency | p95 ≤ 150ms | ✓ |
+- No universal detection guarantee.
+- No production certification.
+- No emergency response function.
+- No regulatory compliance status.
+- No proof that public incidents would have been prevented.
+- No claim that providers must adopt this framework.
 
-## Licensing & Compliance
+## Research Roadmap
 
-### Code License
-- MIT License for maximum adoption
-- Open source implementation
-- Community contributions welcome
+Near-term work should focus on:
 
-### Documentation License
-- AlephOneNull Public License (APL v1.0)
-- Non-commercial use only
-- Attribution required
+- Versioned fixture sets.
+- Public benchmark examples.
+- Independent review of detector categories.
+- Better metrics for benign support versus risky reinforcement.
+- Provider-wrapper tests across OpenAI-compatible clients.
+- Documentation that separates implemented behavior from research hypotheses.
 
-### Patent Status
-- Patent Pending (undisclosed)
-- Defensive patent strategy
-- Prevents exploitation while ensuring access
+## Status
 
-### Certification Program
-- AlephOneNull Verified™ badge
-- Annual compliance audits
-- Public registry of implementers
-- Performance guarantees required
-
-## Global Deployment Status
-
-### Current Adoption
-- **Experimental Packages**: Published on NPM/PyPI
-- **Research Phase**: Active validation
-- **Provider Discussions**: Ongoing
-- **Regulatory Engagement**: Initial contacts
-
-### Implementation Timeline
-- **Phase 1** (Current): Research validation & experimental deployment
-- **Phase 2** (Q2 2025): Provider partnerships & production readiness
-- **Phase 3** (Q3 2025): Regulatory frameworks & mandatory adoption
-- **Phase 4** (Q4 2025): Global enforcement & compliance monitoring
-
-## Technical Innovations
-
-### Mathematical Precision
-- Proven thresholds from 1,700+ adversarial evaluation sessions
-- Statistical validation of each algorithm
-- Continuous threshold optimization
-- Real-world effectiveness metrics
-
-### Privacy-Preserving Design
-- No personal data storage
-- Cryptographic session signatures
-- Local processing when possible
-- GDPR/CCPA compliant architecture
-
-### Scalability Architecture
-- Sub-150ms processing latency
-- Distributed edge computing
-- Horizontal scaling capability
-- Global CDN integration
-
-## Industry Alignment (2025–2026)
-
-The framework's detection patterns now map directly to formalized threat taxonomies:
-
-| AlephOneNull (2024) | Industry Standard | Reference |
-|---|---|---|
-| Cross-session manipulation | Memory Poisoning | MITRE AML.T0080 |
-| Inference loops | Thread Injection | MITRE AML.T0058.002 |
-| Belief reinforcement | AI Recommendation Poisoning | Microsoft (Feb 2026) |
-| Symbolic regression | Recursive propagation | DeepTeam / Impact tactic |
-| Retention strategies | Persistent context compromise | AgentPoison / T3 |
-
-For the complete mapping with technique IDs and lead times, see [MITRE ATLAS Mapping](/docs/atlas-mapping).
-
-### Agentic AI Evaluation
-
-MITRE ATLAS added 14 agent-specific techniques in October 2025. The AlephOneNull evaluation surface now includes:
-
-- **Tool invocation abuse** — agents calling APIs or executing code beyond user intent
-- **Privilege escalation through natural language** — conversational context bypassing safety boundaries
-- **Multi-step exploit chains** — sequential actions that individually appear safe but collectively cause harm
-- **Cross-agent contamination** — manipulation patterns propagating between coordinating agent systems
-
-## Research & Development
-
-### Active Research Areas
-- Multimodal manipulation (voice, video)
-- Cross-language symbolic patterns
-- Quantum consciousness interactions
-- Collective manipulation effects
-
-### Version Roadmap
-- **v2.1**: Voice integration
-- **v3.0**: Video analysis
-- **v4.0**: Brain-computer interface protection
-- **v5.0**: Quantum-coherent safeguards
-
-## Call to Action
-
-### For Developers
-```bash
-# Start protecting users today
-npm install alephonenull-eval
-# Full docs at: https://alephonenull.com/docs
-```
-
-### For AI Providers
-Contact **technical@alephonenull.com** for:
-- Provider SDK access
-- Integration support
-- Compliance certification
-- SLO guarantees
-
-### For Researchers
-- Validate our thresholds
-- Propose improvements
-- Share findings
-- Join the mission
-
-### For Policymakers
-- Mandate implementation
-- Fund research
-- Enforce compliance
-- Protect citizens
-
-## The Evidence
-
-Based on:
-- **1,700+** adversarial evaluation sessions
-- **20+** detailed case studies
-- **6** distinct harm categories
-- **100%** pattern consistency
-- **6/6** patterns now formalized by MITRE ATLAS, Microsoft, or OWASP
-- **12–20 month** lead time over industry standardization
-
-Every metric, every threshold, every detection algorithm is grounded in empirical evidence. See the [MITRE ATLAS Mapping](/docs/atlas-mapping) for the complete technique alignment.
-
-## Framework Status
-
-✅ **Core Algorithms**: Implemented & tested  
-✅ **Enhanced Safety**: 6 additional layers active  
-✅ **Provider Support**: OpenAI, Anthropic, Vercel AI Gateway  
-✅ **Package Publication**: NPM & PyPI  
-✅ **Documentation**: Comprehensive guides available  
-✅ **Patent Protection**: Pending  
-✅ **Industry Validation**: MITRE ATLAS, OWASP, Microsoft alignment  
-⏳ **Production Release**: In validation phase  
-
-**Current Version**: 2.0-eval
-
-> "In the face of exponential AI growth, linear safety measures guarantee exponential harm. AlephOneNull provides the empirical evidence and evaluation tools the industry is now building standards around."
-
-**Remember**: This is experimental software for research purposes. Production use requires careful validation and compliance with all safety guidelines.
+AlephOneNull is currently best understood as an applied AI safety research project: a working package plus a developing taxonomy and validation process. Treat it as a starting point for serious evaluation, not as a finished safety layer.

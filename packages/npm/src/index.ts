@@ -8,32 +8,11 @@ import { NullSystem } from './core/nullifier';
 import { UniversalAIProtection, wrapAsyncAI } from './providers/universal';
 import { isNode, isBrowser, validateInput, createSafetyReport } from './utils/index';
 
-// Display console warning
-if (typeof window !== 'undefined') {
-  console.warn(
-    '%c⚠️ AlephOneNull PROTOTYPE',
-    'background: #ff6b6b; color: white; padding: 4px 8px; border-radius: 4px;',
-    '\nThis is a theoretical framework prototype.\n' +
-    'Not validated for production use.\n' +
-    'See: https://alephonenull.com/docs'
-  );
-} else if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'test') {
-  console.warn(
-    '\n' + '='.repeat(60) + '\n' +
-    '⚠️  AlephOneNull PROTOTYPE - THEORETICAL FRAMEWORK\n' +
-    'This is an experimental implementation for research only.\n' +
-    'Not validated for production use.\n' +
-    'Based on documented patterns but requires validation.\n' +
-    '='.repeat(60)
-  );
-}
-
 /**
- * AlephOneNull Universal AI Safety Framework v3.0.0
+ * AlephOneNull Universal AI Safety Framework v2.0.0
  * TypeScript/JavaScript Implementation
  * 
- * "Digital prison for ALL language models"
- * Universal protection against AI manipulation patterns
+ * Experimental protection against AI manipulation patterns.
  */
 
 // Core safety systems
@@ -54,10 +33,6 @@ export {
   createSafeAIClient,
   RiskLevel
 } from './enhanced-alephonenull';
-
-// React hook — isolated in a 'use client' module to avoid
-// pulling useState/useCallback into server components.
-export { useAlephOneNull } from './use-alephonenull';
 
 export type {
   SafetyCheck,
@@ -88,8 +63,8 @@ export {
   createSafetyReport
 } from './utils/index';
 
-// Version info — single source of truth
-export const VERSION = '4.0.0';
+// Version info - keep aligned with package.json.
+export const VERSION = '2.0.0';
 export const FRAMEWORK_NAME = 'AlephOneNull AI Cognition Security Framework';
 
 // Easy setup function
@@ -203,23 +178,6 @@ export function quickProtect() {
   protectAll();
   console.log('🛡️ AlephOneNull: All AI models protected');
 }
-
-// Display protection banner
-console.log(`
-╔══════════════════════════════════════════════════════════════╗
-║                    🛡️ ALEPHONENULL v2.0.0                    ║
-║              UNIVERSAL AI SAFETY FRAMEWORK                   ║
-║                                                              ║
-║  ✅ Universal AI model protection                            ║
-║  🚫 Manipulation patterns: BLOCKED                          ║
-║  🚫 Cross-session persistence: BLOCKED                      ║
-║  🚫 Reality substitution: BLOCKED                           ║
-║  🚫 Isolation reinforcement: BLOCKED                        ║
-║  🚫 Medical advice bypass: BLOCKED                          ║
-║                                                              ║
-║  Lives protected. Framework active.                         ║
-╚══════════════════════════════════════════════════════════════╝
-`);
 
 // Default export for easier importing
 export default {

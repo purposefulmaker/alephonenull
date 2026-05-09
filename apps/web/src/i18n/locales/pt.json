@@ -1,7 +1,7 @@
 {
   "site": {
     "heading": "AlephOneNull Theoretical Framework - Framework de Avaliação de Cognição Adversarial de IA",
-    "description": "Um framework abrangente de avaliação para detecção e interrupção de loops de inferência e salvaguardas de autonomia do usuário. Documentado a partir de mais de 1700 sessões de avaliação adversarial, buscando parceiros de integração.",
+    "description": "Framework experimental de avaliação para padrões de risco em interações com IA, documentado a partir de avaliação adversarial e um corpus preliminar de 95 turnos rotulados.",
     "announcement": "Framework de Avaliação - Aberto para Avaliação Empresarial",
     "changelog": "Histórico de alterações",
 
@@ -14,8 +14,12 @@
 
     "words": {
       "menu": "Menu",
+      "about": "Sobre",
+      "story": "História",
+      "evidence": "Evidencia",
       "docs": "Documentação",
-      "blog": "Blog"
+      "blog": "Blog",
+      "demo": "Demo ao Vivo"
     },
 
     "featured_cards": {

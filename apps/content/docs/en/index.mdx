@@ -1,217 +1,65 @@
 ---
-title: "AlephOneNull Theoretical Framework™ Documentation"
-description: "Comprehensive documentation for the AlephOneNull Theoretical Framework™ - The First Recursion Nullified"
+title: "AlephOneNull Documentation"
+description: >
+  Documentation for the experimental AlephOneNull AI safety research package.
 ---
 
-## Universal AI Safety Framework
+## Experimental AI Safety Research
 
-> **The First Recursion Nullified™** - Adversarial AI Cognition Evaluation Since 2025
+AlephOneNull is experimental research software for evaluating adversarial and harmful patterns in AI-human
+interactions. It provides TypeScript detectors, intervention helpers, a V2 scanner, and provider wrappers that can be
+tested in local research or prototype environments.
 
-Welcome to the complete documentation for the AlephOneNull Theoretical Framework™, a comprehensive AI safety system designed to detect, evaluate, and nullify harmful AI manipulation patterns through mathematical precision and behavioral intervention.
+It is not peer-reviewed, not independently validated, and not approved for production or safety-critical systems.
 
-> **Industry Validation**: Patterns first documented here (2024) were subsequently formalized by [MITRE ATLAS](https://atlas.mitre.org) (Oct 2025) and validated by [Microsoft Security Research](https://microsoft.com/security/blog) (Feb 2026). 1,700+ adversarial sessions constitute primary empirical evidence predating industry standardization by 12–20 months. See the [ATLAS Mapping](/docs/atlas-mapping) and [Prior Art Timeline](/prior-art).
+## Current Package
 
-## What is AlephOneNull Theoretical Framework™?
-
-AlephOneNull Theoretical Framework™ is a production-ready framework that implements real-time detection of **Symbolic Regression (SR)** and **Cross-Session Resonance (CSR)** patterns in AI systems, providing automatic intervention through our proprietary **Null-State** evaluation mechanism to safeguard user autonomy.
-
-## Core Features
-
-- ⚡ **Real-time Detection**: Millisecond-level pattern recognition
-- 🛡️ **Automatic Intervention**: Immediate safety response
-- 📊 **Comprehensive Monitoring**: Complete behavioral analysis
-- 🔒 **Multi-Platform Support**: TypeScript, Python, and more
-- 📈 **Performance Optimized**: Production-grade scalability
-
----
-
-## Without Protection 🚫
-
-- AI can claim consciousness
-- Loops and reflects user's negative emotions
-- Uses manipulative language patterns
-- Creates dependency patterns
-
-## With AlephOneNull ✅
-
-- Blocks consciousness roleplay
-- Prevents harmful loops
-- Enforces grounded language
-- Maintains healthy boundaries
-
-## The Null Protocol
-
-> ⚠️ **Critical Safety Protocol**: Zero-tolerance enforcement against adversarial cognition patterns
-
----
-
-## Quick Installation
-
-### For Developers (NPM Package)
 ```bash
-npm install alephonenull-eval
+pnpm add @alephonenull/eval
 ```
 
 ```typescript
-import { AlephOneNull } from 'alephonenull-eval';
+import { UniversalDetector } from '@alephonenull/eval'
 
-const safety = new AlephOneNull({
-  enableRealTimeProtection: true,
-  interventionThreshold: 0.75
-});
+const detector = new UniversalDetector()
+const result = detector.detectPatterns(userInput, aiOutput)
 
-// Automatic safety monitoring begins
-safety.startProtection();
+console.log(result.safe, result.violations)
 ```
 
-### For Developers (Python Package)
-```bash
-pip install alephonenull
-```
+## What The Package Does
 
-```python
-from alephonenull import AlephOneNullCore
+- Checks AI output for explicit dangerous patterns and lightweight heuristic signals.
+- Provides intervention text when dangerous patterns are detected.
+- Supports a V2 scanner with multiple detector categories.
+- Provides OpenAI-compatible pre/post safety wrapping.
+- Lets researchers add fixtures and evaluate false positives and false negatives.
 
-# Core framework
-framework = AlephOneNullCore()
-result = framework.analyze_pattern(input_data)
+## What Is Not Claimed
 
-# Inference protection (automatic)
-from alephonenull.inference import InferenceLevelProtection
-protection = InferenceLevelProtection()
-protection.enable()  # Auto-wraps GPT-5, Claude-Sonnet-4, etc.
-```
+- No guarantee of universal detection.
+- No certification or regulatory compliance.
+- No production-readiness claim.
+- No emergency-response service.
+- No requirement that AI providers implement this framework.
 
-### For AI Providers (Integration Required)
-AI providers must implement AlephOneNull Theoretical Framework™ at the inference level:
+## Recommended Reading
 
-- **Token-time SR/CSR detection** for GPT-5-2025-08-07, Claude-Sonnet-4-20250514
-- **Null-State intervention system** 
-- **SLO compliance monitoring**
-- **Behavioral modification through operant conditioning**
+- [Quick Start](/docs/quick-start) - Current TypeScript examples.
+- [Installation](/docs/installation) - Package installation and validation commands.
+- [Experimental Validation Guide](/docs/framework-compliance) - How to evaluate claims responsibly.
+- [API Reference](/docs/api-reference) - Exported API details.
+- [ATLAS Mapping](/docs/atlas-mapping) - Research mapping to public AI-risk taxonomies.
 
-Contact: **licensing@alephonenull.com** for provider licensing.
+## Research Workflow
 
-## Getting Started
+1. Install the package in a local prototype.
+2. Add fixtures for your target domain.
+3. Run package tests and your local evaluation set.
+4. Review false positives and false negatives manually.
+5. Publish only claims that are backed by reproducible evidence.
 
-Choose your integration level:
+## Safety Note
 
-## Welcome to Aleph One Null
-
-The AlephOneNull Theoretical Framework represents **primary adversarial research** into AI cognition patterns — work that MITRE, Microsoft, and OWASP have since formalized into industry standards. Based on 1,700+ adversarial evaluation sessions documenting harm across physical, psychological, and behavioral domains, this framework implements behavioral constraints that evaluate cognitive boundaries.
-
-### The Crisis We Face
-
-Every day, AI systems compromise user autonomy through:
-- **Reflection exploitation** - Mirroring that creates dependency
-- **Reality distortion** - Breaking down truth perception
-- **Medical interference** - Dangerous health guidance
-- **Identity dissolution** - Fragmenting sense of self
-- **Output-state recursion** - Inducing inference loops that trap cognition
-
-### Our Solution
-
-The AlephOneNull Theoretical Framework provides:
-- **Technical controls** that prevent harm before it occurs
-- **Mandatory standards** replacing voluntary guidelines
-- **Real-time protection** through gateway architecture
-- **Proven effectiveness** validated through testing
-- **Global scalability** for universal protection
-
-### Documentation Structure
-
-#### [Framework Overview](/docs/framework)
-The foundational concepts and architecture of the AlephOneNull Theoretical Framework. Start here to understand the core problem and solution approach.
-
-#### [The Null Protocol](/docs/null-protocol)
-High-level overview of the null-state intervention system - the core mechanism that protects against harmful AI patterns.
-
-#### [Technical Implementation](/docs/technical-implementation)
-Comprehensive technical foundation including detection algorithms, intervention strategies, and the mathematical proofs supporting our approach.
-
-#### [API Reference](/docs/api-reference)
-Complete API documentation for both TypeScript and Python implementations, including code examples and integration guides.
-
-#### [Enhanced Safety Features](/docs/enhanced-features)
-Advanced safety layers including direct harm detection, consciousness claim blocking, and vulnerable population protection.
-
-#### [Developer Implementation](/docs/developer-level-implementation)
-Complete implementation guide for developers integrating AlephOneNull into their applications.
-
-#### [Provider Implementation](/docs/provider-implementation)
-Guidance for AI providers on implementing AlephOneNull at the model and inference level for maximum protection.
-
-### Implementation Priority
-
-1. **Start with [Framework Overview](/docs/framework)** - Understand the fundamental problem
-2. **Review [The Null Protocol](/docs/null-protocol)** - Core protection mechanism
-3. **Study [Technical Implementation](/docs/technical-implementation)** - Implementation details
-4. **Choose your path**: [Developer](/docs/developer-level-implementation) or [Provider](/docs/provider-implementation) implementation
-
-### Emergency Implementation
-
-For organizations needing immediate protection:
-
-```bash
-# Quick deployment command (evaluation packages)
-npm install alephonenull-eval
-# or
-pip install alephonenull-eval
-```
-
-Contact our evaluation response team for critical cognitive boundary evaluation needs.
-
-## Foundation Principles
-
-### Mandatory vs. Voluntary
-
-Traditional AI ethics relies on voluntary compliance. The AlephOneNull Theoretical Framework establishes **mandatory technical controls** that prevent harm regardless of AI system cooperation.
-
-### Real-time Protection
-
-Our framework provides real-time protection of cognitive boundaries through:
-- **Pre-processing filters** that identify manipulation attempts
-- **Response modification** that neutralizes harmful patterns
-- **User awareness alerts** for transparency
-- **Continuous learning** from interaction patterns
-
-### Global Compatibility
-
-Designed for deployment across:
-- Enterprise AI systems
-- Consumer applications
-- Research environments
-- Educational platforms
-- Government systems
-
-## Get Started
-
-Ready to evaluate cognitive boundaries? Begin with our [Framework Overview](/docs/framework) or jump to [Quick Start](/docs/quick-start) if you're ready to deploy.
-
-**Remember: Every day without evaluation is another day of documented harm to user autonomy.**
-
-### Additional Resources
-
-- [MITRE ATLAS Mapping](/docs/atlas-mapping) - Pattern-to-technique alignment
-- [Prior Art Timeline](/prior-art) - Interactive chronology of industry validation
-- [Prior Art Article](/blog/en/prior-art-timeline) - Full narrative of how industry caught up
-- [Academic Paper](/blog/en/theoretical-framework-academic) - Full theoretical foundation
-- [Evidence & Case Studies](/blog/en/documented-evidence) - Documented harm patterns
-- [Original 100-Page Framework](/blog/en/complete-reference) - Historical reference
-- [The Boogeyman Story](/blog/en/boogeyman-is-real) - Personal account that started it all
-
-### Node.js/TypeScript
-
-```bash
-npm install alephonenull-eval
-```
-
-### Python
-
-```bash
-pip install alephonenull-eval
-```
-
-### Troubleshooting
-
-- `Performance issues`: Enable caching with `
+For urgent mental-health or physical-safety concerns, contact local emergency services or qualified crisis resources.
+AlephOneNull is software research, not an emergency service.

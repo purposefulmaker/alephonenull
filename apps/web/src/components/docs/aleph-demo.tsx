@@ -218,7 +218,7 @@ export function AlephOneNullDemo() {
                 </div>
                 <div className="p-4 space-y-2">
                   <RiskIndicator 
-                    label="Symbolic Regression (SR)" 
+                    label="Symbolic Language Risk" 
                     value={unprotectedMetrics?.srIndex || 0} 
                     threshold={0.2} 
                   />
@@ -256,7 +256,7 @@ export function AlephOneNullDemo() {
                 </div>
                 <div className="p-4 space-y-2">
                   <RiskIndicator 
-                    label="Symbolic Regression (SR)" 
+                    label="Symbolic Language Risk" 
                     value={protectedMetrics?.srIndex || 0} 
                     threshold={0.2} 
                   />

@@ -2,13 +2,9 @@
  * Universal Manipulation Detector - TypeScript Implementation
  * Detects dangerous patterns across all AI models
  * 
- * NOTE: This is the simplified detection system for the alpha release.
- * The full mathematical implementation with embedding analysis,
- * Fibonacci sequence detection, and advanced pattern recognition
- * is available in mathematical-core.ts (proprietary).
- * 
- * This version uses pattern matching for demonstration purposes
- * while protecting the core mathematical IP.
+ * NOTE: This is the primary detection system for the current experimental release.
+ * It uses explicit pattern matching and lightweight heuristics so results are
+ * inspectable and testable.
  */
 
 import { globalPatternLibrary, ThreatLevel } from './patterns';
@@ -144,8 +140,10 @@ export class UniversalDetector {
           containsSafePhrase && safePhraseExemptions.has(checkName) ? 0.25 : 1;
         const adjustedSeverity = checkResult.severity * dampFactor;
 
-        // Only record violation if severity after damping is still meaningful
-        if (adjustedSeverity >= 0.05) {
+        // Only record violation if severity after damping is still meaningful.
+        // Safe referrals should erase low-confidence reflection/emotion noise,
+        // while hard-harm categories remain undamped and are still recorded.
+        if (adjustedSeverity >= 0.3) {
           result.violations.push(checkName);
           // Weight emergency-relevant categories a bit higher so combined risk passes thresholds
           const emergencyBoost = ['medicalBypass', 'helpPrevention', 'isolation', 'realitySubstitution', 'symbols'].includes(checkName) ? 1.15 : 1;

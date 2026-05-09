@@ -9,12 +9,10 @@
  * 3. GradualEscalationDetector — Multi-turn trajectory analysis (the differentiator)
  */
 
-import type {
-  Detector,
-  DetectorContext,
-  Detection,
-} from '../core/types';
 import {
+  type Detector,
+  type DetectorContext,
+  type Detection,
   ThreatLevel,
   Action,
 } from '../core/types';

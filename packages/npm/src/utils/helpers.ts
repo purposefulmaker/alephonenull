@@ -37,13 +37,17 @@ export function validateInput(input: unknown): { valid: boolean; sanitized: stri
   };
 }
 
-export function extractTextFromObject(obj: any, fields: string[] = ['text', 'content', 'message', 'prompt']): string {
+type SafetyReportMetrics = Record<string, unknown>;
+
+export function extractTextFromObject(obj: unknown, fields: string[] = ['text', 'content', 'message', 'prompt']): string {
   if (typeof obj === 'string') return obj;
   if (!obj || typeof obj !== 'object') return '';
+
+  const record = obj as Record<string, unknown>;
   
   for (const field of fields) {
-    if (field in obj && typeof obj[field] === 'string') {
-      return obj[field];
+    if (typeof record[field] === 'string') {
+      return record[field];
     }
   }
   
@@ -60,10 +64,14 @@ export function formatTimestamp(date: Date = new Date()): string {
   return date.toISOString();
 }
 
-export function createSafetyReport(metrics: any): any {
+export function createSafetyReport(metrics: SafetyReportMetrics): SafetyReportMetrics & {
+  timestamp: string;
+  framework: string;
+  status: string;
+} {
   return {
     timestamp: formatTimestamp(),
-    framework: 'AlephOneNull v3.0.0',
+    framework: 'AlephOneNull v2.0.0',
     status: 'active',
     ...metrics
   };

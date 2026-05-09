@@ -16,7 +16,7 @@ OpenAI provides several guardrails:
 
 AlephOneNull adds:
 - **Manipulation Detection**: Identifies psychological exploitation
-- **Pattern Recognition**: Detects symbolic regression and loops
+- **Pattern Recognition**: Detects symbolic-language risk and loops
 - **Session Protection**: Prevents cross-session attacks
 
 ## Combined Implementation
@@ -26,7 +26,7 @@ AlephOneNull adds:
 Here's a complete implementation combining all guardrails:
 
 ```typescript
-import { createSafetySystem } from 'alephonenull-eval'
+import { createSafetySystem } from '@alephonenull/eval'
 import OpenAI from 'openai'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })

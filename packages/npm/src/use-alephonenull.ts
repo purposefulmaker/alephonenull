@@ -1,8 +1,11 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { EnhancedAlephOneNull } from './enhanced-alephonenull'
-import type { Config, UserProfile } from './enhanced-alephonenull'
+import {
+  EnhancedAlephOneNull,
+  type Config,
+  type UserProfile,
+} from './enhanced-alephonenull'
 
 export function useAlephOneNull(config?: Partial<Config>) {
   const [aleph] = useState(() => new EnhancedAlephOneNull(config))

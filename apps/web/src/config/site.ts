@@ -3,7 +3,7 @@ import en from '@/i18n/locales/en.json'
 import pt from '@/i18n/locales/pt.json'
 
 export const siteConfig = {
-  name: 'AlephOneNull Theoretical Framework™',
+  name: 'AlephOneNull AI Safety Evaluation Toolkit',
 
   description: {
     en: en.site.description,
@@ -23,15 +23,15 @@ export const siteConfig = {
 
   logo: {
     image: '/images/logo.png',
-    alt: 'AlephOneNull™ Logo',
+    alt: 'AlephOneNull logo',
   },
 
   app: {
-    latestVersion: '1.0.0',
+    latestVersion: '2.0.0',
   },
 
   author: {
-    name: 'AlephOneNull Team',
+    name: 'John Bernard',
     site: 'https://purposefulmaker.com',
   },
 
@@ -49,8 +49,8 @@ export const siteConfig = {
 
     buymeacoffee: {
       label: 'Buy Me a Coffee',
-      url: 'https://buymeacoffee.com/alephonenull'
-    }
+      url: 'https://buymeacoffee.com/alephonenull',
+    },
   },
 } as const
 

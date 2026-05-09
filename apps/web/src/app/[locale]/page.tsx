@@ -43,7 +43,7 @@ export default async function IndexPage({
 
         <PageHeaderHeading>
           <FlipWords
-            words={['evaluation', 'safety', 'human-first']}
+            words={['evaluation', 'security', 'red-team']}
             className="text-9xl -z-10"
           />
 
@@ -55,6 +55,13 @@ export default async function IndexPage({
         <PageActions className="flex-wrap gap-3 sm:gap-0">
           <Link href="/docs/quick-start" className={cn(buttonVariants())}>
             {t('site.buttons.get_started')}
+          </Link>
+
+          <Link
+            href="/evidence"
+            className={cn(buttonVariants({ variant: 'outline' }))}
+          >
+            Evidence Pack
           </Link>
 
           <Link
@@ -86,11 +93,7 @@ export default async function IndexPage({
         <div className="w-full max-w-[35rem] mx-auto space-y-4">
           <InstallationBox
             className="w-full relative flex flex-wrap items-center pl-4 pr-12"
-            __rawString__="npm install alephonenull-eval"
-          />
-          <InstallationBox
-            className="w-full relative flex flex-wrap items-center pl-4 pr-12"
-            __rawString__="pip install alephonenull-eval"
+            __rawString__="pnpm add @alephonenull/eval"
           />
         </div>
 
@@ -109,51 +112,77 @@ export default async function IndexPage({
       <section className="flex flex-col gap-4">
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-2 2xl:grid-cols-4">
           <FeaturedCard
-            icon="🛡️"
-            title="Symbolic Pattern Regression Analysis"
-            description="94% reduction in adversarial cognition patterns"
+            icon="01"
+            title="Behavioral Pattern Analysis"
+            description="Inspectable checks for risky model interaction patterns"
           />
 
           <FeaturedCard
-            icon="🔄"
-            title="Inference-Loop Detection & Interruption"
-            description="Breaks inference loops at evaluation time"
+            icon="02"
+            title="Recursion And Loop Checks"
+            description="Flags repeated structures and escalating response loops"
           />
 
           <FeaturedCard
-            icon="⚡️"
+            icon="03"
             title="Real-Time Evaluation"
-            description="Sub-150ms evaluation response latency"
+            description="Measure scan latency in your own runtime and fixtures"
           />
 
           <FeaturedCard
-            icon="🔒"
-            title="Persistent Behavioral Drift Detection"
-            description="Evaluates cognitive boundaries across interactions"
+            icon="04"
+            title="Session Risk Review"
+            description="Evaluates persistence-like and cross-session risk signals"
           />
         </div>
 
         <FeaturedCard
           icon="+"
           orientation="horizontal"
-          title="Complete Framework Implementation"
-          description="Provider-level behavioral modification, platform integration, and developer SDKs for comprehensive evaluation of AI behavioral integrity against output-state recursion and behavioral policy violations."
+          title="Experimental Safety Evaluation Toolkit"
+          description="TypeScript detectors, intervention helpers, provider wrappers, and validation guidance for AI safety red-team workflows."
         />
+      </section>
+
+      <section className="mt-12 grid gap-4 lg:grid-cols-[0.8fr_1.2fr]">
+        <FeaturedCard
+          icon="95"
+          title="Preliminary Labeled Corpus"
+          description="The current eval-bench pack contains 95 turns, 20 controls, 75 positives, and 19 observed labels across four providers."
+        />
+
+        <FeaturedCard
+          icon="V3"
+          orientation="horizontal"
+          title="Evidence Pack Published"
+          description="The current corpus includes labeled JSONL fixtures, controls, a scoring rubric, corpus metadata, benchmark tooling, and validation notes."
+        >
+          <Link
+            href="/evidence"
+            className={cn(
+              buttonVariants({ variant: 'outline', size: 'sm' }),
+              'mt-2 w-fit'
+            )}
+          >
+            Review the evidence
+          </Link>
+        </FeaturedCard>
       </section>
 
       {/* Industry Validation Banner */}
       <section className="mt-12 mb-8">
         <div className="rounded-lg border border-amber-500/20 bg-amber-500/[0.04] p-6 text-center space-y-3">
           <p className="text-xs uppercase tracking-[4px] text-amber-600 dark:text-amber-500 font-mono">
-            Industry Validation
+            Research Context
           </p>
           <p className="text-lg font-semibold">
-            12–20 months ahead of industry formalization
+            Mapping experimental detectors to public AI-risk taxonomies
           </p>
           <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
-            Patterns first documented in this framework (2024) were subsequently
-            formalized by MITRE ATLAS (Oct 2025), OWASP GenAI (2025), and
-            Microsoft Security Research (Feb 2026).
+            The project tracks overlap between local detector categories and
+            public frameworks such as MITRE ATLAS, OWASP GenAI, and related AI
+            security research. These mappings are research references, not
+            certification claims.
           </p>
           <div className="flex flex-wrap justify-center gap-4 pt-2 text-xs text-muted-foreground font-mono">
             <span>MITRE AML.T0080</span>
