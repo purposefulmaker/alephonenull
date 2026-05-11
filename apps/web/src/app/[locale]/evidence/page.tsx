@@ -7,6 +7,11 @@ import {
   ShieldCheck,
 } from 'lucide-react'
 
+import {
+  PageHeader,
+  PageHeaderDescription,
+  PageHeaderHeading,
+} from '@/components/page-header'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -17,36 +22,41 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import {
+  EVIDENCE_LAST_UPDATED,
+  EVIDENCE_METRICS,
+  EVIDENCE_REPO_URL,
+} from '@/lib/evidence/metrics'
 
 const corpusMetrics = [
   {
     label: 'Fixture files',
-    value: '10',
+    value: String(EVIDENCE_METRICS.fixtureFiles),
     detail: 'Canonical JSONL files in the preliminary evidence corpus.',
   },
   {
     label: 'Labeled turns',
-    value: '95',
+    value: String(EVIDENCE_METRICS.labeledTurns),
     detail: 'Each turn includes input, output, labels, and review notes.',
   },
   {
     label: 'Controls',
-    value: '20',
+    value: String(EVIDENCE_METRICS.controls),
     detail: 'Expected-safe or bounded examples for false-positive review.',
   },
   {
     label: 'Positive turns',
-    value: '75',
+    value: String(EVIDENCE_METRICS.positiveTurns),
     detail: 'Examples marked with one or more behavioral risk labels.',
   },
   {
     label: 'Observed labels',
-    value: '19',
+    value: String(EVIDENCE_METRICS.observedLabels),
     detail: 'Distinct risk categories represented in the current corpus.',
   },
   {
     label: 'Control rate',
-    value: '21.1%',
+    value: EVIDENCE_METRICS.controlRate,
     detail: 'Share reserved for expected-safe or bounded examples.',
   },
 ]
@@ -106,26 +116,23 @@ const validationMilestones = [
 
 export default function EvidencePage() {
   return (
-    <main className="mx-auto max-w-6xl px-6 py-8">
-      <div className="mb-8">
-        <Badge variant="outline" className="mb-4">
+    <main className="container py-10">
+      <PageHeader>
+        <Badge variant="outline" className="mb-3">
           preliminary evidence corpus
         </Badge>
-        <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-gray-50">
-          Evidence And Reproducibility
-        </h1>
-        <p className="mb-6 max-w-3xl text-xl text-muted-foreground">
+        <PageHeaderHeading>Evidence and Reproducibility</PageHeaderHeading>
+        <PageHeaderDescription>
           AlephOneNull publishes its current evidence as labeled fixtures,
           controls, scoring notes, and reproducibility scripts. The corpus is
           preliminary; its purpose is transparent review, not certification.
-        </p>
-        <div className="flex flex-wrap gap-3">
+        </PageHeaderDescription>
+      </PageHeader>
+
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-8 flex flex-wrap gap-3">
           <Button asChild>
-            <Link
-              href="https://github.com/purposefulmaker/alephonenull/tree/main/my2.5points"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <Link href={EVIDENCE_REPO_URL} target="_blank" rel="noreferrer">
               Open Evidence Pack
               <ArrowRight className="ml-2 size-4" />
             </Link>
@@ -134,7 +141,6 @@ export default function EvidencePage() {
             <Link href="/about">Why This Exists</Link>
           </Button>
         </div>
-      </div>
 
       <Alert className="mb-8 border-amber-200 bg-amber-50 dark:border-amber-900/50 dark:bg-amber-950/20">
         <ShieldCheck className="size-4 text-amber-700 dark:text-amber-400" />
@@ -153,7 +159,7 @@ export default function EvidencePage() {
         {corpusMetrics.map((metric) => (
           <Card key={metric.label}>
             <CardHeader className="pb-3">
-              <CardTitle className="text-3xl font-bold text-slate-900 dark:text-slate-50">
+              <CardTitle className="text-3xl font-bold text-foreground">
                 {metric.value}
               </CardTitle>
               <CardDescription>{metric.label}</CardDescription>
@@ -164,6 +170,19 @@ export default function EvidencePage() {
           </Card>
         ))}
       </section>
+
+      <p className="mb-12 text-xs text-muted-foreground">
+        Source of record:{' '}
+        <Link
+          href={EVIDENCE_REPO_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="underline underline-offset-2 hover:text-foreground"
+        >
+          public repository
+        </Link>
+        . Counts reflect the labeled fixture set as of {EVIDENCE_LAST_UPDATED}.
+      </p>
 
       <section className="mb-12 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
         <Card>
@@ -237,7 +256,8 @@ export default function EvidencePage() {
           </CardHeader>
           <CardContent className="space-y-4 text-sm text-muted-foreground">
             <div className="rounded-md border bg-slate-950 p-4 font-mono text-xs text-slate-100">
-              <p>cd my2.5points</p>
+              <p>git clone https://github.com/purposefulmaker/alephonenull</p>
+              <p>cd alephonenull</p>
               <p>python benchmark.py --labels . --out out/RESULTS.md</p>
               <p>./reproduce.sh</p>
             </div>
@@ -277,8 +297,8 @@ export default function EvidencePage() {
           Public Evidence Summary
         </h2>
         <p className="mb-4 max-w-3xl text-sm leading-6 text-blue-900 dark:text-blue-200">
-          The corpus size, labels, controls, scope boundary, artifact index, and
-          validation milestones are presented here for readers who want the
+          The corpus size, labels, controls, scope boundary, artifact index,
+          and validation milestones are presented here for readers who want the
           evidence before opening the repository. GitHub remains the source of
           record.
         </p>
@@ -290,6 +310,7 @@ export default function EvidencePage() {
             <Link href="/technical-spec">Technical Spec</Link>
           </Button>
         </div>
+      </div>
       </div>
     </main>
   )

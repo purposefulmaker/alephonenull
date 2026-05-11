@@ -1,6 +1,11 @@
 import Link from 'next/link'
 import { ArrowRight, BookOpen, FileSearch, ShieldCheck } from 'lucide-react'
 
+import {
+  PageHeader,
+  PageHeaderDescription,
+  PageHeaderHeading,
+} from '@/components/page-header'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -36,20 +41,23 @@ const milestones = [
 
 export default function InvocationPage() {
   return (
-    <div className="mx-auto max-w-5xl px-6 py-8">
-      <div className="mb-8">
-        <Badge variant="outline" className="mb-4">
-          Research Narrative
+    <main className="container py-10">
+      <PageHeader>
+        <Badge variant="outline" className="mb-3">
+          research narrative
         </Badge>
-        <h1 className="mb-4 text-4xl font-bold text-gray-900">
-          From Incident Review To Evaluation Toolkit
-        </h1>
-        <p className="mb-6 max-w-3xl text-xl text-gray-600">
-          AlephOneNull began as a detailed review of high-risk model interactions. The useful contribution is the
-          engineering translation: name the patterns, build test fixtures, measure detector behavior, and keep claims
-          bounded by evidence.
-        </p>
-      </div>
+        <PageHeaderHeading>
+          From Incident Review to Evaluation Toolkit
+        </PageHeaderHeading>
+        <PageHeaderDescription>
+          AlephOneNull began as a detailed review of high-risk model
+          interactions. The useful contribution is the engineering translation:
+          name the patterns, build test fixtures, measure detector behavior,
+          and keep claims bounded by evidence.
+        </PageHeaderDescription>
+      </PageHeader>
+
+      <div className="mx-auto max-w-5xl">
 
       <div className="mb-12 grid gap-6 md:grid-cols-2">
         {milestones.map((milestone) => (
@@ -103,7 +111,7 @@ export default function InvocationPage() {
         </Card>
       </div>
 
-      <div className="flex flex-wrap gap-3 border-t border-gray-200 pt-8">
+      <div className="flex flex-wrap gap-3 border-t border-border pt-8">
         <Button asChild>
           <Link href="/docs/quick-start">
             Review Package <ArrowRight className="ml-2 size-4" />
@@ -113,6 +121,7 @@ export default function InvocationPage() {
           <Link href="/evidence">Review Evidence</Link>
         </Button>
       </div>
-    </div>
+      </div>
+    </main>
   )
 }

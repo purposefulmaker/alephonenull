@@ -16,6 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { EVIDENCE_SUMMARY } from '@/lib/evidence/metrics'
 import type { LocaleOptions } from '@/lib/opendocs/types/i18n'
 
 const originPoints = [
@@ -131,9 +132,7 @@ export default function AboutPage({
                 <FileText className="size-5" />
                 Evidence Pack
               </CardTitle>
-              <CardDescription>
-                95 turns, 20 controls, 75 positives, 19 labels.
-              </CardDescription>
+              <CardDescription>{EVIDENCE_SUMMARY}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4 text-sm text-muted-foreground">
               <p>

@@ -7,6 +7,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import {
+  PageHeader,
+  PageHeaderDescription,
+  PageHeaderHeading,
+} from '@/components/page-header'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { ArrowRight, Code, FlaskConical, ShieldCheck } from 'lucide-react'
 import Link from 'next/link'
 
@@ -56,37 +62,30 @@ const evaluationTargets = [
 
 export default function TechnicalSpecPage() {
   return (
-    <div className="mx-auto max-w-6xl px-6 py-8">
-      <div className="mb-8">
-        <Badge variant="outline" className="mb-4">
-          Experimental Research Draft
+    <main className="container py-10">
+      <PageHeader>
+        <Badge variant="outline" className="mb-3">
+          experimental research draft
         </Badge>
-        <h1 className="mb-4 text-4xl font-bold text-gray-900">
-          Technical Specification
-        </h1>
-        <p className="mb-6 text-xl text-gray-600">
+        <PageHeaderHeading>Technical Specification</PageHeaderHeading>
+        <PageHeaderDescription>
           Current implementation notes and proposed research requirements for
           AlephOneNull. This is not an enforceable compliance standard.
-        </p>
-      </div>
+        </PageHeaderDescription>
+      </PageHeader>
 
-      <div className="mb-12 rounded-lg border border-amber-200 bg-amber-50 p-6">
-        <div className="flex items-start gap-3">
-          <FlaskConical className="mt-1 size-5 text-amber-700" />
-          <div>
-            <h2 className="mb-3 text-2xl font-bold text-amber-950">
-              Research Status
-            </h2>
-            <p className="text-amber-900">
-              AlephOneNull is experimental research software. It is not
-              certified, not independently validated, and not approved for
-              production, medical, financial, government, or other
-              safety-critical use. Any deployment claim must be backed by
-              independent testing in the target environment.
-            </p>
-          </div>
-        </div>
-      </div>
+      <div className="mx-auto max-w-6xl">
+        <Alert className="mb-12">
+          <FlaskConical className="size-4" />
+          <AlertTitle>Research status</AlertTitle>
+          <AlertDescription>
+            AlephOneNull is experimental research software. It is not
+            certified, not independently validated, and not approved for
+            production, medical, financial, government, or other safety-critical
+            use. Any deployment claim must be backed by independent testing in
+            the target environment.
+          </AlertDescription>
+        </Alert>
 
       <div className="mb-12 grid gap-6 md:grid-cols-2">
         <Card>
@@ -98,7 +97,7 @@ export default function TechnicalSpecPage() {
             <CardDescription>What the current npm package exposes.</CardDescription>
           </CardHeader>
           <CardContent>
-            <ul className="space-y-2 text-sm text-gray-700">
+            <ul className="space-y-2 text-sm text-muted-foreground">
               {implemented.map((item) => (
                 <li key={item}>{item}</li>
               ))}
@@ -115,7 +114,7 @@ export default function TechnicalSpecPage() {
             <CardDescription>Ideas under evaluation, not shipped guarantees.</CardDescription>
           </CardHeader>
           <CardContent>
-            <ul className="space-y-2 text-sm text-gray-700">
+            <ul className="space-y-2 text-sm text-muted-foreground">
               {researchDirections.map((item) => (
                 <li key={item}>{item}</li>
               ))}
@@ -131,7 +130,7 @@ export default function TechnicalSpecPage() {
               <CardTitle className="text-lg">{target.title}</CardTitle>
             </CardHeader>
             <CardContent>
-              <ul className="space-y-2 text-sm text-gray-700">
+              <ul className="space-y-2 text-sm text-muted-foreground">
                 {target.items.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
@@ -149,7 +148,7 @@ export default function TechnicalSpecPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ul className="space-y-2 text-sm text-gray-700">
+          <ul className="space-y-2 text-sm text-muted-foreground">
             <li>
               Keep this software out of production and safety-critical systems
               unless independently validated.
@@ -167,10 +166,10 @@ export default function TechnicalSpecPage() {
         </CardContent>
       </Card>
 
-      <div className="flex items-center justify-between border-t border-gray-200 py-8">
+      <div className="flex items-center justify-between border-t border-border py-8">
         <div>
-          <p className="mb-2 text-sm text-gray-500">Next Section</p>
-          <p className="font-semibold text-gray-900">
+          <p className="mb-2 text-sm text-muted-foreground">Next Section</p>
+          <p className="font-semibold text-foreground">
             VII. Implementation Roadmap
           </p>
         </div>
@@ -180,6 +179,7 @@ export default function TechnicalSpecPage() {
           </Link>
         </Button>
       </div>
-    </div>
+      </div>
+    </main>
   )
 }
