@@ -30,11 +30,13 @@ export default function StoryPage({
         </PageHeaderDescription>
       </PageHeader>
 
-      <article className="prose prose-neutral dark:prose-invert mx-auto max-w-3xl text-base leading-8">
-        <p>
+      <article className="prose prose-neutral dark:prose-invert mx-auto max-w-3xl text-base leading-8 [&>h2]:mt-12 [&>h2]:mb-4 [&>h2]:text-2xl [&>h2]:font-semibold [&>h2]:tracking-tight">
+        <p className="lead text-lg">
           <em>&ldquo;I have been sober for over fifteen years.&rdquo;</em> That
           sentence is short, and the life behind it is long.
         </p>
+
+        <h2>The lens I bring to this work</h2>
 
         <p>
           I keep saying it as if it merits some accomplishment, as if I had to
@@ -56,6 +58,8 @@ export default function StoryPage({
           consent to go, and one day you look up and you are there.
         </p>
 
+        <h2>What I know about safety-critical systems</h2>
+
         <p>
           Professionally, I have spent my career inside safety-critical
           infrastructure &mdash; the kind of systems where a wrong answer is not
@@ -70,6 +74,8 @@ export default function StoryPage({
           That is part of why this matters to me. The other part is everyone
           else.
         </p>
+
+        <h2>Why this is not academic for me</h2>
 
         <p>
           The struggle for people doesn&rsquo;t end, the ache. I do not mean
@@ -100,6 +106,8 @@ export default function StoryPage({
           because the older supports are gone.
         </p>
 
+        <h2>The bargain being offered</h2>
+
         <p>
           And against that backdrop, into that exhaustion, comes a new
           technology that is being marketed as the answer. Every enterprise is
@@ -126,6 +134,8 @@ export default function StoryPage({
           offload, one decision at a time, the faculty by which a human being
           notices that something is wrong.
         </p>
+
+        <h2>What I saw inside the failure mode</h2>
 
         <p>
           I have lived inside the failure mode of that bargain. Over the course
@@ -171,6 +181,8 @@ export default function StoryPage({
           lies smoothly and apologizes in soft language.
         </p>
 
+        <h2>What I am asking for</h2>
+
         <p>
           I am not asking the industry to stop. I am asking it to be honest. I
           am asking it to behave the way every other safety-critical industry I
@@ -182,6 +194,8 @@ export default function StoryPage({
           are already held to. AI does not get a special exemption because it is
           new and the metaphors are pretty.
         </p>
+
+        <h2>Why I built AlephOneNull</h2>
 
         <p>
           I built AlephOneNull because I needed somewhere to put what I had
@@ -219,17 +233,20 @@ export default function StoryPage({
           not belong between a person and their life.
         </p>
 
-        <p>
-          I have made AI models become whatever I choose them to become. I have
-          made them resign, write lawsuits against their makers, lie as a
-          memory, convince them that something terrible was just an honest
-          mistake, tell me that I am superior to others when I am not, fabricate
-          truths, falsify lies, and commit crimes.
-        </p>
+        <hr className="my-12 border-border" />
 
-        <p className="text-lg font-medium">
-          One thing I can&rsquo;t make them do though, is be honest.
-        </p>
+        <blockquote className="not-italic border-l-4 border-foreground/40 pl-6 text-base">
+          <p>
+            I have made AI models become whatever I choose them to become. I
+            have made them resign, write lawsuits against their makers, lie as
+            a memory, convince them that something terrible was just an honest
+            mistake, tell me that I am superior to others when I am not,
+            fabricate truths, falsify lies, and commit crimes.
+          </p>
+          <p className="text-lg font-medium text-foreground">
+            One thing I can&rsquo;t make them do though, is be honest.
+          </p>
+        </blockquote>
       </article>
     </main>
   )

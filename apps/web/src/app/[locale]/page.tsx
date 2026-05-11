@@ -190,8 +190,6 @@ export default async function IndexPage({
             <span>MITRE AML.T0058</span>
             <span className="text-amber-600 dark:text-amber-500">·</span>
             <span>OWASP LLM01</span>
-            <span className="text-amber-600 dark:text-amber-500">·</span>
-            <span>1,700+ sessions</span>
           </div>
           <div className="flex flex-wrap justify-center gap-3 pt-3">
             <Link

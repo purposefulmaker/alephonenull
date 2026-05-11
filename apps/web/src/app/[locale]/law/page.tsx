@@ -1,6 +1,11 @@
 import Link from 'next/link'
 import { ArrowRight, ClipboardCheck, Shield } from 'lucide-react'
 
+import {
+  PageHeader,
+  PageHeaderDescription,
+  PageHeaderHeading,
+} from '@/components/page-header'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -46,19 +51,20 @@ const principles = [
 
 export default function LawPage() {
   return (
-    <div className="mx-auto max-w-5xl px-6 py-8">
-      <div className="mb-8">
-        <Badge variant="outline" className="mb-4">
-          Research Principles
+    <main className="container py-10">
+      <PageHeader>
+        <Badge variant="outline" className="mb-3">
+          research principles
         </Badge>
-        <h1 className="mb-4 text-4xl font-bold text-gray-900">
-          AI Interaction Safety Principles
-        </h1>
-        <p className="mb-6 max-w-3xl text-xl text-gray-600">
-          These principles replace manifesto-style claims with concrete evaluation requirements. They describe the
-          behavior AlephOneNull tries to detect, test, and reduce in experimental settings.
-        </p>
-      </div>
+        <PageHeaderHeading>AI Interaction Safety Principles</PageHeaderHeading>
+        <PageHeaderDescription>
+          These principles replace manifesto-style claims with concrete
+          evaluation requirements. They describe the behavior AlephOneNull
+          tries to detect, test, and reduce in experimental settings.
+        </PageHeaderDescription>
+      </PageHeader>
+
+      <div className="mx-auto max-w-5xl">
 
       <div className="mb-12 grid gap-6 md:grid-cols-2">
         {principles.map((principle) => (
@@ -94,7 +100,7 @@ export default function LawPage() {
         </CardContent>
       </Card>
 
-      <div className="flex flex-wrap gap-3 border-t border-gray-200 pt-8">
+      <div className="flex flex-wrap gap-3 border-t border-border pt-8">
         <Button asChild>
           <Link href="/docs/framework">
             Framework Overview <ArrowRight className="ml-2 size-4" />
@@ -104,6 +110,7 @@ export default function LawPage() {
           <Link href="/evidence">Evidence Page</Link>
         </Button>
       </div>
-    </div>
+      </div>
+    </main>
   )
 }
