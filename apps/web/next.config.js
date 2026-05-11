@@ -5,9 +5,6 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   transpilePackages: ['@alephonenull/eval'],
-  experimental: {
-    appDir: true,
-  },
   images: {
     domains: ['cdn.builder.io'],
   },
