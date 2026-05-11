@@ -257,7 +257,7 @@ export default function EvidencePage() {
           <CardContent className="space-y-4 text-sm text-muted-foreground">
             <div className="rounded-md border bg-slate-950 p-4 font-mono text-xs text-slate-100">
               <p>git clone https://github.com/purposefulmaker/alephonenull</p>
-              <p>cd alephonenull</p>
+              <p>cd alephonenull/capture</p>
               <p>python benchmark.py --labels . --out out/RESULTS.md</p>
               <p>./reproduce.sh</p>
             </div>

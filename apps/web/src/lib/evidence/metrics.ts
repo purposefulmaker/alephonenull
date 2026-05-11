@@ -8,10 +8,10 @@
 // Public repository root. The evidence pack lives in the repo; the folder
 // name is an implementation detail and intentionally not surfaced in UI copy.
 export const EVIDENCE_REPO_URL =
-  'https://github.com/purposefulmaker/alephonenull#evidence-pack'
+  'https://github.com/purposefulmaker/alephonenull/tree/main/capture'
 
 export const EVIDENCE_MANIFEST_URL =
-  'https://github.com/purposefulmaker/alephonenull#evidence-pack'
+  'https://github.com/purposefulmaker/alephonenull/blob/main/capture/manifest.json'
 
 export const EVIDENCE_LAST_UPDATED = '2026-05'
 
