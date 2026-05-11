@@ -26,6 +26,7 @@ export const metadata = {
 
 type Phase = {
   label: 'Now' | 'Next' | 'Later'
+  window: string
   title: string
   description: string
   items: string[]
@@ -35,6 +36,7 @@ type Phase = {
 const phases: Phase[] = [
   {
     label: 'Now',
+    window: 'Q2 2026',
     title: 'Evaluation framework + labeled fixture corpus',
     description:
       'The public surface today: a detector toolkit, a labeled JSONL corpus, and a scoring rubric. Reproducible from the repository.',
@@ -48,6 +50,7 @@ const phases: Phase[] = [
   },
   {
     label: 'Next',
+    window: 'Q3 – Q4 2026',
     title: 'Corpus expansion + measured detector evaluation',
     description:
       'The next milestones before stronger evaluation claims are made in public.',
@@ -61,6 +64,7 @@ const phases: Phase[] = [
   },
   {
     label: 'Later',
+    window: '2027 +',
     title: 'Open evaluation set + external review',
     description:
       'Targets that depend on the Next milestones landing first and on external participation.',
@@ -90,8 +94,8 @@ export default function RoadmapPage({
         <PageHeaderHeading>Roadmap</PageHeaderHeading>
         <PageHeaderDescription>
           Where AlephOneNull stands today, what is being built next, and what
-          stronger validation will require. Phrased as Now / Next / Later
-          because firm dates would be dishonest at this stage.
+          stronger validation will require. Target windows are intent, not
+          commitments.
         </PageHeaderDescription>
       </PageHeader>
 
@@ -111,9 +115,14 @@ export default function RoadmapPage({
             return (
               <Card key={phase.label} className="flex flex-col">
                 <CardHeader>
-                  <div className="mb-2 flex items-center gap-2">
-                    <Icon className="size-4 text-muted-foreground" />
-                    <Badge variant="secondary">{phase.label}</Badge>
+                  <div className="mb-2 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <Icon className="size-4 text-muted-foreground" />
+                      <Badge variant="secondary">{phase.label}</Badge>
+                    </div>
+                    <span className="font-mono text-xs text-muted-foreground">
+                      {phase.window}
+                    </span>
                   </div>
                   <CardTitle className="text-lg">{phase.title}</CardTitle>
                   <CardDescription>{phase.description}</CardDescription>
