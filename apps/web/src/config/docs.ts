@@ -26,6 +26,13 @@ export const docsConfig: DocsConfig = {
       },
     },
     {
+      href: '/null-meter',
+      title: {
+        en: 'Null Meter',
+        pt: 'Null Meter',
+      },
+    },
+    {
       href: '/docs/framework',
       title: {
         en: 'Framework',
