@@ -48,6 +48,18 @@ from .core.alephonenull_framework import (
     check_safety as framework_check_safety
 )
 
+# Null Meter — three-layer scoring (hallucination / drift / context fill).
+# Same gauge as the live web demo at /docs/null-meter.
+from .core.null_meter import (
+    null_meter,
+    NullMeterScores,
+    NullMeterResult,
+    GROUNDING_SYSTEM_PROMPT,
+    STEER_HALLUCINATION_THRESHOLD,
+    STEER_DRIFT_THRESHOLD,
+    DEFAULT_CONTEXT_TOKENS,
+)
+
 # Inference-Level Protection (Auto-wrap AI libraries)
 from .inference.protection import (
     InferenceLevelProtection,

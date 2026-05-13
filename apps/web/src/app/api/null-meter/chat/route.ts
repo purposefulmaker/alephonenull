@@ -24,7 +24,10 @@ const EMBED_MODEL = 'text-embedding-3-small'
 // gpt-4o-mini context window
 const MODEL_CONTEXT_TOKENS = 128_000
 
-type ChatMessage = { role: 'user' | 'assistant'; content: string }
+type ChatMessage = {
+  role: 'user' | 'assistant' | 'system'
+  content: string
+}
 
 async function callOpenAI(
   messages: ChatMessage[],
