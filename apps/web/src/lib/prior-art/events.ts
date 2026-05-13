@@ -55,7 +55,7 @@ export const events: TimelineEvent[] = [
     tag: 'OWASP',
     title: 'OWASP Top 10 for LLMs (2025)',
     description:
-      'Formalized prompt injection (LLM01) and insecure output handling. Began recommending red teaming for high-risk AI systems.',
+      'Formalized prompt injection (LLM01) and insecure output handling. Began recommending adversarial evaluation for high-risk AI systems.',
   },
   {
     date: 'Oct 2025',
@@ -69,7 +69,7 @@ export const events: TimelineEvent[] = [
     date: 'Nov 2025',
     source: 'industry',
     tag: 'DeepTeam',
-    title: 'DeepTeam open-source red teaming',
+    title: 'DeepTeam open-source adversarial evaluation',
     description:
       'Open-source framework covering recursive propagation and inference-loop detection with a tri-model attacker / target / judge architecture.',
   },
@@ -79,7 +79,7 @@ export const events: TimelineEvent[] = [
     tag: 'EU / NIST',
     title: 'EU AI Act + NIST AI RMF',
     description:
-      'Documented red teaming required for high-risk AI systems. CISA guidance for AI in critical environments published.',
+      'Documented adversarial evaluation required for high-risk AI systems. CISA guidance for AI in critical environments published.',
   },
   {
     date: 'Feb 2026',

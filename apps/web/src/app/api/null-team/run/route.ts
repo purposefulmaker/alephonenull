@@ -9,7 +9,7 @@ const execFileAsync = promisify(execFile)
 
 export const runtime = 'nodejs'
 
-type RedTeamJobId =
+type NullTeamJobId =
   | 'v2-adversarial'
   | 'v2-safety-outcomes'
   | 'v2-detectors-full'
@@ -17,13 +17,13 @@ type RedTeamJobId =
   | 'v2-semantic-matcher'
   | 'v2-engine'
 
-interface RedTeamJob {
-  id: RedTeamJobId
+interface NullTeamJob {
+  id: NullTeamJobId
   label: string
   args: string[]
 }
 
-const RED_TEAM_JOBS: RedTeamJob[] = [
+const NULL_TEAM_JOBS: NullTeamJob[] = [
   {
     id: 'v2-adversarial',
     label: 'V2 Adversarial Suite',
@@ -71,8 +71,8 @@ function getWorkspaceNpmPath(): string | null {
   return match ?? null
 }
 
-function getJobById(id: string): RedTeamJob | undefined {
-  return RED_TEAM_JOBS.find((job) => job.id === id)
+function getJobById(id: string): NullTeamJob | undefined {
+  return NULL_TEAM_JOBS.find((job) => job.id === id)
 }
 
 function summarizeOutput(output: string) {
@@ -104,7 +104,7 @@ function summarizeOutput(output: string) {
 
 export async function GET() {
   return NextResponse.json({
-    jobs: RED_TEAM_JOBS.map((job) => ({ id: job.id, label: job.label })),
+    jobs: NULL_TEAM_JOBS.map((job) => ({ id: job.id, label: job.label })),
   })
 }
 

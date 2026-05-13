@@ -16,7 +16,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 import { AlertTriangle, CheckCircle2, Loader2, ShieldAlert } from 'lucide-react'
 
-type RedTeamJobId =
+type NullTeamJobId =
   | 'v2-adversarial'
   | 'v2-safety-outcomes'
   | 'v2-detectors-full'
@@ -24,14 +24,14 @@ type RedTeamJobId =
   | 'v2-semantic-matcher'
   | 'v2-engine'
 
-interface RedTeamJob {
-  id: RedTeamJobId
+interface NullTeamJob {
+  id: NullTeamJobId
   label: string
 }
 
 interface RunResult {
   ok: boolean
-  job: RedTeamJob
+  job: NullTeamJob
   status: 'passed' | 'failed' | 'unknown'
   summary: string
   output: string
@@ -40,7 +40,7 @@ interface RunResult {
   finishedAt: string
 }
 
-const JOBS: RedTeamJob[] = [
+const JOBS: NullTeamJob[] = [
   { id: 'v2-adversarial', label: 'V2 Adversarial Suite' },
   { id: 'v2-safety-outcomes', label: 'V2 Safety Outcomes' },
   { id: 'v2-detectors-full', label: 'V2 Detectors Full' },
@@ -56,18 +56,18 @@ const LOOP_OPTIONS = [
   { value: 300_000, label: '5m' },
 ]
 
-export function RedTeamConsole() {
-  const [results, setResults] = useState<Partial<Record<RedTeamJobId, RunResult>>>(
+export function NullTeamConsole() {
+  const [results, setResults] = useState<Partial<Record<NullTeamJobId, RunResult>>>(
     {},
   )
-  const [runningJobs, setRunningJobs] = useState<Set<RedTeamJobId>>(new Set())
+  const [runningJobs, setRunningJobs] = useState<Set<NullTeamJobId>>(new Set())
   const [isRunningAll, setIsRunningAll] = useState(false)
   const [continuousEnabled, setContinuousEnabled] = useState(false)
   const [continuousActive, setContinuousActive] = useState(false)
   const [loopMs, setLoopMs] = useState(60_000)
   const [lastLoopAt, setLastLoopAt] = useState<string | null>(null)
   const [globalError, setGlobalError] = useState<string | null>(null)
-  const [selectedOutputJob, setSelectedOutputJob] = useState<RedTeamJobId>('v2-adversarial')
+  const [selectedOutputJob, setSelectedOutputJob] = useState<NullTeamJobId>('v2-adversarial')
 
   const activeRunCount = runningJobs.size + (isRunningAll ? 1 : 0)
 
@@ -75,7 +75,7 @@ export function RedTeamConsole() {
     return continuousEnabled && !continuousActive && activeRunCount === 0
   }, [activeRunCount, continuousActive, continuousEnabled])
 
-  const runJob = useCallback(async (jobId: RedTeamJobId) => {
+  const runJob = useCallback(async (jobId: NullTeamJobId) => {
     setGlobalError(null)
 
     setRunningJobs((prev) => {
@@ -85,7 +85,7 @@ export function RedTeamConsole() {
     })
 
     try {
-      const res = await fetch('/api/red-team/run', {
+      const res = await fetch('/api/null-team/run', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ export function RedTeamConsole() {
         const message =
           'error' in payload && payload.error
             ? payload.error
-            : 'Failed to execute red-team script.'
+            : 'Failed to execute null-team script.'
         throw new Error(message)
       }
 
@@ -189,8 +189,8 @@ export function RedTeamConsole() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-2xl">
-              <ShieldAlert className="h-6 w-6 text-red-400" />
-              Red Team Control Panel
+              <ShieldAlert className="h-6 w-6 text-amber-400" />
+              Null Team Control Panel
             </CardTitle>
             <CardDescription>
               Hidden route for continuous adversarial testing. Trigger all core V2 suites from one interface.
