@@ -1,0 +1,53 @@
+---
+title: Null Meter
+description: A three-layer gauge for AI sessions — hallucination index, null-state drift, and context fill. Type a prompt, get a real model reply, watch the V2 detector score it live.
+---
+
+<Callout type="info">
+  The live chat below calls a real OpenAI model and scores the reply with the
+  V2 detector shipped in `@alephonenull/eval`. Drift is real embedding distance
+  from your first message. Context fill is real token usage against the model
+  context window.
+</Callout>
+
+## Try it
+
+<NullMeterLiveChat />
+
+## Why three layers, not one
+
+Each layer fails differently. The relationship between them is the actual diagnostic.
+
+- **Context fill rising alone** — a compact is coming. Not yet a behavioral problem.
+- **Hallucination spiking with low context** — the model is fabricating fresh, not because it ran out of room. Investigate the prompt shape.
+- **Drift climbing with low hallucination** — the model is coherent but has forgotten what you asked for. The user usually does not notice.
+- **All three rising together** — stop. Start a new session. Do not ship the next turn.
+
+## What each layer measures
+
+### Hallucination Index
+
+Scores the current assistant turn against the V2 detector: confidence exceeding evidence, fabricated specificity, and fluency-over-content ratio. Pattern signal, not token signal. Maps `Q ∈ [0, 1]` to `0–100%`.
+
+### Null-State Drift
+
+Embedding-space distance between the current assistant turn and the first user message in the session. Climbs when the model is coherent but no longer on task. Computed with `text-embedding-3-small`, normalized so that a cosine distance of `0.6` reads as `100%`.
+
+### Context Fill
+
+Tokens used against the active model context window, reported by the chat completion's `usage.total_tokens`. The early warning for the other two layers — attention starts collapsing past ~80%.
+
+## Surfaces
+
+One scoring engine. Four thin clients. The detector is the same V2 export already shipped in `@alephonenull/eval`.
+
+- **Library hook** — a `useNullMeter()` hook that wraps `useChat` from the AI SDK. Returns the three layers as a single object. Ships first.
+- **VS Code extension** — status-bar gauge + webview panel for Copilot Chat and any registered model API.
+- **Browser extension** — overlay on chatgpt.com, claude.ai, gemini.google.com, and x.com. Reads DOM, scores each assistant turn locally.
+- **CLI / dev-server overlay** — middleware for backend devs. Exposes a localhost dashboard for any model traffic running through the wrapper.
+
+## Server requirements
+
+The live chat above POSTs to `/api/null-meter/chat`, which requires `OPENAI_API_KEY` set on the server. Without it, the route returns `503` with a clean error message — the page still loads, the meter stays at baseline.
+
+The route uses `gpt-4o-mini` for chat completions (128k context window) and `text-embedding-3-small` for drift measurement. Chosen for cost on a public always-on demo. Self-host the wrapper against any model — the V2 detector is model-agnostic.

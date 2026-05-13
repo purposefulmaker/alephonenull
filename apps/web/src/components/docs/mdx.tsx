@@ -43,6 +43,7 @@ import { p } from './mdx-components/p'
 import type { ComponentProps } from 'react'
 import { AlephOneNullDemo } from './aleph-demo-compare'
 import { LatestModelsDemo } from './aleph-demo-latest'
+import { NullMeterLiveChat } from '@/components/null-meter/null-meter-live-chat'
 
 const components = {
   Image,
@@ -59,6 +60,7 @@ const components = {
   Button,
   AlephOneNullDemo,
   LatestModelsDemo,
+  NullMeterLiveChat,
 
   h1,
   h2,

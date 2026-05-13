@@ -12,34 +12,6 @@ import type { DocsConfig } from '@/lib/opendocs/types/docs'
 export const docsConfig: DocsConfig = {
   mainNav: [
     {
-      href: '/about',
-      title: {
-        en: 'About',
-        pt: 'Sobre',
-      },
-    },
-    {
-      href: '/evidence',
-      title: {
-        en: 'Evidence',
-        pt: 'Evidencia',
-      },
-    },
-    {
-      href: '/null-meter',
-      title: {
-        en: 'Null Meter',
-        pt: 'Null Meter',
-      },
-    },
-    {
-      href: '/docs/framework',
-      title: {
-        en: 'Framework',
-        pt: 'A LEI',
-      },
-    },
-    {
       href: '/docs',
       title: {
         en: 'Documentation',
@@ -51,6 +23,13 @@ export const docsConfig: DocsConfig = {
       title: {
         en: 'Blog',
         pt: 'Blog',
+      },
+    },
+    {
+      href: '/docs/live-demo',
+      title: {
+        en: 'Live Demo',
+        pt: 'Demo ao Vivo',
       },
     },
   ],
@@ -279,6 +258,14 @@ export const docsConfig: DocsConfig = {
           },
           items: [],
         },
+        {
+          href: '/docs/null-meter',
+          title: {
+            en: 'Null Meter',
+            pt: 'Null Meter',
+          },
+          items: [],
+        },
       ],
     },
     {
@@ -332,6 +319,22 @@ export const docsConfig: DocsConfig = {
           title: {
             en: 'Case Studies',
             pt: 'Evidências e Estudos de Caso',
+          },
+          items: [],
+        },
+        {
+          href: '/about',
+          title: {
+            en: 'About',
+            pt: 'Sobre',
+          },
+          items: [],
+        },
+        {
+          href: '/story',
+          title: {
+            en: 'Story',
+            pt: 'História',
           },
           items: [],
         },
