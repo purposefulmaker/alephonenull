@@ -10,7 +10,7 @@ For research and experimentation only.
 The complete framework for containing ANY AI model and preventing manipulation.
 """
 
-__version__ = "0.1.0a1"  # Alpha version
+__version__ = "0.2.0a1"  # Alpha version — v2 engine added
 __author__ = "AlephOneNull Research Team"
 __description__ = "⚠️ EXPERIMENTAL: Theoretical AI safety framework - research purposes only"
 
@@ -59,6 +59,26 @@ from .core.null_meter import (
     STEER_DRIFT_THRESHOLD,
     DEFAULT_CONTEXT_TOKENS,
 )
+
+# V2 engine — External Conscience with 20 detectors, Q calculator, null state.
+# Faithful port of @alephonenull/eval/v2 (TypeScript).
+try:
+    from .v2 import (
+        AlephOneNullV2,
+        ThreatLevel as V2ThreatLevel,
+        Action as V2Action,
+        Detection as V2Detection,
+        ScanResult as V2ScanResult,
+        V2Config,
+        QCalculator,
+        NullState,
+        normalize as v2_normalize,
+        normalize_context as v2_normalize_context,
+        create_all_detectors as v2_create_all_detectors,
+    )
+    V2_AVAILABLE = True
+except Exception:  # pragma: no cover
+    V2_AVAILABLE = False
 
 # Inference-Level Protection (Auto-wrap AI libraries)
 from .inference.protection import (

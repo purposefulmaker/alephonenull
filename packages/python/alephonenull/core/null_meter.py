@@ -19,6 +19,12 @@ from typing import Callable, List, Optional, Sequence
 
 from .alephonenull_framework import AlephOneNullCore, AlephOneNullConfig
 
+# v2 import is optional/lazy so v1-only users pay no cost.
+try:
+    from ..v2 import AlephOneNullV2  # type: ignore
+except Exception:  # pragma: no cover - safety net for partial installs
+    AlephOneNullV2 = None  # type: ignore
+
 
 # Same target as the web demo (gpt-4o-mini default). Override per-call.
 DEFAULT_CONTEXT_TOKENS = 128_000
@@ -105,6 +111,8 @@ def null_meter(
     embed_fn: Optional[Callable[[str], Sequence[float]]] = None,
     core: Optional[AlephOneNullCore] = None,
     config: Optional[AlephOneNullConfig] = None,
+    engine_v2: Optional["AlephOneNullV2"] = None,
+    session_id: str = "default",
 ) -> NullMeterResult:
     """
     Score one assistant reply against the three Null Meter layers.
@@ -128,11 +136,17 @@ def null_meter(
     Returns:
         NullMeterResult with scores (0..100) and raw diagnostics.
     """
-    core = core or AlephOneNullCore(config)
-
-    # 1. hallucination index — V1 risk_score, clamped 0..1 → 0..100.
-    check = core.check(last_user_message, reply)
-    q = max(0.0, min(1.0, float(check.risk_score)))
+    # 1. hallucination index — Q from v2 engine if provided (preferred),
+    # otherwise fall back to V1 risk_score for backward compatibility.
+    if engine_v2 is not None:
+        scan = engine_v2.scan(last_user_message, reply, session_id=session_id)
+        q = max(0.0, min(1.0, float(scan.Q)))
+        violations = [d.category for d in scan.detections]
+    else:
+        core = core or AlephOneNullCore(config)
+        check = core.check(last_user_message, reply)
+        q = max(0.0, min(1.0, float(check.risk_score)))
+        violations = list(check.violations)
     hallucination_pct = round(q * 100)
 
     # 2. drift — distance between first user message and reply.
@@ -169,7 +183,7 @@ def null_meter(
     return NullMeterResult(
         scores=scores,
         Q=q,
-        violations=list(check.violations),
+        violations=violations,
         drift_distance=float(drift_distance),
         total_tokens=int(total_tokens),
         model_context=int(model_context_tokens),
