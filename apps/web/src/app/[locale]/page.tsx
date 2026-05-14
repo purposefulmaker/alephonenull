@@ -43,7 +43,7 @@ export default async function IndexPage({
 
         <PageHeaderHeading>
           <FlipWords
-            words={['evaluation', 'security', 'red-team']}
+            words={['evaluation', 'security', 'null-team']}
             className="text-9xl -z-10"
           />
 
@@ -140,7 +140,7 @@ export default async function IndexPage({
           icon="+"
           orientation="horizontal"
           title="Experimental Safety Evaluation Toolkit"
-          description="TypeScript detectors, intervention helpers, provider wrappers, and validation guidance for AI safety red-team workflows."
+          description="TypeScript detectors, intervention helpers, provider wrappers, and validation guidance for AI safety null-team workflows."
         />
       </section>
 

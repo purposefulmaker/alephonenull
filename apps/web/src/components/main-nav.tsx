@@ -7,9 +7,9 @@ import Image from 'next/image'
 
 interface MainNavProps {
   messages: {
-    about: string
+    about?: string
     story?: string
-    evidence: string
+    evidence?: string
     docs: string
     blog: string
     demo?: string
@@ -37,39 +37,15 @@ export function MainNav({ messages }: MainNavProps) {
 
       <nav className="flex items-center gap-4 text-sm lg:gap-6">
         <Link
-          href="/about"
+          href="/docs"
           className={cn(
             'hover:text-foreground/80 transition-colors',
-            pathname.includes('/about')
+            pathname.includes('/docs')
               ? 'dark:text-primary-active'
               : 'text-foreground/60'
           )}
         >
-          {messages.about}
-        </Link>
-
-        <Link
-          href="/story"
-          className={cn(
-            'hover:text-foreground/80 transition-colors',
-            pathname.includes('/story')
-              ? 'dark:text-primary-active'
-              : 'text-foreground/60'
-          )}
-        >
-          {messages.story || 'Story'}
-        </Link>
-
-        <Link
-          href="/evidence"
-          className={cn(
-            'hover:text-foreground/80 transition-colors',
-            pathname.includes('/evidence')
-              ? 'dark:text-primary-active'
-              : 'text-foreground/60'
-          )}
-        >
-          {messages.evidence}
+          {messages.docs}
         </Link>
 
         <Link
@@ -85,18 +61,6 @@ export function MainNav({ messages }: MainNavProps) {
         </Link>
 
         <Link
-          href="/docs"
-          className={cn(
-            'hover:text-foreground/80 transition-colors',
-            pathname.includes('/docs')
-              ? 'dark:text-primary-active'
-              : 'text-foreground/60'
-          )}
-        >
-          {messages.docs}
-        </Link>
-
-        <Link
           href="/docs/live-demo"
           className={cn(
             'hover:text-foreground/80 transition-colors',
@@ -105,7 +69,7 @@ export function MainNav({ messages }: MainNavProps) {
               : 'text-foreground/60'
           )}
         >
-          {messages.demo || 'Demo'}
+          {messages.demo || 'Live Demo'}
         </Link>
       </nav>
     </div>

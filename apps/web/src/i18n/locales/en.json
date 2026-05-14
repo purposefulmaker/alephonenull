@@ -28,7 +28,7 @@
       },
 
       "gateway": {
-        "description": "Provider wrappers for pre/post response checks in prototypes and red-team fixtures."
+        "description": "Provider wrappers for pre/post response checks in prototypes and null-team fixtures."
       },
 
       "mandatory": {

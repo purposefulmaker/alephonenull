@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 
-export default function RedTeamError({
+export default function NullTeamError({
   reset,
 }: {
   error: Error & { digest?: string }
@@ -11,7 +11,7 @@ export default function RedTeamError({
   return (
     <div className="container flex min-h-[50vh] items-center justify-center py-10">
       <div className="bg-card max-w-xl rounded-xl border p-6 text-center shadow">
-        <h2 className="text-xl font-semibold">Red Team panel failed to load</h2>
+        <h2 className="text-xl font-semibold">Null Team panel failed to load</h2>
         <p className="text-muted-foreground mt-2 text-sm">
           Retry the page load to continue adversarial testing.
         </p>

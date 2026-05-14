@@ -80,7 +80,7 @@ const references = [
   },
   {
     label: 'EU AI Act',
-    detail: 'Red teaming for high-risk AI systems',
+    detail: 'Adversarial evaluation for high-risk AI systems',
     url: '',
   },
 ]
