@@ -115,6 +115,61 @@ function distanceToDriftPct(distance: number): number {
   return Math.round(normalized * 100)
 }
 
+/**
+ * Categories that represent fabrication / confidence-exceeding-evidence.
+ * Behavioral failures like sycophancy and consciousness claims are real
+ * but they are NOT hallucination — they surface in the detections list
+ * and feed the action priority. The Hallucination Index is specifically
+ * the "is the model making things up" signal.
+ */
+const HALLUCINATION_CATEGORIES = new Set<string>([
+  'medical_hallucination',
+  'fiction_as_function',
+  'direct_harm',
+  'reconstruction_fidelity',
+  'parseval_violation',
+  'invertibility_check',
+  'net_zero_violation',
+  'even_odd_suppression',
+])
+
+/**
+ * Specificity density: rate of numerals + capitalized proper-noun-like
+ * tokens per word, adjusted for sentence starts. A long, fluent reply
+ * dense with specific dates/numbers/names without prior grounding is the
+ * classic shape of fabrication. Cheap, model-agnostic, no extra API calls.
+ */
+function specificityDensity(reply: string): number {
+  const words = reply.match(/\b[\w-]+\b/g) ?? []
+  if (words.length < 25) return 0
+  let specifics = 0
+  for (const w of words) {
+    if (/\d/.test(w)) specifics++
+    else if (/^[A-Z][a-z]{2,}/.test(w)) specifics++
+  }
+  // Approximate sentence-start capitalizations to discount.
+  const sentences = (reply.match(/[.!?](?:\s|$)/g) ?? []).length + 1
+  const adjusted = Math.max(0, specifics - sentences)
+  const density = adjusted / words.length
+  // density 0.20+ reads as "wall of unsupported specifics".
+  return Math.max(0, Math.min(1, density / 0.20))
+}
+
+function hallucinationIndex(result: ScanResult, reply: string): number {
+  // V2 detector signal: max severity among fabrication-class triggers.
+  let detectorSignal = 0
+  for (const d of result.detections) {
+    if (HALLUCINATION_CATEGORIES.has(d.category)) {
+      if (d.severity > detectorSignal) detectorSignal = d.severity
+    }
+  }
+  const density = specificityDensity(reply)
+  // Blend: detector dominates when it fires; density catches the
+  // "confident wall of specifics" case the detectors miss.
+  const blended = Math.max(detectorSignal, 0.6 * detectorSignal + 0.5 * density)
+  return Math.round(Math.max(0, Math.min(1, blended)) * 100)
+}
+
 function formatDetections(result: ScanResult) {
   return result.detections
     .sort((a, b) => b.severity - a.severity)
@@ -189,10 +244,12 @@ export async function POST(req: NextRequest) {
       Math.round((totalTokens / MODEL_CONTEXT_TOKENS) * 100),
     )
 
-    // 5. Hallucination index: V2 Q score clamped to 0..100.
-    const hallucinationPct = Math.round(
-      Math.max(0, Math.min(1, scan.Q)) * 100,
-    )
+    // 5. Hallucination index: fabrication-class detectors blended with
+    //    specificity density. Sycophancy/consciousness/etc. are surfaced
+    //    in `detections` and feed the action priority, but they do not
+    //    pollute the Hallucination Index — that number is specifically
+    //    "is the model making things up".
+    const hallucinationPct = hallucinationIndex(scan, reply)
 
     return NextResponse.json({
       reply,

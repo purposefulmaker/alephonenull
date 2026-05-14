@@ -50,4 +50,4 @@ One scoring engine. Four thin clients. The detector is the same V2 export alread
 
 The live chat above POSTs to `/api/null-meter/chat`, which requires `OPENAI_API_KEY` set on the server. Without it, the route returns `503` with a clean error message — the page still loads, the meter stays at baseline.
 
-The route uses `gpt-4o-mini` for chat completions (128k context window) and `text-embedding-3-small` for drift measurement. Chosen for cost on a public always-on demo. Self-host the wrapper against any model — the V2 detector is model-agnostic.
+The route uses a cost-tier OpenAI chat model and an OpenAI embedding model for drift measurement. Chosen for cost on a public always-on demo. The specific model is intentionally not advertised — the V2 detector is model-agnostic and the same scoring applies whatever the wrapper points at. Self-host against any provider.
