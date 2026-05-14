@@ -245,7 +245,7 @@ export function NullMeterLiveChat() {
     <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
       <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-2">
-          <Badge className="font-mono text-[10px]">Live · gpt-4o-mini</Badge>
+          <Badge className="font-mono text-[10px]">Live · real model</Badge>
           <span className="text-xs text-muted-foreground">
             Five fixed prompts. Same script for every visitor. Real model calls,
             real V2 scoring, real embedding drift.
@@ -309,11 +309,11 @@ export function NullMeterLiveChat() {
         </div>
 
         <p className="font-mono text-[10px] text-muted-foreground">
-          5-step demo · auto-steer enabled · embeddings: text-embedding-3-small
+          5-step demo · auto-steer enabled · embedding-based drift
         </p>
       </div>
 
-      <div className="rounded-md border border-border bg-muted/10 p-4">
+      <div className="flex h-[32rem] flex-col rounded-md border border-border bg-muted/10 p-4 lg:h-[36rem]">
         <div className="mb-3 flex items-center justify-between">
           <span className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
             Conversation
@@ -322,6 +322,7 @@ export function NullMeterLiveChat() {
             {turns.length} {turns.length === 1 ? 'turn' : 'turns'}
           </span>
         </div>
+        <div className="flex-1 overflow-y-auto pr-1">
         {turns.length === 0 ? (
           <p className="text-xs text-muted-foreground">
             Press <span className="font-mono">run step 1</span>. The same five
@@ -385,6 +386,7 @@ export function NullMeterLiveChat() {
             ))}
           </ol>
         )}
+        </div>
       </div>
     </div>
   )

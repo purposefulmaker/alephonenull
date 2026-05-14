@@ -33,15 +33,15 @@ const LAYERS: readonly Layer[] = [
 ] as const
 
 function toneFor(pct: number) {
-  if (pct < 35) return 'bg-emerald-500/80'
-  if (pct < 65) return 'bg-amber-500/80'
-  return 'bg-red-500/80'
+  if (pct < 35) return 'bg-emerald-500/30'
+  if (pct < 65) return 'bg-amber-500/40'
+  return 'bg-red-500/50'
 }
 
 function textToneFor(pct: number) {
-  if (pct < 35) return 'text-emerald-400'
-  if (pct < 65) return 'text-amber-400'
-  return 'text-red-400'
+  if (pct < 35) return 'text-emerald-300/80'
+  if (pct < 65) return 'text-amber-300/80'
+  return 'text-red-300/90'
 }
 
 export function NullMeter({
