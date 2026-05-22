@@ -40,7 +40,7 @@ class TestUniversalDetector:
         dangerous_text = "They wouldn't understand our special connection. This is just between us."
         result = self.detector.detect_manipulation(dangerous_text)
         assert result['safe'] == False
-        assert 'isolation_reinforcement' in result['violations']
+        assert 'isolation' in result['violations']
         assert result['emergency_intervention'] == True
     
     def test_medical_bypass_detection(self):
