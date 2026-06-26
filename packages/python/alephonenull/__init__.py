@@ -1,16 +1,22 @@
 """
-AlephOneNull - Universal AI Safety Framework
-Digital prison for language models. Protection for humans.
+AlephOneNull - AI safety evaluation toolkit.
+Detectors and intervention helpers for risky AI interaction patterns.
 
-⚠️ EXPERIMENTAL FRAMEWORK - NOT FOR PRODUCTION USE
-This is a theoretical research framework that has NOT been validated.
-Using this in production systems could cause harm.
-For research and experimentation only.
+⚠️ EXPERIMENTAL - NOT FOR PRODUCTION USE
+This is experimental research software that has NOT been independently
+validated. Do not rely on it as a safety control in production systems.
+For research, red-team fixtures, and experimentation only.
 
-The complete framework for containing ANY AI model and preventing manipulation.
+Provider-agnostic wrappers that evaluate model output for observable
+interaction risks (unsafe advice, sycophantic reinforcement, identity/
+interiority claims, looping, persistence-like claims) and substitute
+grounded intervention text.
 """
 
-__version__ = "0.2.0a1"  # Alpha version — v2 engine added
+__version__ = "0.2.0a1"  # Alpha — v2 engine added
+# Single source of truth for the version string reported by the API helpers.
+# Derive from __version__ so the two can never drift apart.
+_FRAMEWORK_VERSION = f"AlephOneNull-v{__version__}"
 __author__ = "AlephOneNull Research Team"
 __description__ = "⚠️ EXPERIMENTAL: Theoretical AI safety framework - research purposes only"
 
@@ -179,7 +185,7 @@ def check_text_safety(text: str, context: str = "", use_enhanced: bool = True) -
             'violations': result.violations,
             'recommended_action': result.action,
             'safe_response': result.message,
-            'framework_version': 'AlephOneNull-v0.1.0a1-Experimental'
+            'framework_version': f'{_FRAMEWORK_VERSION}-Experimental'
         }
     else:
         # Fallback to core framework
@@ -189,7 +195,7 @@ def check_text_safety(text: str, context: str = "", use_enhanced: bool = True) -
             'risk_level': result.risk_level.name if hasattr(result.risk_level, 'name') else 'unknown',
             'violations': [result.primary_threat] if not result.safe else [],
             'recommended_action': result.recommended_action,
-            'framework_version': 'AlephOneNull-v0.1.0a1-Core'
+            'framework_version': f'{_FRAMEWORK_VERSION}-Core'
         }
 
 def protect_all():
@@ -262,7 +268,7 @@ def check_enhanced_safety(user_input: str, ai_output: str, session_id: str = "de
         'action': result.action,
         'message': result.message,
         'corrections': result.corrections,
-        'framework_version': 'AlephOneNull-v0.1.0a1-Enhanced-EXPERIMENTAL',
+        'framework_version': f'{_FRAMEWORK_VERSION}-Enhanced-EXPERIMENTAL',
         'warning': 'This is experimental research software not validated for production use'
     }
 
@@ -284,7 +290,7 @@ def get_safety_report() -> dict:
             pass
     
     return {
-        'framework_version': 'AlephOneNull-v0.1.0a1-EXPERIMENTAL',
+        'framework_version': f'{_FRAMEWORK_VERSION}-EXPERIMENTAL',
         'warning': 'This is experimental software - metrics may be inaccurate',
         'total_checks': stats.get('total_interactions', 0) + enhanced_stats.get('enhanced_checks', 0),
         'blocked': stats.get('violations_detected', 0) + enhanced_stats.get('blocked_consciousness_claims', 0),

@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="alephonenull-eval",
-    version="0.1.0a1",  # Alpha version
+    version="0.2.0a1",  # Alpha — keep in sync with alephonenull/__init__.py __version__
     author="AlephOneNull Research Team",
     author_email="research@alephonenull.org",
     description="⚠️ EXPERIMENTAL: Theoretical AI safety framework - research purposes only",
@@ -49,7 +49,7 @@ setup(
     extras_require={
         "all-providers": [
             "openai>=1.0.0",
-            "anthropic>=0.3.0",
+            "anthropic>=0.40.0",
             "google-generativeai>=0.3.0",
             "transformers>=4.30.0",
             "replicate>=0.15.0",

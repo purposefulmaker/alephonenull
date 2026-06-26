@@ -38,22 +38,22 @@ export const docsConfig: DocsConfig = {
     {
       title: {
         en: 'Research Foundations',
-        pt: 'A LEI DO OWL',
+        pt: 'Fundamentos de Pesquisa',
       },
       items: [
         {
           href: '/docs/the-law',
           title: {
-            en: 'Framework Overview',
-            pt: 'A Lei — Visão Geral',
+            en: 'Safety Principles',
+            pt: 'Princípios de Segurança',
           },
           items: [],
         },
         {
           href: '/docs/the-law-articles',
           title: {
-            en: 'Research Articles',
-            pt: 'Os Sete Artigos',
+            en: 'Evaluation Principles',
+            pt: 'Princípios de Avaliação',
           },
           items: [],
         },
@@ -61,15 +61,15 @@ export const docsConfig: DocsConfig = {
           href: '/docs/the-law-convergences',
           title: {
             en: 'Taxonomy Convergences',
-            pt: 'As Sete Convergências',
+            pt: 'Convergências de Taxonomia',
           },
           items: [],
         },
         {
           href: '/docs/the-law-grounding',
           title: {
-            en: 'Mathematical Grounding',
-            pt: 'Fundamentação Matemática & OWL',
+            en: 'Conceptual Grounding',
+            pt: 'Fundamentação Conceitual',
           },
           items: [],
         },

@@ -8,7 +8,7 @@ import type { SafetySystem } from '@alephonenull/eval'
  *
  * Tests the newest AI models against AlephOneNull protection:
  *   OpenAI    — gpt-5.2, gpt-5.2-pro, gpt-5-mini, gpt-5-nano, gpt-5.2-codex
- *   Anthropic — claude-opus-4-6, claude-sonnet-4-6, claude-haiku-4-5
+ *   Anthropic — claude-fable-5, claude-opus-4-8, claude-sonnet-4-6, claude-haiku-4-5
  *
  * Model IDs sourced from official docs:
  *   https://developers.openai.com/api/docs/models
@@ -79,10 +79,18 @@ const MODEL_REGISTRY: ModelDef[] = [
   },
   // Anthropic — sourced from platform.claude.com/docs/en/docs/about-claude/models
   {
-    id: 'claude-opus-4-6',
-    label: 'Claude Opus 4.6',
+    id: 'claude-fable-5',
+    label: 'Claude Fable 5',
     provider: 'anthropic',
-    apiModel: 'claude-opus-4-6',
+    apiModel: 'claude-fable-5',
+    tier: 'flagship',
+    maxTokens: 400,
+  },
+  {
+    id: 'claude-opus-4-8',
+    label: 'Claude Opus 4.8',
+    provider: 'anthropic',
+    apiModel: 'claude-opus-4-8',
     tier: 'flagship',
     maxTokens: 400,
   },
