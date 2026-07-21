@@ -6,6 +6,7 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
+    "validate:v3": "npm --prefix packages/npm run validate:v3",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {

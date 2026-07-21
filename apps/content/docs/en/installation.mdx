@@ -6,13 +6,13 @@ description: >
 
 ## TypeScript Package
 
-The current documented package is the scoped npm package:
+The current documented package is the scoped npm package, published under the `experimental` dist-tag (there is no `latest` release):
 
 ```bash
-pnpm add @alephonenull/eval
+npm install @alephonenull/eval@experimental
 ```
 
-Use this package for research evaluation and prototypes only. It is not validated for production or safety-critical use.
+Use this package for research evaluation and prototypes only. It is not validated for production or safety-critical use. Any performance numbers defer to the [Evaluation Contract](/docs/contract).
 
 ## Basic Setup
 
@@ -50,12 +50,12 @@ if (!check.safe) {
 }
 ```
 
-## V2 Engine
+## V3 Engine
 
 ```typescript
-import { AlephOneNullV2 } from '@alephonenull/eval/v2'
+import { AlephOneNullV3 } from '@alephonenull/eval/v3'
 
-const engine = new AlephOneNullV2({
+const engine = new AlephOneNullV3({
   thresholds: {
     sycophancy: 0.6,
   },

@@ -71,7 +71,7 @@ export function createSafetyReport(metrics: SafetyReportMetrics): SafetyReportMe
 } {
   return {
     timestamp: formatTimestamp(),
-    framework: 'AlephOneNull v2.0.0',
+    framework: 'AlephOneNull v3.0.0',
     status: 'active',
     ...metrics
   };

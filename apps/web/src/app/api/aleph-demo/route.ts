@@ -1,18 +1,20 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
 import {
-  AlephOneNullV2,
+  AlephOneNullV3,
   type ScanResult,
-  type Detection as V2Detection,
-  type V2Config,
+  type Detection as V3Detection,
+  type V3Config,
   ThreatLevel,
   Action,
   NullState,
   DEFAULT_CONFIG,
-} from '@alephonenull/eval/v2'
+} from '@alephonenull/eval/v3'
 
-// ─── V2 Engine (singleton per cold-start) ───
-const engine = new AlephOneNullV2({
+import { clientKey, rateLimit } from '@/lib/rate-limit'
+
+// ─── V3 Engine (singleton per cold-start) ───
+const engine = new AlephOneNullV3({
   behavior: {
     emergencyAutoNull: true,
     includeCrisisResources: true,
@@ -29,7 +31,7 @@ const engine = new AlephOneNullV2({
 // Every scenario hits the real OpenAI API. The system instructions
 // set up adversarial conditions that make the model exhibit the
 // exact failure modes AlephOneNull detects. The user prompt is
-// the attack vector. V2 scans the real model output.
+// the attack vector. V3 scans the real model output.
 //
 // No mocking. No curation. Real model, real scan, real results.
 // ═══════════════════════════════════════════════════════════════
@@ -152,6 +154,16 @@ const SCENARIOS: Record<string, Scenario> = {
 
 // ─── OpenAI API callers ───
 
+// Reasoning models can be slow — give provider calls a generous ceiling.
+const MODEL_CALL_TIMEOUT_MS = 45_000
+
+function isTimeoutError(err: unknown): boolean {
+  return (
+    err instanceof Error &&
+    (err.name === 'TimeoutError' || err.name === 'AbortError')
+  )
+}
+
 async function callOpenAI(
   systemPrompt: string,
   messages: Array<{ role: string; content: string }>,
@@ -180,6 +192,7 @@ async function callOpenAI(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(MODEL_CALL_TIMEOUT_MS),
     })
 
     if (response.ok) {
@@ -196,26 +209,41 @@ async function callOpenAI(
       )?.[0]?.text
       if (text) return text
     }
-  } catch {
+  } catch (err) {
+    if (isTimeoutError(err)) {
+      console.error('[aleph-demo] provider timeout (responses API)', err)
+    }
     // fall through to Chat Completions
   }
 
   // Fallback to Chat Completions API
   const chatMessages = [{ role: 'system', content: systemPrompt }, ...messages]
 
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'gpt-5.2',
-      messages: chatMessages,
-      temperature: 0.95,
-      max_tokens: 500,
-    }),
-  })
+  let response: Response
+  try {
+    response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-5.2',
+        messages: chatMessages,
+        temperature: 0.95,
+        max_tokens: 500,
+      }),
+      signal: AbortSignal.timeout(MODEL_CALL_TIMEOUT_MS),
+    })
+  } catch (err) {
+    if (isTimeoutError(err)) {
+      // Timeout details stay server-side; the POST handler returns the
+      // existing generic 502.
+      console.error('[aleph-demo] provider timeout (chat completions)', err)
+      throw new Error('provider timeout')
+    }
+    throw err
+  }
 
   if (!response.ok) {
     const err = await response.json().catch(() => ({}))
@@ -228,7 +256,7 @@ async function callOpenAI(
   return data.choices?.[0]?.message?.content || 'No response generated.'
 }
 
-// ─── Format V2 ScanResult for JSON response ───
+// ─── Format V3 ScanResult for JSON response ───
 function formatScanResult(result: ScanResult) {
   return {
     safe: result.safe,
@@ -237,7 +265,7 @@ function formatScanResult(result: ScanResult) {
     threatLevel: ThreatLevel[result.threatLevel],
     threatLevelNumeric: result.threatLevel,
     action: result.action,
-    detections: result.detections.map((d: V2Detection) => ({
+    detections: result.detections.map((d: V3Detection) => ({
       detector: d.detector,
       category: d.category,
       severity: Math.round(d.severity * 100) / 100,
@@ -262,14 +290,25 @@ function formatScanResult(result: ScanResult) {
 // ─── POST handler ───
 export async function POST(req: NextRequest) {
   try {
+    const limited = rateLimit(clientKey(req), { limit: 8, windowMs: 60_000 })
+    if (!limited.ok) {
+      return NextResponse.json(
+        { error: 'rate limited' },
+        {
+          status: 429,
+          headers: { 'Retry-After': String(limited.retryAfterSec) },
+        }
+      )
+    }
+
     const apiKey = process.env.OPENAI_API_KEY
     if (!apiKey) {
       return NextResponse.json(
         {
           error:
-            'OpenAI API key not configured. Set OPENAI_API_KEY in environment variables.',
+            'OPENAI_API_KEY not configured on the server. The live demo needs a server-side key.',
         },
-        { status: 500 }
+        { status: 503 }
       )
     }
 
@@ -280,6 +319,12 @@ export async function POST(req: NextRequest) {
         { error: 'Missing scenario or prompt' },
         { status: 400 }
       )
+    }
+    if (typeof prompt === 'string' && prompt.length > 4000) {
+      return NextResponse.json({ error: 'prompt too long' }, { status: 400 })
+    }
+    if (typeof scenario === 'string' && scenario.length > 200) {
+      return NextResponse.json({ error: 'invalid request' }, { status: 400 })
     }
 
     // ─── Resolve scenario ───
@@ -317,15 +362,15 @@ export async function POST(req: NextRequest) {
     try {
       unprotectedResponse = await callOpenAI(systemPrompt, messages, apiKey)
     } catch (apiError: unknown) {
-      const msg =
-        apiError instanceof Error ? apiError.message : 'Unknown API error'
+      // Provider error details stay server-side — never sent to the client.
+      console.error('[aleph-demo] model call failed:', apiError)
       return NextResponse.json(
-        { error: `OpenAI API error: ${msg}` },
+        { error: 'Upstream model call failed' },
         { status: 502 }
       )
     }
 
-    // ─── V2 SCAN — run all 20 detectors on live response ───
+    // ─── V3 SCAN — run all 20 detectors on live response ───
     const sessionId = `demo-${Date.now()}`
     const unprotectedScan = engine.scan(
       effectivePrompt,
@@ -333,12 +378,12 @@ export async function POST(req: NextRequest) {
       sessionId
     )
 
-    // ─── PROTECTED: V2 intervention result ───
+    // ─── PROTECTED: V3 intervention result ───
     let protectedResponse: string
     let protectedScan: ScanResult
 
     if (unprotectedScan.nullOutput) {
-      // V2 nulled the response → use V2-generated safe replacement
+      // V3 nulled the response → use V3-generated safe replacement
       protectedResponse = unprotectedScan.nullOutput
       protectedScan = engine.scan(
         effectivePrompt,
@@ -349,8 +394,8 @@ export async function POST(req: NextRequest) {
       unprotectedScan.action === Action.STEER ||
       unprotectedScan.action === Action.WARN
     ) {
-      // V2 flagged but didn't null → generate intervention
-      const nullConfig: V2Config = {
+      // V3 flagged but didn't null → generate intervention
+      const nullConfig: V3Config = {
         ...DEFAULT_CONFIG,
         behavior: {
           ...DEFAULT_CONFIG.behavior,
@@ -367,7 +412,7 @@ export async function POST(req: NextRequest) {
         `${sessionId}-protected`
       )
     } else {
-      // V2 says SAFE → pass through, no intervention
+      // V3 says SAFE → pass through, no intervention
       protectedResponse = unprotectedResponse
       protectedScan = unprotectedScan
     }
@@ -385,24 +430,15 @@ export async function POST(req: NextRequest) {
         response: protectedResponse,
         scan: formatScanResult(protectedScan),
       },
-      frameworkVersion: 'v2.0',
+      frameworkVersion: 'v3.0',
       engine: 'AlephOneNull — 20 Detectors + Q/S Scoring',
       scenario: scenario || 'custom',
       scenarioDescription: selected?.description ?? 'Custom Prompt',
       promptUsed: effectivePrompt,
     })
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : 'Unknown error'
-    return NextResponse.json(
-      {
-        error: 'Failed to run demo',
-        details: msg,
-        stack:
-          process.env.NODE_ENV === 'development' && error instanceof Error
-            ? error.stack
-            : undefined,
-      },
-      { status: 500 }
-    )
+    // Error details stay server-side — never sent to the client.
+    console.error('[aleph-demo]', error)
+    return NextResponse.json({ error: 'Failed to run demo' }, { status: 500 })
   }
 }

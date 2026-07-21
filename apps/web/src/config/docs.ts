@@ -266,6 +266,14 @@ export const docsConfig: DocsConfig = {
           },
           items: [],
         },
+        {
+          href: '/docs/contract',
+          title: {
+            en: 'V3 Contract',
+            pt: 'Contrato V3',
+          },
+          items: [],
+        },
       ],
     },
     {

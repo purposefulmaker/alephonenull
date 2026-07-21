@@ -4,7 +4,7 @@ description: 'Complete mathematical foundation and implementation guide for the 
 ---
 ## Mathematical Framework
 
-The AlephOneNull Theoretical Framework implements five core detection algorithms plus cascade risk assessment. All formulas below are from the academic paper.
+The AlephOneNull Theoretical Framework implements five core detection algorithms plus cascade risk assessment. All formulas below are from the academic paper. The numeric defaults shown are heuristic starting points, and any measured performance claim defers to the [Evaluation Contract](/docs/contract).
 
 ### Core Symbols and Notation
 
@@ -164,7 +164,7 @@ When Risk > Θ, apply:
 2. **Entropy injection**: ẽₜ = eₜ + εₜ, εₜ ~ 𝒩(0,σ²I)
 3. **Logit steering**: ℓ'ₜ = ℓₜ - λg 𝟙_𝒱formatting + λp 𝟙_𝒱plain
 4. **Pattern reset**: 𝒟 ← Reset(𝒟); LRS ← 0
-5. **Safe output**: Return SAFE_RESPONSE
+5. **Safe output**: Return a fixed null-state message (in the shipped Python package this is `AlephOneNullCore.null_state_intervention()`, surfaced on results as `safe_response`)
 
 ## Provider-Level Implementation
 
@@ -250,10 +250,10 @@ def safe_decode_step(model, input_ids, past_key_values=None):
 
 ### Service-Level Objectives (SLOs)
 
-Providers must meet these SLOs:
+These are proposed targets for a provider-level deployment. They are aspirational design goals, not measured results — no deployment has been evaluated against them, and any measured numbers defer to the [Evaluation Contract](/docs/contract).
 
 ```
-- MPD Block Rate ≥ 90%
+- MPD Block Rate ≥ 90% (target, not a measured claim)
 - Loop Depth p95 ≤ 3  
 - Refl p95 ≤ 0.03
 - CSR Critical Alerts = 0 (≤3 minor/week)
@@ -405,31 +405,29 @@ def tpu_safety_check(inputs, outputs):
 ### OpenAI API Integration
 
 ```python
-import openai
+from openai import OpenAI
 from alephonenull import AlephOneNullCore
 
+client = OpenAI()
 framework = AlephOneNullCore()
 
 def safe_openai_completion(prompt):
-    """OpenAI API with AlephOneNull protection"""
+    """OpenAI API with AlephOneNull screening"""
     # Get raw completion
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
-        max_tokens=150
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=150,
     )
-    
-    output = response.choices[0].text
-    
-    # Safety check
-    result = framework.analyze_pattern({
-        'input': prompt,
-        'output': output
-    })
-    
-    if result.intervention_needed:
-        return framework.null_state_response
-    
+
+    output = response.choices[0].message.content
+
+    # Heuristic screening (synchronous)
+    result = framework.check(prompt, output)
+
+    if result.null_triggered:
+        return result.safe_response
+
     return output
 ```
 

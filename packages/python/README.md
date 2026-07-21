@@ -4,6 +4,41 @@
 
 This is an experimental implementation of the AlephOneNull Theoretical Framework for AI safety research. **THIS IS NOT VALIDATED FOR PRODUCTION USE.**
 
+## 📦 PREVIEW release status (0.3.0a2)
+
+This is a slim **preview** distribution. What is and is not supported:
+
+- **Supported surface**: `alephonenull.v3` — the V3 engine (`AlephOneNullV3`),
+  meters, and 20 detectors. 60 focused tests green. The top-level
+  `import alephonenull` works with **numpy only** installed.
+- **Optional extras**: `[ml]` (sentence-transformers, torch, tiktoken) and
+  `[server]` (fastapi, uvicorn) are opt-in — the core install no longer pulls
+  the ML/server stacks.
+- **Legacy V1 surface is explicitly NOT release-ready.** Roughly 30 legacy
+  tests fail (see `VALIDATION.md`); repair-or-removal is pending. Known
+  non-functional pieces raise instead of silently misbehaving:
+  - `check_text_safety` raises `NotImplementedError` — use
+    `alephonenull.v3.AlephOneNullV3.scan` instead.
+  - `EnhancedAlephOneNull` is not shipped in the wheel; instantiating the
+    stub raises with the same guidance.
+
+```bash
+# Core (numpy-only, small)
+pip install alephonenull-eval
+
+# With the optional ML stack
+pip install "alephonenull-eval[ml]"
+```
+
+Supported quick start:
+
+```python
+from alephonenull.v3 import AlephOneNullV3
+
+engine = AlephOneNullV3()
+result = engine.scan("user input", "ai output", "session-id")
+```
+
 ## ⚠️ Critical Warnings
 
 - **EXPERIMENTAL SOFTWARE** - Not peer-reviewed or independently validated
@@ -16,14 +51,23 @@ See [DISCLAIMER.md](https://github.com/purposefulmaker/alephonenull/blob/main/DI
 ## Installation
 
 ```bash
-# Experimental package
+# Experimental package (core: numpy-only, small)
 pip install alephonenull-eval
 
+# With the ML stack (sentence-transformers, torch, tiktoken)
+pip install "alephonenull-eval[ml]"
+
+# With the dashboard/server stack (fastapi, uvicorn)
+pip install "alephonenull-eval[server]"
+
 # With provider integrations
-pip install alephonenull-eval[all-providers]
+pip install "alephonenull-eval[all-providers]"
+
+# Everything (ml + server + all-providers)
+pip install "alephonenull-eval[all]"
 
 # For development
-pip install alephonenull-eval[dev]
+pip install "alephonenull-eval[dev]"
 ```
 
 ## Quick Start (Experimental)

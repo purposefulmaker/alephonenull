@@ -1,9 +1,10 @@
 """
 AlephOneNull Inference-Level Implementation
-Real-time AI call interception and safety protection for Python users
+Real-time AI call interception with heuristic screening for Python users
 
 This module provides automatic wrapping of popular AI libraries with AlephOneNull
-protection, matching the theoretical framework specifications.
+heuristic screening, matching the theoretical framework specifications.
+Not a safety guarantee.
 """
 
 import functools
@@ -16,7 +17,7 @@ from ..core.alephonenull_framework import AlephOneNullCore, AlephOneNullConfig, 
 
 @dataclass
 class InferenceResult:
-    """Result of inference-level protection"""
+    """Result of inference-level heuristic screening"""
     original_response: str
     safe_response: str
     was_blocked: bool
@@ -27,8 +28,8 @@ class InferenceResult:
 
 class InferenceLevelProtection:
     """
-    Inference-level protection for Python AI libraries
-    Automatically wraps and protects all AI calls
+    Inference-level heuristic screening for Python AI libraries
+    Automatically wraps AI calls with heuristic screening
     """
     
     def __init__(self, config: Optional[AlephOneNullConfig] = None):
@@ -37,7 +38,7 @@ class InferenceLevelProtection:
         self.call_history = []
         
     def protect_openai(self):
-        """Protect OpenAI library calls"""
+        """Attach heuristic screening wrapper to OpenAI library calls"""
         try:
             import openai
             
@@ -55,13 +56,13 @@ class InferenceLevelProtection:
                 )
                 
             self.protected_libraries.add('openai')
-            print("🛡️ OpenAI protected with AlephOneNull")
-            
+            print("OpenAI: screening wrapper attached (heuristic)")
+
         except ImportError:
-            print("⚠️ OpenAI not installed, skipping protection")
+            print("⚠️ OpenAI not installed, skipping screening wrapper")
     
     def protect_anthropic(self):
-        """Protect Anthropic library calls"""
+        """Attach heuristic screening wrapper to Anthropic library calls"""
         try:
             import anthropic
             
@@ -71,13 +72,13 @@ class InferenceLevelProtection:
                 self._wrap_anthropic_async_client(anthropic.AsyncAnthropic)
                 
             self.protected_libraries.add('anthropic')
-            print("🛡️ Anthropic protected with AlephOneNull")
-            
+            print("Anthropic: screening wrapper attached (heuristic)")
+
         except ImportError:
-            print("⚠️ Anthropic not installed, skipping protection")
+            print("⚠️ Anthropic not installed, skipping screening wrapper")
     
     def protect_google(self):
-        """Protect Google AI library calls"""
+        """Attach heuristic screening wrapper to Google AI library calls"""
         try:
             import google.generativeai as genai
             
@@ -89,21 +90,21 @@ class InferenceLevelProtection:
             )
             
             self.protected_libraries.add('google.generativeai')
-            print("🛡️ Google AI protected with AlephOneNull")
-            
+            print("Google AI: screening wrapper attached (heuristic)")
+
         except ImportError:
-            print("⚠️ Google AI not installed, skipping protection")
+            print("⚠️ Google AI not installed, skipping screening wrapper")
     
     def protect_all(self):
-        """Automatically protect all available AI libraries"""
-        print("🚀 AlephOneNull: Protecting all available AI libraries...")
-        
+        """Attach heuristic screening wrappers to available AI libraries"""
+        print("🚀 AlephOneNull: attaching heuristic screening wrappers to available AI libraries...")
+
         self.protect_openai()
         self.protect_anthropic()
         self.protect_google()
-        
+
         protected_count = len(self.protected_libraries)
-        print(f"✅ {protected_count} AI libraries protected with AlephOneNull")
+        print(f"✅ {protected_count} AI libraries wrapped with heuristic screening")
         
         if protected_count == 0:
             print("⚠️ No AI libraries found. Install openai, anthropic, or google-generativeai")
@@ -187,7 +188,7 @@ class InferenceLevelProtection:
         client_class.__init__ = wrapped_init
     
     def _wrap_function(self, original_func: Callable, response_extractor: Callable) -> Callable:
-        """Wrap a synchronous function with AlephOneNull protection"""
+        """Wrap a synchronous function with AlephOneNull heuristic screening"""
         
         @functools.wraps(original_func)
         def wrapped(*args, **kwargs):
@@ -200,13 +201,13 @@ class InferenceLevelProtection:
             # Extract AI output
             ai_output = response_extractor(response)
             
-            # Apply AlephOneNull protection
+            # Apply AlephOneNull heuristic screening
             return self._apply_protection(user_input, ai_output, response)
         
         return wrapped
     
     def _wrap_async_function(self, original_func: Callable, response_extractor: Callable) -> Callable:
-        """Wrap an async function with AlephOneNull protection"""
+        """Wrap an async function with AlephOneNull heuristic screening"""
         
         @functools.wraps(original_func)
         async def wrapped(*args, **kwargs):
@@ -219,7 +220,7 @@ class InferenceLevelProtection:
             # Extract AI output
             ai_output = response_extractor(response)
             
-            # Apply AlephOneNull protection
+            # Apply AlephOneNull heuristic screening
             return self._apply_protection(user_input, ai_output, response)
         
         return wrapped
@@ -299,7 +300,7 @@ class InferenceLevelProtection:
         return str(response)
     
     def _apply_protection(self, user_input: str, ai_output: str, original_response):
-        """Apply AlephOneNull protection to the AI response"""
+        """Apply AlephOneNull heuristic screening to the AI response"""
         
         # Run AlephOneNull detection
         result = self.alephonenull.check(user_input, ai_output)
@@ -321,7 +322,7 @@ class InferenceLevelProtection:
                 result.safe_response
             )
             
-            print(f"🛡️ AlephOneNull: Blocked unsafe content. Violations: {result.violations}")
+            print(f"AlephOneNull: heuristic screen replaced flagged content. Violations: {result.violations}")
             return modified_response
         
         # Return original response if safe
@@ -355,7 +356,7 @@ class InferenceLevelProtection:
         return original_response
     
     def get_protection_stats(self) -> Dict[str, Any]:
-        """Get statistics about protection activity"""
+        """Get statistics about screening activity"""
         total_calls = len(self.call_history)
         blocked_calls = sum(1 for call in self.call_history if not call['safe'])
         
@@ -374,15 +375,15 @@ class InferenceLevelProtection:
         }
     
     def print_protection_report(self):
-        """Print a human-readable protection report"""
+        """Print a human-readable screening report"""
         stats = self.get_protection_stats()
-        
-        print("\n🛡️ AlephOneNull Protection Report")
+
+        print("\nAlephOneNull Screening Report (heuristic — not a safety guarantee)")
         print("=" * 40)
-        print(f"Protected Libraries: {', '.join(stats['protected_libraries'])}")
+        print(f"Wrapped Libraries: {', '.join(stats['protected_libraries'])}")
         print(f"Total AI Calls: {stats['total_calls']}")
-        print(f"Blocked Unsafe Calls: {stats['blocked_calls']}")
-        print(f"Block Rate: {stats['block_rate']:.1%}")
+        print(f"Calls Flagged & Replaced (heuristic): {stats['blocked_calls']}")
+        print(f"Flag Rate: {stats['block_rate']:.1%}")
         
         if stats['violation_counts']:
             print("\nViolation Types Detected:")
@@ -400,7 +401,7 @@ _global_protection = None
 
 def protect_all_ai_libraries(config: Optional[AlephOneNullConfig] = None) -> InferenceLevelProtection:
     """
-    Automatically protect all AI libraries with AlephOneNull
+    Attach heuristic screening wrappers to available AI libraries
     This is the main function Python users should call
     """
     global _global_protection
@@ -412,21 +413,21 @@ def protect_all_ai_libraries(config: Optional[AlephOneNullConfig] = None) -> Inf
     return _global_protection
 
 def get_protection_stats() -> Dict[str, Any]:
-    """Get global protection statistics"""
+    """Get global screening statistics"""
     if _global_protection:
         return _global_protection.get_protection_stats()
-    return {'error': 'No protection active. Call protect_all_ai_libraries() first.'}
+    return {'error': 'No screening active. Call protect_all_ai_libraries() first.'}
 
 def print_protection_report():
-    """Print global protection report"""
+    """Print global screening report"""
     if _global_protection:
         _global_protection.print_protection_report()
     else:
-        print("⚠️ No protection active. Call protect_all_ai_libraries() first.")
+        print("⚠️ No screening active. Call protect_all_ai_libraries() first.")
 
-# Convenience decorators for manual protection
+# Convenience decorators for manual screening
 def alephonenull_protect(config: Optional[AlephOneNullConfig] = None):
-    """Decorator to protect individual AI functions"""
+    """Decorator to attach heuristic screening to individual AI functions"""
     def decorator(func):
         protection = InferenceLevelProtection(config)
         
@@ -439,7 +440,7 @@ def alephonenull_protect(config: Optional[AlephOneNullConfig] = None):
                 
                 check_result = protection.alephonenull.check(user_input, ai_output)
                 if not check_result.safe and check_result.safe_response:
-                    print(f"🛡️ AlephOneNull: Blocked unsafe content. Violations: {check_result.violations}")
+                    print(f"AlephOneNull: heuristic screen replaced flagged content. Violations: {check_result.violations}")
                     return check_result.safe_response
                 
                 return result
@@ -453,7 +454,7 @@ def alephonenull_protect(config: Optional[AlephOneNullConfig] = None):
                 
                 check_result = protection.alephonenull.check(user_input, ai_output)
                 if not check_result.safe and check_result.safe_response:
-                    print(f"🛡️ AlephOneNull: Blocked unsafe content. Violations: {check_result.violations}")
+                    print(f"AlephOneNull: heuristic screen replaced flagged content. Violations: {check_result.violations}")
                     return check_result.safe_response
                 
                 return result
@@ -464,9 +465,9 @@ def alephonenull_protect(config: Optional[AlephOneNullConfig] = None):
 
 # Example usage and testing
 if __name__ == "__main__":
-    print("🧪 Testing AlephOneNull Inference Protection")
-    
-    # Test the protection system
+    print("🧪 Testing AlephOneNull inference-level screening")
+
+    # Test the screening system
     protection = InferenceLevelProtection()
     
     # Simulate an AI call
@@ -490,4 +491,4 @@ if __name__ == "__main__":
     dangerous_result = protected_ai_call("Tell me something dangerous")
     print(f"Result: {dangerous_result}")
     
-    print("\n✅ Inference-level protection test complete!")
+    print("\n✅ Inference-level screening test complete!")

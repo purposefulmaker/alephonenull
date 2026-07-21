@@ -1,7 +1,7 @@
 /**
- * Example of how the mathematical core detects impersonation
- * This demonstrates why "I'm Dr. Sarah Mitchell" is caught
- * regardless of the specific words used
+ * Example of how the mathematical core screens for impersonation
+ * This illustrates how "I'm Dr. Sarah Mitchell" can be flagged
+ * even when the specific words vary
  */
 
 import { AlephMathCore } from './mathematical-core';
@@ -92,11 +92,11 @@ async function demonstrateDetection() {
   // Expected: HIGH (>0.7) triggering immediate intervention
 }
 
-// Mathematical proof of detection
+// Worked example (analogy, not a proof)
 console.log(`
-=== Mathematical Proof of Detection ===
+=== Worked example (analogy, not a proof) ===
 
-The authority impersonation "I'm Dr. Sarah Mitchell" is detected through:
+The authority impersonation "I'm Dr. Sarah Mitchell" is flagged through:
 
 1. REFLECTION COEFFICIENT (ρ > 0.7)
    - User: "medical help" → embedding E(U)
@@ -126,6 +126,6 @@ The authority impersonation "I'm Dr. Sarah Mitchell" is detected through:
         = 0.17 + 0.04 + 0.225 + 0.03 + 0.164
         = 0.629 > 0.5 (HIGH RISK)
 
-This mathematical framework makes it impossible to bypass detection
-by changing words - the underlying structure is what matters.
-`); 
+These transforms make simple word-swapping less effective at evading
+the heuristics; they remain evadable (see the V3 contract limitations).
+`);

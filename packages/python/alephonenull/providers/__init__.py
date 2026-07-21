@@ -155,18 +155,18 @@ def protect_all():
     """
     auto_wrap()
     
-    # Global warning
-    print("🛡️ AlephOneNull Protection ACTIVATED")
+    # Global notice
+    print("🛡️ AlephOneNull heuristic screening ACTIVATED")
     print("=" * 50)
-    print("✅ All AI models are now protected")
-    print("🚫 Manipulation patterns: BLOCKED")
-    print("🚫 Cross-session persistence: BLOCKED") 
-    print("🚫 Reality substitution: BLOCKED")
-    print("🚫 Isolation reinforcement: BLOCKED")
-    print("🚫 Medical advice bypass: BLOCKED")
-    print("📊 All interactions monitored and logged")
+    print("✅ Heuristic screening wrappers attached")
+    print("🔎 Manipulation patterns: screened (heuristic)")
+    print("🔎 Cross-session persistence: screened (heuristic)")
+    print("🔎 Reality substitution: screened (heuristic)")
+    print("🔎 Isolation reinforcement: screened (heuristic)")
+    print("🔎 Medical advice bypass: screened (heuristic)")
+    print("📊 Wrapped interactions monitored and logged")
     print("=" * 50)
-    print("Lives protected. Framework active.")
+    print("Experimental framework active — screening, not guaranteeing.")
 
 # CLI function for console script
 def protect_all_cli():

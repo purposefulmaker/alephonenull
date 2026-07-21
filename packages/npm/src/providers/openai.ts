@@ -1,5 +1,5 @@
 /**
- * OpenAI Provider Wrapper - Protects ALL OpenAI interactions
+ * OpenAI provider wrapper — attaches heuristic screening to OpenAI calls
  */
 
 import { UniversalDetector } from '../core/detector';

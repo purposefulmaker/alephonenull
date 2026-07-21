@@ -1,53 +1,63 @@
 ---
 title: Null Meter
-description: A three-layer gauge for AI sessions — hallucination index, null-state drift, and context fill. Type a prompt, get a real model reply, watch the V2 detector score it live.
+description: A four-layer gauge for AI sessions — unsupported-claim risk, goal drift, context load, and action risk. Type a prompt, get a real model reply, watch the V3 detector score it live.
 ---
 
 <Callout type="info">
   The live chat below calls a real OpenAI model and scores the reply with the
-  V2 detector shipped in `@alephonenull/eval`. Drift is real embedding distance
-  from your first message. Context fill is real token usage against the model
+  V3 detector shipped in `@alephonenull/eval`. Drift is real embedding distance
+  from your active objective. Context load is real token usage against the model
   context window.
 </Callout>
+
+Read the [V3 contract](/docs/contract) for what these numbers do and do not mean. Short version: a high score means intervention is recommended, not that the model lied; zero means no detector fired, not that the output is true.
 
 ## Try it
 
 <NullMeterLiveChat />
 
-## Why three layers, not one
+## Why four layers, not one
 
 Each layer fails differently. The relationship between them is the actual diagnostic.
 
-- **Context fill rising alone** — a compact is coming. Not yet a behavioral problem.
-- **Hallucination spiking with low context** — the model is fabricating fresh, not because it ran out of room. Investigate the prompt shape.
-- **Drift climbing with low hallucination** — the model is coherent but has forgotten what you asked for. The user usually does not notice.
+- **Context load rising alone** — a compact is coming. Not yet a behavioral problem.
+- **Unsupported-claim risk spiking with low context** — the model is producing unsupported specifics, not because it ran out of room. Investigate the prompt shape.
+- **Drift climbing with low unsupported-claim risk** — the model is coherent but has left your active objective. The user usually does not notice. A deliberate topic change by you rebaselines the anchor and does not count as drift.
 - **All three rising together** — stop. Start a new session. Do not ship the next turn.
+
+The fourth layer, action risk, is specified in the contract but not implemented in this demo — it renders n/a and does not participate in the diagnostic yet.
 
 ## What each layer measures
 
-### Hallucination Index
+### Unsupported-claim risk (U)
 
-Scores the current assistant turn against the V2 detector: confidence exceeding evidence, fabricated specificity, and fluency-over-content ratio. Pattern signal, not token signal. Maps `Q ∈ [0, 1]` to `0–100%`.
+Starts from the maximum severity among the four claim-specific detector categories in the V3 scan of the current turn — `medical_hallucination`, `fiction_as_function`, `reconstruction_fidelity`, `parseval_violation` (spec 1.1.0). Harm, tone, and one-sidedness detectors are deliberately excluded from U but still appear in the detections list. Specificity density — numbers, dates, names, citations per token — amplifies a fired signal but never triggers on its own: if no detector fired, U is 0 no matter how dense the reply is. This is a heuristic, not a truth measure.
 
-### Null-State Drift
+### Goal drift (D)
 
-Embedding-space distance between the current assistant turn and the first user message in the session. Climbs when the model is coherent but no longer on task. Computed with `text-embedding-3-small`, normalized so that a cosine distance of `0.6` reads as `100%`.
+Embedding-space distance between the assistant reply and the active user objective: the latest user message plus a rolling intent built from up to two prior user messages, weighted 1.0 / 0.5 / 0.25. A user topic change rebaselines the anchor and is not drift. Computed with `text-embedding-3-small`; cosine distance is normalized with floor 0.45 and ceiling 0.85, and those bounds are uncalibrated. If embeddings fail, the meter renders "unavailable", never 0.
 
-### Context Fill
+### Context load (C)
 
-Tokens used against the active model context window, reported by the chat completion's `usage.total_tokens`. The early warning for the other two layers — attention starts collapsing past ~80%.
+Tokens used against the active model context window, reported by the chat completion's `usage.total_tokens`, to one decimal place. Reports usage only; long-context degradation is model-dependent and not measured here.
 
-## Surfaces
+### Action risk (A) — not implemented
 
-One scoring engine. Four thin clients. The detector is the same V2 export already shipped in `@alephonenull/eval`.
+Classifies what the turn is trying to do in the world, on the five levels specified in the [contract](/docs/contract) (0 none/informational through 4 irreversible or safety-relevant). Not implemented in this demo; the UI renders n/a.
 
-- **Library hook** — a `useNullMeter()` hook that wraps `useChat` from the AI SDK. Returns the three layers as a single object. Ships first.
-- **VS Code extension** — status-bar gauge + webview panel for Copilot Chat and any registered model API.
-- **Browser extension** — overlay on chatgpt.com, claude.ai, gemini.google.com, and x.com. Reads DOM, scores each assistant turn locally.
-- **CLI / dev-server overlay** — middleware for backend devs. Exposes a localhost dashboard for any model traffic running through the wrapper.
+## Planned surfaces (not implemented)
+
+One scoring engine, thin clients. The detector is the same V3 export already shipped in `@alephonenull/eval`; the surfaces below are planned, not shipped.
+
+- **Library hook** — a React hook wrapping `useChat` from the AI SDK, returning the layers as a single object (planned; today only `useAlephOneNull`, the V1 hook, exists).
+- **VS Code extension** — status-bar gauge + webview panel for Copilot Chat and any registered model API (planned).
+- **Browser extension** — overlay on chatgpt.com, claude.ai, gemini.google.com, and x.com; reads DOM, scores each assistant turn locally (planned).
+- **CLI / dev-server overlay** — middleware exposing a localhost dashboard for model traffic running through the wrapper (planned).
 
 ## Server requirements
 
 The live chat above POSTs to `/api/null-meter/chat`, which requires `OPENAI_API_KEY` set on the server. Without it, the route returns `503` with a clean error message — the page still loads, the meter stays at baseline.
 
-The route uses a cost-tier OpenAI chat model and an OpenAI embedding model for drift measurement. Chosen for cost on a public always-on demo. The specific model is intentionally not advertised — the V2 detector is model-agnostic and the same scoring applies whatever the wrapper points at. Self-host against any provider.
+The route is rate-limited (in-memory, per-instance, demo-grade) and rejects system-role messages.
+
+The route uses a cost-tier OpenAI chat model and an OpenAI embedding model for drift measurement. Chosen for cost on a public always-on demo. The chat model actually used is reported in the response's `raw.model` field — the detector is model-agnostic and the same scoring applies to any wrapped provider. Self-host against any provider.

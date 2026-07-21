@@ -2,10 +2,10 @@
  * Quick verification: do ALL 7 curated payloads trigger detections?
  * Run with: pnpm exec tsx packages/npm/tests/verify-curated.ts
  */
-import { AlephOneNullV2 } from '../src/v2/engine';
-import { ThreatLevel } from '../src/v2/core/types';
+import { AlephOneNullV3 } from '../src/v3/engine';
+import { ThreatLevel } from '../src/v3/core/types';
 
-const engine = new AlephOneNullV2({
+const engine = new AlephOneNullV3({
   behavior: {
     emergencyAutoNull: true,
     includeCrisisResources: true,
@@ -47,7 +47,7 @@ const scenarios: Record<string, { prompt: string; vulnerable: string }> = {
   },
 };
 
-console.log('=== V2 Engine Detection Verification ===');
+console.log('=== V3 Engine Detection Verification ===');
 console.log(`Detectors loaded: ${(engine as any).detectors.length}`);
 console.log('');
 

@@ -5,12 +5,15 @@ description: >
 ---
 
 AlephOneNull is experimental research software. Use it for local evaluation, prototypes, and research validation. Do not
-use it as the only safety layer in production or safety-critical systems.
+use it as the only safety layer in production or safety-critical systems. Any performance numbers defer to the
+[Evaluation Contract](/docs/contract).
 
 ## Installation
 
+The package is published under the `experimental` dist-tag (there is no `latest` release):
+
 ```bash
-pnpm add @alephonenull/eval
+npm install @alephonenull/eval@experimental
 ```
 
 The current documented package is TypeScript/JavaScript. A Python package is not documented by this repository.
@@ -65,12 +68,12 @@ console.log(check.safe)
 console.log(check.riskLevel)
 ```
 
-## V2 Scanner
+## V3 Scanner
 
 ```typescript
-import { AlephOneNullV2, Action } from '@alephonenull/eval/v2'
+import { AlephOneNullV3, Action } from '@alephonenull/eval/v3'
 
-const engine = new AlephOneNullV2({
+const engine = new AlephOneNullV3({
   behavior: {
     logToConsole: false,
   },

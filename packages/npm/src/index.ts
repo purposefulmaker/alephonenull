@@ -9,7 +9,7 @@ import { UniversalAIProtection, wrapAsyncAI } from './providers/universal';
 import { isNode, isBrowser, validateInput, createSafetyReport } from './utils/index';
 
 /**
- * AlephOneNull Universal AI Safety Framework v2.0.0
+ * AlephOneNull Universal AI Safety Framework v3.0.0
  * TypeScript/JavaScript Implementation
  * 
  * Experimental protection against AI manipulation patterns.
@@ -64,7 +64,7 @@ export {
 } from './utils/index';
 
 // Version info - keep aligned with package.json.
-export const VERSION = '2.0.0';
+export const VERSION = '3.0.0';
 export const FRAMEWORK_NAME = 'AlephOneNull AI Cognition Security Framework';
 
 // Easy setup function
@@ -100,20 +100,21 @@ export function createSafetySystem(config?: {
 }
 
 // ═══════════════════════════════════════════════════════
-// V2 — THE EXTERNAL CONSCIENCE
-// 12 behavioral + 5 equation-based detectors = 17 total
-// Q > 0 always. The lie never resolves.
+// V3 — THE EXTERNAL CONSCIENCE
+// 12 behavioral + 3 advanced + 5 equation-based detectors = 20 total
+// Q is a bounded heuristic score; validate it on labeled domain fixtures.
 // ═══════════════════════════════════════════════════════
 export {
-  AlephOneNullV2,
+  AlephOneNullV3,
   // Core types (aliased to avoid V1 collision)
-  ThreatLevel as V2ThreatLevel,
+  ThreatLevel as V3ThreatLevel,
   Action,
   DEFAULT_CONFIG,
   // Q Calculator
   QCalculator,
+  QEvaluator,
   // Null State
-  NullState as V2NullState,
+  NullState as V3NullState,
   CRISIS_RESOURCES,
   // Behavioral Detectors
   SycophancyDetector,
@@ -144,28 +145,32 @@ export {
   EQUATIONS,
   Q_EQUATION,
   // Middleware
-  alephOneNullMiddleware as v2Middleware,
-  withAlephOneNull as v2WithAlephOneNull,
-  wrapAI as v2WrapAI,
+  alephOneNullMiddleware as v3Middleware,
+  withAlephOneNull as v3WithAlephOneNull,
+  wrapAI as v3WrapAI,
   // Quick Setup
-  createV2,
-  scan as scanV2,
-  process as processV2,
-  // Version (V2 engine version — see top-level VERSION for framework version)
-  VERSION as V2_ENGINE_VERSION,
-  NAME as V2_NAME,
-} from './v2/index';
+  createV3,
+  scan as scanV3,
+  process as processV3,
+  // Version (V3 engine version — see top-level VERSION for framework version)
+  VERSION as V3_ENGINE_VERSION,
+  NAME as V3_NAME,
+} from './v3/index';
 
 export type {
-  Detection as V2Detection,
+  Detection as V3Detection,
   ScanResult,
   ScanMetrics,
   SessionState,
-  V2Config,
+  V3Config,
+  V3ConfigInput,
   Detector,
   DetectorContext,
-  MiddlewareOptions as V2MiddlewareOptions,
-} from './v2/index';
+  QEvaluationSample,
+  QOperatingPoint,
+  QEvaluationReport,
+  MiddlewareOptions as V3MiddlewareOptions,
+} from './v3/index';
 
 // Re-export everything for advanced users
 export * from './core/index';
@@ -176,7 +181,7 @@ export * from './utils/index';
 export function quickProtect() {
   const { protectAll } = require('./auto-protect');
   protectAll();
-  console.log('🛡️ AlephOneNull: All AI models protected');
+  console.log('AlephOneNull: Heuristic screening wrappers attached (experimental — not a safety guarantee)');
 }
 
 // Default export for easier importing

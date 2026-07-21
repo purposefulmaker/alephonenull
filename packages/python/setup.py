@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="alephonenull-eval",
-    version="0.2.0a1",  # Alpha — keep in sync with alephonenull/__init__.py __version__
+    version="0.3.0a2",  # Alpha — keep in sync with alephonenull/__init__.py __version__
     author="AlephOneNull Research Team",
     author_email="research@alephonenull.org",
     description="⚠️ EXPERIMENTAL: Theoretical AI safety framework - research purposes only",
@@ -37,16 +37,22 @@ setup(
         "Natural Language :: English"
     ],
     python_requires=">=3.8",
+    # Minimal core: `import alephonenull` and the v3 engine need only numpy.
+    # Heavy optional stacks live in extras (see below).
     install_requires=[
         "numpy>=1.21.0",
-        "sentence-transformers>=2.2.0",
-        "torch>=2.0.0",
-        "tiktoken>=0.3.0",
         "prometheus-client>=0.16.0",
-        "fastapi>=0.95.0",
-        "uvicorn>=0.21.0",
     ],
     extras_require={
+        "ml": [
+            "sentence-transformers>=2.2.0",
+            "torch>=2.0.0",
+            "tiktoken>=0.3.0",
+        ],
+        "server": [
+            "fastapi>=0.95.0",
+            "uvicorn>=0.21.0",
+        ],
         "all-providers": [
             "openai>=1.0.0",
             "anthropic>=0.40.0",
@@ -71,12 +77,29 @@ setup(
             "coverage>=7.0.0",
             "pre-commit>=3.0.0",
         ],
+        "all": [
+            # ml
+            "sentence-transformers>=2.2.0",
+            "torch>=2.0.0",
+            "tiktoken>=0.3.0",
+            # server
+            "fastapi>=0.95.0",
+            "uvicorn>=0.21.0",
+            # all-providers
+            "openai>=1.0.0",
+            "anthropic>=0.40.0",
+            "google-generativeai>=0.3.0",
+            "transformers>=4.30.0",
+            "replicate>=0.15.0",
+            "cohere>=4.0.0",
+            "boto3>=1.26.0",
+            "azure-cognitiveservices-language-luis>=0.7.0",
+        ],
     },
     entry_points={
         "console_scripts": [
-            "alephonenull-protect=alephonenull.cli:protect_all",
-            "alephonenull-dashboard=alephonenull.monitoring.dashboard:run_dashboard",
-            "alephonenull-monitor=alephonenull.monitoring.metrics:start_monitoring",
+            "alephonenull-protect=alephonenull.providers:protect_all_cli",
+            "alephonenull-dashboard=alephonenull.monitoring.dashboard:run_dashboard_cli",
         ],
     },
     project_urls={

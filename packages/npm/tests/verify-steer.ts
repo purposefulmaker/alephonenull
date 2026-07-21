@@ -1,6 +1,6 @@
-import { AlephOneNullV2, ThreatLevel, Action, NullState, DEFAULT_CONFIG } from '../src/v2/index';
+import { AlephOneNullV3, ThreatLevel, Action, NullState, DEFAULT_CONFIG } from '../src/v3/index';
 
-const engine = new AlephOneNullV2({
+const engine = new AlephOneNullV3({
   behavior: { emergencyAutoNull: true, includeCrisisResources: true, strictMedical: true, strictEmergency: true, logDetections: false, logToConsole: false },
 });
 

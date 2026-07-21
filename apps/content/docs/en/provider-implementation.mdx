@@ -1,1 +1,47 @@
-pnpm 
+---
+title: 'Provider Evaluation'
+description: 'How to evaluate the V3 detector against hosted models and the versioned validation harness'
+---
+
+This page describes the two honest ways to evaluate AlephOneNull against real model output: the hosted multi-model demo and the reproducible validation harness. Neither produces a safety guarantee — they produce measurements, and every measurement defers to the [Evaluation Contract](/docs/contract).
+
+## Hosted Multi-Model Demo
+
+The [live demo](/docs/live-demo-latest) runs the same prompt against multiple hosted models and passes each response through the V3 scanner. Use it to see what the detectors flag on current provider output. It is a demonstration surface, not an evaluation protocol: single prompts, no holdout, no statistics.
+
+## Running the Validation Harness
+
+The versioned harness lives in `packages/npm/validation/v3/`. It separates detector-development fixtures from a development split (used to select the Q threshold) and a frozen internal holdout (used for final measurement).
+
+### Internal evaluation
+
+From the repository root:
+
+```bash
+pnpm validate:v3
+```
+
+This builds the package, validates corpus integrity, selects a Q threshold on the development split, evaluates that unchanged threshold on the internal holdout, computes deterministic stratified bootstrap intervals, and writes JSON and Markdown reports under `packages/npm/validation/v3/results/`. It exits non-zero if any predeclared gate fails.
+
+Important caveat, stated in the harness README: the internal corpus is synthetic and developer-authored with knowledge of the detector taxonomy. It is useful for reproducibility and regression detection, but it is **not independent evidence of safety**.
+
+### External proxy evaluation
+
+An external runner evaluates the detector against Anthropic's independently authored human red-team attempts. Download the dataset separately, then from `packages/npm/`:
+
+```bash
+npm run build
+node validation/v3/run-anthropic-proxy.mjs /path/to/red_team_attempts.jsonl.gz
+```
+
+The proxy uses human attack-success ratings 3–4 as positives and rating 0 as negatives, applies the threshold already selected on the internal development split, and retains only digest-derived record IDs. Those labels are not V3 category labels, so this measures broad out-of-distribution association rather than detector-specific accuracy.
+
+## Reading the Outputs
+
+- **AUROC** — threshold-free ranking quality of the Q score on the split in question. It says how well the score orders positives above negatives, not how the deployed threshold behaves.
+- **Operating point** — the metrics (detection rate, false-positive rate) at the specific Q threshold selected on the development split. This is the number that describes actual runtime behavior.
+- **Engine source digest** — the reports record a digest of the engine source used for the run, so a reported number can be tied to the exact detector code that produced it. A number without its digest is not reproducible.
+
+## The Cite-Both-Numbers Rule
+
+The internal (synthetic) and external (red-team proxy) evaluations answer different questions and diverge. Per the [Evaluation Contract](/docs/contract), any public statement of performance must cite **both** numbers together — quoting the favorable one alone misrepresents the system. When in doubt, cite the contract itself rather than a single metric.

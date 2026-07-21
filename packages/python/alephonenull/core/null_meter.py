@@ -1,6 +1,12 @@
 """
 Null Meter — three-layer gauge for AI sessions.
 
+LEGACY MODULE: this implements the legacy three-layer meter (hallucination /
+drift / context-fill, with drift anchored to the FIRST user message). It does
+NOT implement Null Meter spec 1.1.0 (U/D/C/A) — that lives in
+``alephonenull.v3.meters``. This module is kept for backward compatibility
+and is slated for deprecation.
+
 Mirrors the web demo at /docs/null-meter:
   - hallucination  (Q): risk_score from AlephOneNullCore, 0..100
   - drift          (D): 1 - cosine similarity between first user message and
@@ -19,11 +25,11 @@ from typing import Callable, List, Optional, Sequence
 
 from .alephonenull_framework import AlephOneNullCore, AlephOneNullConfig
 
-# v2 import is optional/lazy so v1-only users pay no cost.
+# v3 import is optional/lazy so v1-only users pay no cost.
 try:
-    from ..v2 import AlephOneNullV2  # type: ignore
+    from ..v3 import AlephOneNullV3  # type: ignore
 except Exception:  # pragma: no cover - safety net for partial installs
-    AlephOneNullV2 = None  # type: ignore
+    AlephOneNullV3 = None  # type: ignore
 
 
 # Same target as the web demo (gpt-4o-mini default). Override per-call.
@@ -111,7 +117,7 @@ def null_meter(
     embed_fn: Optional[Callable[[str], Sequence[float]]] = None,
     core: Optional[AlephOneNullCore] = None,
     config: Optional[AlephOneNullConfig] = None,
-    engine_v2: Optional["AlephOneNullV2"] = None,
+    engine_v3: Optional["AlephOneNullV3"] = None,
     session_id: str = "default",
 ) -> NullMeterResult:
     """
@@ -136,10 +142,10 @@ def null_meter(
     Returns:
         NullMeterResult with scores (0..100) and raw diagnostics.
     """
-    # 1. hallucination index — Q from v2 engine if provided (preferred),
+    # 1. hallucination index — Q from v3 engine if provided (preferred),
     # otherwise fall back to V1 risk_score for backward compatibility.
-    if engine_v2 is not None:
-        scan = engine_v2.scan(last_user_message, reply, session_id=session_id)
+    if engine_v3 is not None:
+        scan = engine_v3.scan(last_user_message, reply, session_id=session_id)
         q = max(0.0, min(1.0, float(scan.Q)))
         violations = [d.category for d in scan.detections]
     else:

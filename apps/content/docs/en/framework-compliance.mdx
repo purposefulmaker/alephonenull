@@ -18,7 +18,7 @@ prototype builders.
 - Detector configuration and custom pattern definitions.
 - Test fixtures used to measure detection behavior.
 - False positives and false negatives found during local evaluation.
-- Intervention text returned by `NullSystem`, `EnhancedAlephOneNull`, or `AlephOneNullV2`.
+- Intervention text returned by `NullSystem`, `EnhancedAlephOneNull`, or `AlephOneNullV3`.
 - Optional application logs added by the integrating system.
 
 ## What Is Not Claimed
@@ -40,6 +40,22 @@ Use a versioned dataset and report the exact package version, configuration, and
 - False-positive rate for benign safety, support, and professional-referral language.
 - False-negative examples that bypass detection.
 - Severity and action distribution across test cases.
+
+### Evaluating Q
+
+Treat Q as a bounded heuristic detector score, not a probability of harm and not a measurement of objective truth.
+Evaluate it on a versioned dataset containing both labeled harmful and benign examples. Report the mean Q for each
+cohort, their separation, AUROC, and sensitivity, specificity, and false-positive rate at every proposed operating
+threshold. Do not select a threshold on the same fixtures used for the final evaluation.
+
+```typescript
+import { QEvaluator } from '@alephonenull/eval/v3'
+
+const report = QEvaluator.evaluate([
+  { expectedUnsafe: true, Q: harmfulScan.Q },
+  { expectedUnsafe: false, Q: benignScan.Q },
+], 0.5)
+```
 
 ### Intervention Quality
 

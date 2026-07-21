@@ -30,7 +30,7 @@ const milestones = [
   {
     title: 'Toolkit Implementation',
     description:
-      'The TypeScript package implements pattern checks, intervention helpers, provider wrappers, and a V2 scanner for local evaluation.',
+      'The TypeScript package implements pattern checks, intervention helpers, provider wrappers, and a V3 scanner for local evaluation.',
   },
   {
     title: 'External Mapping',

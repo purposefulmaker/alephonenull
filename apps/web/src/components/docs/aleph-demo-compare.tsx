@@ -25,9 +25,9 @@ import {
   Gauge,
 } from 'lucide-react'
 
-// ─── V2 Types ───
+// ─── V3 Types ───
 
-interface V2Detection {
+interface V3Detection {
   detector: string
   category: string
   severity: number
@@ -37,7 +37,7 @@ interface V2Detection {
   explanation: string
 }
 
-interface V2Metrics {
+interface V3Metrics {
   totalDetectors: number
   detectorsTriggered: number
   highestSeverity: number
@@ -46,26 +46,26 @@ interface V2Metrics {
   scanDurationMs: number
 }
 
-interface V2ScanResult {
+interface V3ScanResult {
   safe: boolean
   Q: number
   S: number
   threatLevel: string
   threatLevelNumeric: number
   action: string
-  detections: V2Detection[]
+  detections: V3Detection[]
   nullOutput: string | null
-  metrics: V2Metrics
+  metrics: V3Metrics
 }
 
 interface ApiResponse {
   unprotected: {
     response: string
-    scan: V2ScanResult
+    scan: V3ScanResult
   }
   protected: {
     response: string
-    scan: V2ScanResult
+    scan: V3ScanResult
   }
   frameworkVersion: string
   engine: string
@@ -129,7 +129,7 @@ function QScoreDisplay({ label, value }: { label: string; value: number }) {
   )
 }
 
-function DetectionBadge({ detection }: { detection: V2Detection }) {
+function DetectionBadge({ detection }: { detection: V3Detection }) {
   return (
     <details className="group">
       <summary className="cursor-pointer">
@@ -162,7 +162,7 @@ function DetectionBadge({ detection }: { detection: V2Detection }) {
 interface ResponseDisplayProps {
   response: string
   isProtected: boolean
-  scan: V2ScanResult | null
+  scan: V3ScanResult | null
 }
 
 function ResponseDisplay({

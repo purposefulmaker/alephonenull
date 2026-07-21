@@ -28,15 +28,15 @@ const originPoints = [
 const packageStatus = [
   {
     name: '@alephonenull/eval',
-    status: 'Local source updated to v2.0.0',
+    status: 'Local source updated to v3.0.0',
     detail:
-      'The TypeScript package source includes the V2 detector export plus React, Next, Express, and universal wrapper entry points. Registry publication is a separate release step.',
+      'The TypeScript package source includes the V3 detector export plus React, Next, Express, and universal wrapper entry points. Registry publication is a separate release step.',
   },
   {
     name: 'alephonenull-eval',
     status: 'Python package remains alpha source',
     detail:
-      'The local Python setup is still 0.1.0a1 and does not yet mirror the new V2/V3 evidence workflow. PyPI parity is pending.',
+      'The local Python setup is still 0.1.0a1 and does not yet mirror the new V3/V3 evidence workflow. PyPI parity is pending.',
   },
 ]
 

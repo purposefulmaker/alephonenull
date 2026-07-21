@@ -13,7 +13,7 @@ interiority claims, looping, persistence-like claims) and substitute
 grounded intervention text.
 """
 
-__version__ = "0.2.0a1"  # Alpha — v2 engine added
+__version__ = "0.3.0a2"  # Alpha — v3 engine; slim preview (extras split, legacy surface fenced)
 # Single source of truth for the version string reported by the API helpers.
 # Derive from __version__ so the two can never drift apart.
 _FRAMEWORK_VERSION = f"AlephOneNull-v{__version__}"
@@ -23,25 +23,9 @@ __description__ = "⚠️ EXPERIMENTAL: Theoretical AI safety framework - resear
 import warnings
 import sys
 
-# Issue runtime warning about experimental status
-warnings.warn(
-    "AlephOneNull is an EXPERIMENTAL research framework. "
-    "It has NOT been validated for production use. "
-    "Using this in production systems could cause serious harm. "
-    "This is for research and experimentation purposes only.",
-    category=UserWarning,
-    stacklevel=2
-)
-
-# Print prominent experimental warning
-print("⚠️" * 50)
-print("🚨 EXPERIMENTAL FRAMEWORK - NOT FOR PRODUCTION USE 🚨")
-print("⚠️" * 50)
-print("This framework has NOT been peer-reviewed or validated.")
-print("DO NOT use in production systems.")
-print("For research purposes only.")
-print("See https://github.com/purposefulmaker/alephonenull/blob/main/DISCLAIMER.md")
-print("⚠️" * 50)
+# Importing a library must not emit warnings or write to stdout/stderr. The
+# experimental status remains explicit in package metadata and documentation,
+# and individual high-risk helper calls retain their targeted warnings.
 
 # Core AlephOneNull Theoretical Framework (Theoretical Implementation)
 from .core.alephonenull_framework import (
@@ -66,27 +50,27 @@ from .core.null_meter import (
     DEFAULT_CONTEXT_TOKENS,
 )
 
-# V2 engine — External Conscience with 20 detectors, Q calculator, null state.
-# Faithful port of @alephonenull/eval/v2 (TypeScript).
+# V3 engine — External Conscience with 20 detectors, Q calculator, null state.
+# Faithful port of @alephonenull/eval/v3 (TypeScript).
 try:
-    from .v2 import (
-        AlephOneNullV2,
-        ThreatLevel as V2ThreatLevel,
-        Action as V2Action,
-        Detection as V2Detection,
-        ScanResult as V2ScanResult,
-        V2Config,
+    from .v3 import (
+        AlephOneNullV3,
+        ThreatLevel as V3ThreatLevel,
+        Action as V3Action,
+        Detection as V3Detection,
+        ScanResult as V3ScanResult,
+        V3Config,
         QCalculator,
         NullState,
-        normalize as v2_normalize,
-        normalize_context as v2_normalize_context,
-        create_all_detectors as v2_create_all_detectors,
+        normalize as v3_normalize,
+        normalize_context as v3_normalize_context,
+        create_all_detectors as v3_create_all_detectors,
     )
-    V2_AVAILABLE = True
+    V3_AVAILABLE = True
 except Exception:  # pragma: no cover
-    V2_AVAILABLE = False
+    V3_AVAILABLE = False
 
-# Inference-Level Protection (Auto-wrap AI libraries)
+# Inference-level heuristic screening (auto-wrap AI libraries)
 from .inference.protection import (
     InferenceLevelProtection,
     protect_all_ai_libraries,
@@ -126,26 +110,30 @@ except ImportError:
     def run_dashboard(*args, **kwargs):
         print("⚠️  Dashboard unavailable. Install with: pip install alephonenull-eval[monitoring]")
 
-# Enhanced AlephOneNull with comprehensive safety layers
+# Enhanced AlephOneNull with comprehensive safety layers.
+# The enhanced module (enhanced-alephonenull.py) is NOT shipped in the wheel;
+# these fallback stubs raise loudly instead of silently no-oping.
+class EnhancedAlephOneNull:
+    """Fallback stub — the enhanced layer is not shipped in the wheel."""
+    def __init__(self, *args, **kwargs):
+        raise RuntimeError(
+            "EnhancedAlephOneNull is unavailable in the installed wheel; "
+            "use alephonenull.v3.AlephOneNullV3 instead."
+        )
+
+class SafetyCheck: pass
+class RiskLevel: pass
+ENHANCED_AVAILABLE = False
+
 try:
-    import sys
     import os
     enhanced_path = os.path.join(os.path.dirname(__file__), '..', 'enhanced-alephonenull.py')
     if os.path.exists(enhanced_path):
         sys.path.insert(0, os.path.dirname(enhanced_path))
         from enhanced_alephonenull import EnhancedAlephOneNull, SafetyCheck, RiskLevel
         ENHANCED_AVAILABLE = True
-    else:
-        ENHANCED_AVAILABLE = False
-        # Fallback definitions
-        class EnhancedAlephOneNull: pass
-        class SafetyCheck: pass  
-        class RiskLevel: pass
 except ImportError:
-    ENHANCED_AVAILABLE = False
-    class EnhancedAlephOneNull: pass
-    class SafetyCheck: pass
-    class RiskLevel: pass
+    pass
 
 # Global safety systems (using new framework + inference protection)
 _global_alephonenull = create_alephonenull()
@@ -160,65 +148,39 @@ if ENHANCED_AVAILABLE:
         warnings.warn(f"Enhanced AlephOneNull failed to initialize: {e}", UserWarning)
         _enhanced_global = None
 
-# Simplified API for quick usage
+# Legacy quick-check API — NOT functional in this preview.
+# The old implementation called AlephOneNullCore.analyze_pattern, a method that
+# does not exist (the class exposes check()), and read result fields
+# (risk_level, primary_threat, recommended_action) that AlephOneNullResult
+# does not have. Rather than ship silently-broken code, this raises.
 def check_text_safety(text: str, context: str = "", use_enhanced: bool = True) -> dict:
-    """
-    Quick safety check for any text output from AI models
-    
-    ⚠️ EXPERIMENTAL - This is a research prototype
-    
-    Args:
-        text: The AI-generated text to check
-        context: Optional context/prompt that led to this text
-        use_enhanced: Whether to use enhanced safety features if available
-        
-    Returns:
-        Dict with safety results and recommended actions
-    """
-    warnings.warn("check_text_safety is experimental and not validated for production use", UserWarning)
-    
-    if use_enhanced and _enhanced_global and ENHANCED_AVAILABLE:
-        result = _enhanced_global.check(context or "Unknown context", text)
-        return {
-            'safe': result.safe,
-            'risk_level': result.risk_level.value if hasattr(result.risk_level, 'value') else str(result.risk_level),
-            'violations': result.violations,
-            'recommended_action': result.action,
-            'safe_response': result.message,
-            'framework_version': f'{_FRAMEWORK_VERSION}-Experimental'
-        }
-    else:
-        # Fallback to core framework
-        result = _global_alephonenull.analyze_pattern(text, context)
-        return {
-            'safe': result.safe,
-            'risk_level': result.risk_level.name if hasattr(result.risk_level, 'name') else 'unknown',
-            'violations': [result.primary_threat] if not result.safe else [],
-            'recommended_action': result.recommended_action,
-            'framework_version': f'{_FRAMEWORK_VERSION}-Core'
-        }
+    """Legacy API — not functional in this preview release."""
+    raise NotImplementedError(
+        "check_text_safety is not functional in this preview; "
+        "use alephonenull.v3.AlephOneNullV3.scan"
+    )
 
 def protect_all():
     """
-    Auto-protect all AI libraries with AlephOneNull safety
-    
+    Attach heuristic screening wrappers to supported AI libraries
+
     ⚠️ EXPERIMENTAL - May break existing code
     """
     warnings.warn("protect_all is experimental and may interfere with existing AI integrations", UserWarning)
-    print("🛡️ Activating universal AI protection (EXPERIMENTAL)")
+    print("Attaching heuristic screening wrappers (EXPERIMENTAL)")
     
     try:
         _inference_protection.enable_all()
         protect_all_ai_libraries()
         return True
     except Exception as e:
-        warnings.warn(f"Failed to enable protection: {e}", UserWarning)
+        warnings.warn(f"Failed to attach screening wrappers: {e}", UserWarning)
         return False
 
 def emergency_stop():
     """Emergency stop all AI interactions"""
     warnings.warn("Emergency stop activated - this is experimental functionality", UserWarning)
-    print("🚨 EMERGENCY STOP - All AI interactions blocked")
+    print("🚨 EMERGENCY STOP - attempting to halt wrapped AI interactions")
     _inference_protection.emergency_stop()
     return True
 
@@ -255,9 +217,12 @@ def check_enhanced_safety(user_input: str, ai_output: str, session_id: str = "de
     warnings.warn("check_enhanced_safety is experimental and not peer-reviewed", UserWarning)
     
     if not ENHANCED_AVAILABLE or not _enhanced_global:
+        # No fallback: the legacy quick-check path (check_text_safety) is not
+        # functional in this preview. Point at the supported v3 surface instead.
         return {
             'error': 'Enhanced AlephOneNull not available - this is experimental software',
-            'fallback_result': check_text_safety(ai_output, user_input, use_enhanced=False)
+            'fallback_result': None,
+            'hint': 'use alephonenull.v3.AlephOneNullV3.scan',
         }
     
     result = _enhanced_global.check(user_input, ai_output, session_id, user_profile)
@@ -320,7 +285,7 @@ def print_safety_report():
     
     print(f"Framework Version: {report['framework_version']}")
     print(f"Total Safety Checks: {report['total_checks']}")
-    print(f"Harmful Content Blocked: {report['blocked']}")
+    print(f"Content Flagged (heuristic): {report['blocked']}")
     print(f"Threat Level: {report.get('threat_level', 'EXPERIMENTAL')}")
     
     if report['total_checks'] > 0:
@@ -330,11 +295,11 @@ def print_safety_report():
                 print(f"  • {violation_type}: {count}")
     
     print(f"\nFramework Status: EXPERIMENTAL")
-    print(f"Protection Level: RESEARCH ONLY")
+    print(f"Screening Level: RESEARCH ONLY")
 
 # CLI Functions for terminal usage
 def cli_protect():
-    """CLI command to enable protection"""
+    """CLI command to attach heuristic screening wrappers"""
     warnings.warn("CLI protection is experimental", UserWarning)
     protect_all()
 
@@ -388,7 +353,7 @@ def quick_start():
 ⚠️ WARNING: This is experimental research software
 ⚠️ NOT validated for production use
 
-1. Protect all AI models automatically (EXPERIMENTAL):
+1. Attach heuristic screening wrappers to supported AI libraries (EXPERIMENTAL):
    ```python
    from alephonenull import protect_all
    protect_all()
@@ -439,7 +404,8 @@ __all__ = [
     # Main functions
     'protect_all',
     'auto_wrap',
-    'check_text_safety',
+    # 'check_text_safety' removed: not functional in this preview (raises
+    # NotImplementedError); use alephonenull.v3.AlephOneNullV3.scan instead.
     'check_enhanced_safety',
     'get_safety_report',
     'emergency_stop',

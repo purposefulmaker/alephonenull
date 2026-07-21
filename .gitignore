@@ -39,6 +39,9 @@ yarn-error.log*
 # Local quarantine for private/scratch artifacts that must not be pushed
 dontpush/
 
+# Private account exports and any derived local-only evaluation artifacts
+/data-*/
+
 # Python specific
 __pycache__/
 *.py[cod]
@@ -119,3 +122,6 @@ dmypy.json
 Thumbs.db
 
 .vercel
+
+# Local agent session dir
+.claude/

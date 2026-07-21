@@ -1,11 +1,11 @@
 ---
 title: Integrating with OpenAI Guardrails
 description: How to combine AlephOneNull with OpenAI's moderation and hallucination guardrails
-excerpt: How to combine AlephOneNull with OpenAI's moderation and hallucination guardrails
-date: "2025-01-09"
 ---
 
-AlephOneNull complements existing OpenAI guardrails by detecting manipulation patterns that traditional moderation might miss. This guide shows how to combine both for comprehensive protection.
+AlephOneNull complements existing OpenAI guardrails by screening for manipulation patterns that traditional moderation might miss. This guide shows how to layer both.
+
+AlephOneNull is experimental heuristic screening. Detection rates and operating points defer to the [Evaluation Contract](/docs/contract) — layering does not make any component a guarantee.
 
 ## Overview
 
@@ -15,9 +15,9 @@ OpenAI provides several guardrails:
 - **Meta-Prompting**: Improves prompt quality
 
 AlephOneNull adds:
-- **Manipulation Detection**: Identifies psychological exploitation
-- **Pattern Recognition**: Detects symbolic-language risk and loops
-- **Session Protection**: Prevents cross-session attacks
+- **Manipulation screening**: Heuristics for psychological-exploitation patterns
+- **Pattern recognition**: Flags symbolic-language risk and loops
+- **Session screening**: Flags cross-session persistence patterns
 
 ## Combined Implementation
 

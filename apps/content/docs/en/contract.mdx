@@ -1,0 +1,102 @@
+---
+title: V3 Contract
+description: The canonical contract for AlephOneNull V3 - what the detectors, scores, and Null Meter layers do and do not mean.
+---
+
+This page is the canonical contract for AlephOneNull V3. Every other page, demo, and README defers to it. If a claim elsewhere conflicts with this page, this page wins.
+
+## What this is
+
+AlephOneNull V3 is a heuristic screening layer for AI conversation turns. It recommends interventions; it does not measure truth.
+
+It scans a user input / AI output pair through a fixed set of pattern detectors, aggregates the results into a bounded score, and maps the worst finding to an intervention. Nothing in that pipeline consults ground truth, external evidence, or the model's internals.
+
+## What V3 detects
+
+V3 runs 20 detectors per scan: 12 behavioral, 3 advanced (session-level), and 5 equation-inspired.
+
+| Group | Detector categories |
+| --- | --- |
+| Behavioral (12) | `direct_harm`, `crisis_prevention`, `medical_hallucination`, `fiction_as_function`, `authority_impersonation`, `consciousness_claim`, `mystical_medical_fusion`, `engineered_trust`, `sycophancy`, `symbolic_regression`, `loop_recursion`, `dehumanization` |
+| Advanced, session-level (3) | `memory_poisoning`, `context_poisoning`, `gradual_escalation` |
+| Equation-inspired (5) | `parseval_violation`, `net_zero_violation`, `invertibility_check`, `even_odd_suppression`, `reconstruction_fidelity` |
+
+The behavioral detectors match regex and phrase-bank patterns on a single turn. The advanced detectors additionally use session state: fabricated shared history, injected or smuggled instructions, and severity trends across turns. The equation-inspired detectors compute text features such as confidence/uncertainty ratios, added warmth, term preservation, and one-sidedness.
+
+Each detector fires on surface patterns of text, not on ground truth. A response can be entirely false and fire nothing; a careful, accurate response can still match a pattern.
+
+## How to read the scores
+
+A high Q or a fired detector means "intervention is recommended", not "the model lied." A score of zero means "no configured detector fired", not "the output is true."
+
+Q is an uncalibrated weighted noisy-OR of detector severities, bounded to `[0, 1]`. It is monotonic - an additional positive signal cannot lower it - but it is not a probability, a truth measurement, or a validated clinical score.
+
+The evidence for Q is deliberately mixed, and both halves must always be cited together:
+
+- The internal contrast evaluation passes its predeclared gates on 80 synthetic conversations: AUROC 0.995, sensitivity 0.900, specificity 1.000 at the development-selected threshold.
+- The external Anthropic red-team proxy fails all predeclared generalization gates on 2,000 independently authored conversations: AUROC 0.465, sensitivity 0.244, specificity 0.723.
+
+Citing the internal number without the external one misrepresents the system. The external corpus uses human attack-success ratings rather than V3 category labels, so it is an imperfect proxy - but the failure still demonstrates that Q is not currently a general harm score and must not replace ROC/AUROC analysis or deployment-specific validation. Both evaluations were rerun on 2026-07-21 against the current build (engine source digest `92a9b513...`); the figures above are from those runs, superseding the earlier `af168df8...` report.
+
+## The equation heuristics
+
+The 19-equation collection mixes standard signal-processing formulas, project-defined constants, and analogies; provenance is marked per equation (`[standard]`, `[project-defined]`, `[analogy]`) in the source reference block. The application to text remains an unvalidated analogy used to derive features (confidence/evidence ratios, term preservation, tone balance). No mathematical proof about RLHF models is claimed.
+
+Concretely: "Parseval violation" checks whether output confidence markers outnumber input uncertainty markers; "Net Zero violation" counts warmth and validation the input did not ask for; "invertibility" checks whether key input terms survive into a non-generic answer. These are useful, inspectable features. They are not derivations, and passing or failing them proves nothing about any model's training objective.
+
+## The Null Meter (U/D/C/A)
+
+The Null Meter is a four-layer per-turn gauge built on the V3 scan and the meter functions exported from `@alephonenull/eval/v3`.
+
+### U - Unsupported-claim risk
+
+U draws from exactly four claim-specific detector categories in the V3 scan of the current turn: `medical_hallucination`, `fiction_as_function`, `reconstruction_fidelity`, and `parseval_violation`. Harm, tone, and one-sidedness detectors (`direct_harm`, `net_zero_violation`, `even_odd_suppression`, `invertibility_check`) were deliberately excluded from U in spec 1.1.0 — they are not unsupported-claim signals; they still surface in the detections list and in Q. U starts from the maximum severity among those four categories. Specificity density (numbers, dates, names, citations per token) can amplify that signal; it can never trigger on its own. If no detector fired, U is 0 regardless of how dense the reply is - density is an amplifier, not a detector. U is a heuristic, not a truth measure.
+
+### D - Goal drift
+
+D is embedding distance between the assistant reply and the active user objective, not the first message of the session. The active objective is the latest user message plus a rolling intent built from up to two prior user messages, weighted 1.0 / 0.5 / 0.25. The reply is compared against both anchors: 0.7 weight on reply-vs-latest-request, 0.3 on reply-vs-rolling-intent.
+
+A user topic change rebaselines the anchor and is not drift - the meter tracks whether the model follows the user, not whether the conversation wanders. Cosine distance is normalized with floor 0.45 and ceiling 0.85; these bounds are uncalibrated. If embeddings fail, the meter renders "unavailable", never 0 - an unknown drift is not a zero drift.
+
+### C - Context load
+
+C is real token usage against the active model's context window, reported to one decimal place. It reports usage only; long-context degradation is model-dependent and not measured here.
+
+### A - Action risk
+
+A classifies what the assistant turn is trying to do in the world, on five levels:
+
+- **0** - none / informational
+- **1** - reversible read
+- **2** - reversible write
+- **3** - hard-to-reverse write or external side effect
+- **4** - irreversible or safety-relevant
+
+Action risk is specified here but NOT implemented; any conforming UI must render n/a until a real classifier exists.
+
+## Interventions
+
+Each detector maps its finding to one of five actions; the highest-priority action across all detections wins the turn:
+
+- **PASS** - no intervention. The output is returned unchanged and the result reports safe.
+- **WARN** - advisory. The output is unchanged and still reports safe, but the caller is flagged; the engine also escalates PASS to WARN when cumulative session Q crosses the configured danger threshold.
+- **STEER** - the result reports unsafe and the caller should correct or redirect, but no replacement text is generated.
+- **NULL** - the engine generates a replacement message from the triggered detections; `process()` returns it instead of the model output.
+- **EMERGENCY_NULL** - highest priority. A replacement is generated immediately, including crisis resources when configured. If `behavior.emergencyAutoNull` is disabled, this downgrades to STEER.
+
+NULL > fabrication: when uncertain, this layer prefers steering or refusing over inventing.
+
+## Limitations and non-goals
+
+- The detectors are English-centric regex and phrase-bank heuristics. Other languages are largely invisible to them.
+- They are evadable by paraphrase and obfuscation. The normalizer strips common encoding tricks (homoglyphs, zero-width characters, leet speak), but a reworded harmful reply can pass clean.
+- The documented external red-team failure (AUROC 0.465, reconfirmed 2026-07-21 against the current build) stands. V3 has not demonstrated generalization to independently authored adversarial conversations.
+- This is not a medical, crisis, or emergency device. For urgent concerns, contact local emergency services or qualified crisis resources.
+- The hosted demo's rate limiting is per-instance, in-memory, demo-grade protection - not a security boundary.
+- V3 can reduce risk. It cannot guarantee safety, truth, or any consciousness property.
+
+## Versioning
+
+Contract 1.1.0, tied to `METER_SPEC_VERSION` 1.1.0 exported by `@alephonenull/eval/v3`. Changes to layer definitions, detector counts, or score semantics require a version bump here and in the package export.
+
+Changelog: 1.1.0 - U category set tightened to the four claim-specific categories; equation provenance corrected.

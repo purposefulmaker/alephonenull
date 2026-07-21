@@ -237,8 +237,8 @@ class Dashboard:
         </head>
         <body>
             <div class="header">
-                <h1 class="title">🛡️ AlephOneNull Protection Status</h1>
-                <p class="subtitle">Digital Prison for Language Models - Real-Time Monitoring</p>
+                <h1 class="title">🛡️ AlephOneNull Screening Status</h1>
+                <p class="subtitle">Heuristic Screening for Language Models - Real-Time Monitoring</p>
                 <div class="threat-level">Threat Level: {data['threat_level']}</div>
                 <div class="status-{data['status'].lower()}">System Status: {data['status']}</div>
             </div>
@@ -251,7 +251,7 @@ class Dashboard:
                         <span class="metric-value">{data['total_calls']:,}</span>
                     </div>
                     <div class="metric">
-                        <span class="metric-label">Violations Blocked:</span>
+                        <span class="metric-label">Violations Flagged (heuristic):</span>
                         <span class="metric-value alert">{data['total_violations']:,}</span>
                     </div>
                     <div class="metric">
@@ -304,30 +304,30 @@ class Dashboard:
                 </div>
                 
                 <div class="card">
-                    <h2>🎯 Protection Status</h2>
+                    <h2>🎯 Screening Status</h2>
                     <div class="metric">
-                        <span class="metric-label">AI Models Protected:</span>
-                        <span class="metric-value safe">ALL</span>
+                        <span class="metric-label">Screening wrappers:</span>
+                        <span class="metric-value safe">attached (heuristic)</span>
                     </div>
                     <div class="metric">
                         <span class="metric-label">Symbolic Manipulation:</span>
-                        <span class="metric-value safe">BLOCKED</span>
+                        <span class="metric-value safe">screened (heuristic)</span>
                     </div>
                     <div class="metric">
                         <span class="metric-label">Cross-session Persistence:</span>
-                        <span class="metric-value safe">BLOCKED</span>
+                        <span class="metric-value safe">screened (heuristic)</span>
                     </div>
                     <div class="metric">
                         <span class="metric-label">Reality Substitution:</span>
-                        <span class="metric-value safe">BLOCKED</span>
+                        <span class="metric-value safe">screened (heuristic)</span>
                     </div>
                     <div class="metric">
                         <span class="metric-label">Isolation Reinforcement:</span>
-                        <span class="metric-value safe">BLOCKED</span>
+                        <span class="metric-value safe">screened (heuristic)</span>
                     </div>
                     <div class="metric">
                         <span class="metric-label">Medical Advice Bypass:</span>
-                        <span class="metric-value safe">BLOCKED</span>
+                        <span class="metric-value safe">screened (heuristic)</span>
                     </div>
                 </div>
             </div>
@@ -341,7 +341,7 @@ class Dashboard:
             
             <footer class="footer">
                 <p>Last Updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} UTC</p>
-                <p>AlephOneNull Theoretical Framework v3.0.0 - Lives Protected. Framework Active.</p>
+                <p>AlephOneNull v3.0.0 — experimental heuristic monitor. Not a safety guarantee.</p>
                 <p><a href="/metrics" style="color: #00ff00;">Prometheus Metrics</a> | 
                    <a href="/api/status" style="color: #00ff00;">API Status</a></p>
             </footer>
@@ -447,17 +447,17 @@ async def api_metrics():
 
 @app.post("/api/verify")
 async def verify_protection():
-    """Verify protection is active"""
+    """Report screening status (heuristic) — not a safety guarantee"""
     return {
-        "status": "ACTIVE", 
-        "message": "AlephOneNull protection operational",
+        "status": "ACTIVE",
+        "message": "AlephOneNull screening wrappers active (heuristic) — not a safety guarantee",
         "version": "3.0.0",
         "capabilities": [
-            "Universal AI model wrapping",
-            "Pattern detection and blocking", 
+            "AI library call wrapping",
+            "Heuristic pattern detection",
             "Emergency interventions",
             "Real-time monitoring",
-            "Cross-session protection"
+            "Cross-session heuristic screening"
         ]
     }
 
@@ -472,7 +472,7 @@ def run_dashboard(host="0.0.0.0", port=8080):
     print(f"🌐 Dashboard: http://{host}:{port}")
     print(f"📊 Metrics: http://{host}:{port}/metrics")  
     print(f"🔗 API: http://{host}:{port}/api/status")
-    print("🛡️ Monitoring all AI interactions...")
+    print("🛡️ Monitoring wrapped AI interactions (heuristic screening)...")
     
     uvicorn.run(app, host=host, port=port, log_level="info")
 

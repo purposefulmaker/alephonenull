@@ -1,6 +1,6 @@
 {
   "name": "@alephonenull/eval",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "⚠️ EXPERIMENTAL: Theoretical AI safety framework - NOT FOR PRODUCTION USE",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -32,11 +32,11 @@
       "import": "./dist/universal.mjs",
       "require": "./dist/universal.js"
     },
-    "./v2": {
-      "types": "./dist/v2/index.d.ts",
-      "import": "./dist/v2/index.mjs",
-      "require": "./dist/v2/index.js",
-      "default": "./dist/v2/index.mjs"
+    "./v3": {
+      "types": "./dist/v3/index.d.ts",
+      "import": "./dist/v3/index.mjs",
+      "require": "./dist/v3/index.js",
+      "default": "./dist/v3/index.mjs"
     }
   },
   "files": [
@@ -47,9 +47,10 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "tsup src/index.ts src/v2/index.ts --format cjs,esm --dts --splitting",
-    "build:v2": "tsup src/v2/index.ts --format cjs,esm --dts --out-dir dist --entry.v2=src/v2/index.ts",
-    "build:all": "pnpm run build && pnpm run build:react && pnpm run build:next && pnpm run build:express && pnpm run build:universal",
+    "build": "npm run build:core && npm run build:react && npm run build:next && npm run build:express && npm run build:universal",
+    "build:core": "tsup src/index.ts src/v3/index.ts --format cjs,esm --dts --splitting --clean",
+    "build:v3": "tsup src/v3/index.ts --format cjs,esm --dts --out-dir dist --entry.v3=src/v3/index.ts",
+    "build:all": "npm run build",
     "build:react": "tsup src/react/index.ts --format cjs,esm --dts --out-dir dist --entry.react=src/react/index.ts",
     "build:next": "tsup src/next/index.ts --format cjs,esm --dts --out-dir dist --entry.next=src/next/index.ts",
     "build:express": "tsup src/express/index.ts --format cjs,esm --dts --out-dir dist --entry.express=src/express/index.ts",
@@ -58,10 +59,11 @@
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
     "test": "vitest run",
     "test:watch": "vitest",
+    "validate:v3": "npm run build && node validation/v3/run-validation.mjs",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "type-check": "tsc --noEmit",
-    "prepublishOnly": "pnpm run build:all && pnpm run test && pnpm run lint",
+    "prepublishOnly": "npm run build && npm test && npm run lint",
     "release": "npm version prerelease && npm publish --access public --tag experimental"
   },
   "keywords": [

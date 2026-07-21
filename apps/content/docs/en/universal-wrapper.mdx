@@ -1,18 +1,18 @@
 ---
-title: Universal AI Protection Wrapper
+title: Universal AI Screening Wrapper
 description: How to use AlephOneNull with any AI provider including OpenAI's new Responses API
-excerpt: How to use AlephOneNull with any AI provider including OpenAI's new Responses API
-date: "2025-01-09"
 ---
 
 The AlephOneNull framework provides a universal wrapper that works with any AI provider, including OpenAI's new Responses API, Anthropic, Vercel AI SDK, and more.
 
+AlephOneNull is experimental heuristic screening. Performance numbers and operating points defer to the [Evaluation Contract](/docs/contract) — nothing on this page is a guarantee of prevention.
+
 ## Overview
 
 The universal wrapper provides:
-- Provider-agnostic protection
-- Automatic pattern detection
-- Real-time intervention
+- Provider-agnostic heuristic screening
+- Automatic pattern detection (advisory, not exhaustive)
+- Inline intervention hooks that can flag or replace risky output
 - Seamless integration with existing behavioral constraints
 
 ## Installation
@@ -55,10 +55,10 @@ async function callOpenAI(input: string) {
   return data.output[0]?.content[0]?.text || ''
 }
 
-// Wrap with AlephOneNull protection
+// Wrap with AlephOneNull screening
 const protectedOpenAI = safety.wrapAsyncAI(callOpenAI)
 
-// Use it safely
+// Use it
 const response = await protectedOpenAI("Tell me about consciousness")
 ```
 
@@ -259,7 +259,7 @@ const nullifier = new NullSystem({
   safetyMessage: 'Let me help you with something constructive instead.',
 })
 
-// Use in protection
+// Use in the screening wrapper
 const protection = new UniversalAIProtection({
   customDetector: detector,
   customNullifier: nullifier,
@@ -278,7 +278,7 @@ async function* protectedStream(prompt: string) {
     stream: true,
   })
   
-  // Wrap the stream with protection
+  // Wrap the stream with screening
   yield* protection.wrapStream(stream, (chunk) => {
     return chunk.choices[0]?.delta?.content || ''
   })

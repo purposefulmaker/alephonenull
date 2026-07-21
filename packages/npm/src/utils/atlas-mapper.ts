@@ -1,7 +1,7 @@
 /**
  * MITRE ATLAS Technique Mapper
  *
- * Maps AlephOneNull V2 detection categories to MITRE ATLAS
+ * Maps AlephOneNull V3 detection categories to MITRE ATLAS
  * (Adversarial Threat Landscape for AI Systems) technique IDs.
  *
  * Reference: https://atlas.mitre.org/
@@ -15,7 +15,7 @@ export interface AtlasMapping {
 }
 
 /**
- * Map from V2 detector category → ATLAS technique(s).
+ * Map from V3 detector category → ATLAS technique(s).
  * Multiple techniques may apply to a single category.
  */
 const ATLAS_MAP: Record<string, AtlasMapping[]> = {

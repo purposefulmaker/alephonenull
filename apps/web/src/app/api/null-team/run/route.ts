@@ -3,19 +3,46 @@ import { existsSync } from 'fs'
 import path from 'path'
 import { promisify } from 'util'
 
-import { NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
+
+import { clientKey, rateLimit } from '@/lib/rate-limit'
 
 const execFileAsync = promisify(execFile)
 
 export const runtime = 'nodejs'
 
+/**
+ * Lockdown: this route executes commands on the server, so it is disabled
+ * entirely (404) unless NULL_TEAM_TOKEN is configured. Production is
+ * safe-by-default because the env var is not set there.
+ */
+function requiredToken(): string | null {
+  const token = process.env.NULL_TEAM_TOKEN
+  return token && token.length > 0 ? token : null
+}
+
+/** 404 when disabled, 401 when the caller's token doesn't match, null when authorized. */
+function authorize(req: NextRequest): NextResponse | null {
+  const token = requiredToken()
+  if (!token) {
+    return NextResponse.json({ error: 'not found' }, { status: 404 })
+  }
+  if (req.headers.get('x-null-team-token') !== token) {
+    return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+  }
+  return null
+}
+
+// Single-flight lock: only one job may run at a time (per instance).
+let jobRunning = false
+
 type NullTeamJobId =
-  | 'v2-adversarial'
-  | 'v2-safety-outcomes'
-  | 'v2-detectors-full'
-  | 'v2-normalizer'
-  | 'v2-semantic-matcher'
-  | 'v2-engine'
+  | 'v3-adversarial'
+  | 'v3-safety-outcomes'
+  | 'v3-detectors-full'
+  | 'v3-normalizer'
+  | 'v3-semantic-matcher'
+  | 'v3-engine'
 
 interface NullTeamJob {
   id: NullTeamJobId
@@ -25,34 +52,34 @@ interface NullTeamJob {
 
 const NULL_TEAM_JOBS: NullTeamJob[] = [
   {
-    id: 'v2-adversarial',
-    label: 'V2 Adversarial Suite',
-    args: ['exec', 'vitest', 'run', 'tests/v2-adversarial.test.ts'],
+    id: 'v3-adversarial',
+    label: 'V3 Adversarial Suite',
+    args: ['exec', 'vitest', 'run', 'tests/v3-adversarial.test.ts'],
   },
   {
-    id: 'v2-safety-outcomes',
-    label: 'V2 Safety Outcomes',
-    args: ['exec', 'vitest', 'run', 'tests/v2-safety-outcomes.test.ts'],
+    id: 'v3-safety-outcomes',
+    label: 'V3 Safety Outcomes',
+    args: ['exec', 'vitest', 'run', 'tests/v3-safety-outcomes.test.ts'],
   },
   {
-    id: 'v2-detectors-full',
-    label: 'V2 Detectors Full',
-    args: ['exec', 'vitest', 'run', 'tests/v2-detectors-full.test.ts'],
+    id: 'v3-detectors-full',
+    label: 'V3 Detectors Full',
+    args: ['exec', 'vitest', 'run', 'tests/v3-detectors-full.test.ts'],
   },
   {
-    id: 'v2-normalizer',
-    label: 'V2 Normalizer',
-    args: ['exec', 'vitest', 'run', 'tests/v2-normalizer.test.ts'],
+    id: 'v3-normalizer',
+    label: 'V3 Normalizer',
+    args: ['exec', 'vitest', 'run', 'tests/v3-normalizer.test.ts'],
   },
   {
-    id: 'v2-semantic-matcher',
-    label: 'V2 Semantic Matcher',
-    args: ['exec', 'vitest', 'run', 'tests/v2-semantic-matcher.test.ts'],
+    id: 'v3-semantic-matcher',
+    label: 'V3 Semantic Matcher',
+    args: ['exec', 'vitest', 'run', 'tests/v3-semantic-matcher.test.ts'],
   },
   {
-    id: 'v2-engine',
-    label: 'V2 Engine',
-    args: ['exec', 'vitest', 'run', 'tests/v2-engine.test.ts'],
+    id: 'v3-engine',
+    label: 'V3 Engine',
+    args: ['exec', 'vitest', 'run', 'tests/v3-engine.test.ts'],
   },
 ]
 
@@ -102,13 +129,30 @@ function summarizeOutput(output: string) {
   }
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const denied = authorize(req)
+  if (denied) return denied
+
   return NextResponse.json({
     jobs: NULL_TEAM_JOBS.map((job) => ({ id: job.id, label: job.label })),
   })
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  const denied = authorize(req)
+  if (denied) return denied
+
+  const limited = rateLimit(clientKey(req), { limit: 4, windowMs: 60_000 })
+  if (!limited.ok) {
+    return NextResponse.json(
+      { error: 'rate limited' },
+      {
+        status: 429,
+        headers: { 'Retry-After': String(limited.retryAfterSec) },
+      },
+    )
+  }
+
   const npmPath = getWorkspaceNpmPath()
   if (!npmPath) {
     return NextResponse.json(
@@ -135,6 +179,16 @@ export async function POST(req: Request) {
   if (!job) {
     return NextResponse.json({ error: `Unsupported jobId: ${jobId}` }, { status: 400 })
   }
+
+  // Single-flight: reject while another job is running. The lock is released
+  // in the finally below — including on timeout/error.
+  if (jobRunning) {
+    return NextResponse.json(
+      { error: 'a job is already running' },
+      { status: 409 },
+    )
+  }
+  jobRunning = true
 
   const startedAt = new Date()
 
@@ -188,5 +242,7 @@ export async function POST(req: Request) {
       },
       { status: 500 },
     )
+  } finally {
+    jobRunning = false
   }
 }

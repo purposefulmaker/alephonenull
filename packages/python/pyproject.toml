@@ -1,0 +1,4 @@
+# Build backend only — setup.py remains the single source of package metadata.
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"

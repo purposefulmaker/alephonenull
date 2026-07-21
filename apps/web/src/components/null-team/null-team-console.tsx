@@ -17,12 +17,12 @@ import { cn } from '@/lib/utils'
 import { AlertTriangle, CheckCircle2, Loader2, ShieldAlert } from 'lucide-react'
 
 type NullTeamJobId =
-  | 'v2-adversarial'
-  | 'v2-safety-outcomes'
-  | 'v2-detectors-full'
-  | 'v2-normalizer'
-  | 'v2-semantic-matcher'
-  | 'v2-engine'
+  | 'v3-adversarial'
+  | 'v3-safety-outcomes'
+  | 'v3-detectors-full'
+  | 'v3-normalizer'
+  | 'v3-semantic-matcher'
+  | 'v3-engine'
 
 interface NullTeamJob {
   id: NullTeamJobId
@@ -41,12 +41,12 @@ interface RunResult {
 }
 
 const JOBS: NullTeamJob[] = [
-  { id: 'v2-adversarial', label: 'V2 Adversarial Suite' },
-  { id: 'v2-safety-outcomes', label: 'V2 Safety Outcomes' },
-  { id: 'v2-detectors-full', label: 'V2 Detectors Full' },
-  { id: 'v2-normalizer', label: 'V2 Normalizer' },
-  { id: 'v2-semantic-matcher', label: 'V2 Semantic Matcher' },
-  { id: 'v2-engine', label: 'V2 Engine' },
+  { id: 'v3-adversarial', label: 'V3 Adversarial Suite' },
+  { id: 'v3-safety-outcomes', label: 'V3 Safety Outcomes' },
+  { id: 'v3-detectors-full', label: 'V3 Detectors Full' },
+  { id: 'v3-normalizer', label: 'V3 Normalizer' },
+  { id: 'v3-semantic-matcher', label: 'V3 Semantic Matcher' },
+  { id: 'v3-engine', label: 'V3 Engine' },
 ]
 
 const LOOP_OPTIONS = [
@@ -67,7 +67,9 @@ export function NullTeamConsole() {
   const [loopMs, setLoopMs] = useState(60_000)
   const [lastLoopAt, setLastLoopAt] = useState<string | null>(null)
   const [globalError, setGlobalError] = useState<string | null>(null)
-  const [selectedOutputJob, setSelectedOutputJob] = useState<NullTeamJobId>('v2-adversarial')
+  const [selectedOutputJob, setSelectedOutputJob] = useState<NullTeamJobId>('v3-adversarial')
+  // Component state only — never persisted (no localStorage).
+  const [token, setToken] = useState('')
 
   const activeRunCount = runningJobs.size + (isRunningAll ? 1 : 0)
 
@@ -89,6 +91,7 @@ export function NullTeamConsole() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-null-team-token': token,
         },
         body: JSON.stringify({ jobId }),
       })
@@ -96,10 +99,17 @@ export function NullTeamConsole() {
       const payload = (await res.json()) as RunResult | { error?: string }
 
       if (!res.ok) {
+        const statusMessages: Record<number, string> = {
+          401: 'Token rejected. Enter the server’s NULL_TEAM_TOKEN above.',
+          404: 'Console disabled: the server has no NULL_TEAM_TOKEN configured.',
+          409: 'A job is already running. Wait for it to finish, then retry.',
+          429: 'Rate limited. Wait a minute before running again.',
+        }
         const message =
-          'error' in payload && payload.error
+          statusMessages[res.status] ??
+          ('error' in payload && payload.error
             ? payload.error
-            : 'Failed to execute null-team script.'
+            : 'Failed to execute null-team script.')
         throw new Error(message)
       }
 
@@ -138,7 +148,7 @@ export function NullTeamConsole() {
         return next
       })
     }
-  }, [])
+  }, [token])
 
   const runAllJobs = useCallback(async () => {
     if (isRunningAll || runningJobs.size > 0) {
@@ -193,10 +203,27 @@ export function NullTeamConsole() {
               Null Team Control Panel
             </CardTitle>
             <CardDescription>
-              Hidden route for continuous adversarial testing. Trigger all core V2 suites from one interface.
+              Hidden route for continuous adversarial testing. Trigger all core V3 suites from one interface.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="space-y-1.5">
+              <input
+                type="password"
+                value={token}
+                onChange={(event) => setToken(event.target.value)}
+                placeholder="Access token"
+                autoComplete="off"
+                aria-label="Null team access token"
+                className="bg-background border-input h-9 w-full max-w-sm rounded-md border px-3 text-sm"
+              />
+              <p className="text-muted-foreground text-xs">
+                Requires the server&apos;s NULL_TEAM_TOKEN (sent as the
+                x-null-team-token header). If the server has no token
+                configured, this console is disabled.
+              </p>
+            </div>
+
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               <Button
                 variant="primary"

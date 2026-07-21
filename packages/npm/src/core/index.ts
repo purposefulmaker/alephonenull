@@ -1,5 +1,5 @@
 /**
- * AlephOneNull Universal AI Safety Framework v2.0.0
+ * AlephOneNull Universal AI Safety Framework v3.0.0
  * Core TypeScript/JavaScript implementation
  */
 

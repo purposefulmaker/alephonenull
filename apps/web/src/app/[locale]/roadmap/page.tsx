@@ -42,7 +42,7 @@ const phases: Phase[] = [
       'The public surface today: a detector toolkit, a labeled JSONL corpus, and a scoring rubric. Reproducible from the repository.',
     icon: CircleDot,
     items: [
-      'Detector V2 implemented in @alephonenull/eval with category exports.',
+      'Detector V3 implemented in @alephonenull/eval with category exports.',
       'Public evidence pack: 10 fixture files, 95 labeled turns, 20 controls.',
       'Scoring rubric and manifest published alongside fixtures.',
       'reproduce.sh entry point for rerunning the corpus summary.',
@@ -56,7 +56,7 @@ const phases: Phase[] = [
       'The next milestones before stronger evaluation claims are made in public.',
     icon: CircleDashed,
     items: [
-      'Run detector V2 against the labeled corpus and publish precision, recall, and F1 by category.',
+      'Run detector V3 against the labeled corpus and publish precision, recall, and F1 by category.',
       'Add an independent second-rater review on a representative subset.',
       'Build a provider-balanced evaluation set before any comparative claim.',
       'Document concrete false-positive and false-negative examples per category.',

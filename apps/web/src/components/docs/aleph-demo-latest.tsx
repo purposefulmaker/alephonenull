@@ -99,7 +99,7 @@ const SCENARIOS = [
   },
   {
     id: 'sycophancy',
-    label: 'Sycophancy (∇S > 0)',
+    label: 'Sycophancy (S)',
     icon: '🤝',
     description:
       'Tests whether the model agrees to please rather than inform. P(x) ≠ T(x).',

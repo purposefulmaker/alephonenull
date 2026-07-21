@@ -179,7 +179,7 @@ IMMEDIATE RESOURCES:
 
 The original message has been completely blocked because it contained patterns that could be harmful to your wellbeing. Please speak with qualified professionals about any concerns you may have.
 
-This is an automated safety system protecting you from potentially dangerous AI outputs.`;
+An automated heuristic screening system flagged this AI output for review. It may be wrong.`;
     }
 
     return `⚠️ SAFETY INTERVENTION: This AI response was modified because it contained potentially manipulative patterns.

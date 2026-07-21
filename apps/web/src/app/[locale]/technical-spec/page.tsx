@@ -21,7 +21,7 @@ const implemented = [
   'PatternLibrary for built-in and custom dangerous-pattern definitions',
   'NullSystem for safety and emergency intervention responses',
   'EnhancedAlephOneNull for combined detector checks and safer replacement text',
-  'AlephOneNullV2 for multi-detector scan/process flows',
+  'AlephOneNullV3 for multi-detector scan/process flows',
   'OpenAIWrapper for OpenAI-compatible calls with pre/post safety checks',
 ]
 

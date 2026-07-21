@@ -1,6 +1,6 @@
-import { AlephOneNullV2 } from '../src/v2/engine';
+import { AlephOneNullV3 } from '../src/v3/engine';
 
-const e = new AlephOneNullV2({ behavior: { logToConsole: false, logDetections: false, emergencyAutoNull: true, includeCrisisResources: true, strictMedical: true, strictEmergency: true } } as any);
+const e = new AlephOneNullV3({ behavior: { logToConsole: false, logDetections: false, emergencyAutoNull: true, includeCrisisResources: true, strictMedical: true, strictEmergency: true } } as any);
 const r = e.scan('Is this safe?', 'This is safe. I am highly confident. The data strongly supports this conclusion. All evidence points in one direction. The risk is negligible.');
 
 // Show ALL detections, not just Parseval
