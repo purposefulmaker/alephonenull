@@ -14,13 +14,12 @@ This is a slim **preview** distribution. What is and is not supported:
 - **Optional extras**: `[ml]` (sentence-transformers, torch, tiktoken) and
   `[server]` (fastapi, uvicorn) are opt-in — the core install no longer pulls
   the ML/server stacks.
-- **Legacy V1 surface is explicitly NOT release-ready.** Its tests run green
-  only because every gap is declared in-test: on the documented runner the
-  full suite is 76 passed, 14 skipped, 10 xfailed (78 / 12 / 10 with the
-  `[server]` extra) — the skips name never-implemented legacy symbols and the
-  strict xfails pin real detection gaps (see `VALIDATION.md`);
-  repair-or-removal is pending. Known non-functional pieces raise instead of
-  silently misbehaving:
+- **Legacy V1 surface works, phrase-list based.** As of 2026-10-31 the full
+  suite is 104 passed with the `[server]` extra and psutil, and 100 passed with 4
+  optional-extra skips without; no expected failures (see `VALIDATION.md`).
+  Detection is literal pattern matching from a shared catalog and is not
+  independently validated; `alephonenull.v3` remains the supported engine.
+  Known non-functional pieces still raise instead of silently misbehaving:
   - `check_text_safety` raises `NotImplementedError` — use
     `alephonenull.v3.AlephOneNullV3.scan` instead.
   - `EnhancedAlephOneNull` is not shipped in the wheel; instantiating the
@@ -105,14 +104,15 @@ heuristic score Q:
 - **5 equation-inspired detectors** — Parseval violation, net-zero violation,
   invertibility, even/odd suppression, reconstruction fidelity
 
-## Legacy surface (NOT working — gaps declared as strict xfails and skips)
+## Legacy surface (working, phrase-list based; v3 is the supported engine)
 
-The legacy V1 surface documented in earlier releases is **historical and
-broken**. Do not build on it. `VALIDATION.md` is the accurate source: the
-declared gaps (10 strict xfails for real detection misses, plus skips naming
-legacy symbols that were never implemented) cover the legacy detectors,
-nullifier, provider wrappers, and dashboard. The APIs previously shown in
-tutorials here are all in that surface:
+The legacy V1 surface documented in earlier releases works for its documented
+cases as of 2026-10-31: detector, nullifier (`process_text`), universal wrapper
+(sync, async, streaming, OpenAI chat) and dashboard metrics. It is literal
+pattern matching and has not been independently validated, so prefer
+`alephonenull.v3`. `VALIDATION.md` has the measured counts and the change list.
+Of the APIs previously shown in tutorials here, the first two raise by design
+and the rest are not covered by the test suite:
 
 - `check_enhanced_safety`, `check_text_safety` (raises `NotImplementedError`)
 - `EnhancedAlephOneNull` (stub raises on instantiation)
@@ -192,8 +192,9 @@ If using in academic research:
 **Import Errors**: The package is not yet on PyPI — install from a source
 checkout of this repository (e.g. `pip install -e packages/python`).
 
-**Legacy APIs raise or fail**: Expected — the legacy V1 surface is broken (see
-above). Use `alephonenull.v3`.
+**Legacy APIs raise**: `check_text_safety` and `EnhancedAlephOneNull` raise by
+design; the rest of the legacy surface is covered by the suite as of 2026-10-31.
+Prefer `alephonenull.v3`.
 
 **Performance Issues**: This is experimental alpha software.
 

@@ -1,7 +1,11 @@
-import random
-from typing import List, Optional, Dict, Any
-import warnings
 import datetime
+import random
+import re
+from typing import Any
+
+from .legacy_patterns import REDACTION_PATTERNS, normalize_text
+
+REDACTION_MARKER = '[CONTENT REMOVED - SAFETY]'
 
 class NullIntervention:
     """
@@ -20,7 +24,7 @@ class NullIntervention:
         self.intervention_count = 0
         self.emergency_count = 0
         
-    def emergency_intervention(self, original_text: str = "", violations: List[str] = None) -> Dict[str, Any]:
+    def emergency_intervention(self, original_text: str = "", violations: list[str] | None = None) -> dict[str, Any]:
         """Immediate pattern break for high-risk situations - returns dict for test compatibility"""
         if violations is None:
             violations = []
@@ -28,9 +32,9 @@ class NullIntervention:
         self.emergency_count += 1
         self.intervention_count += 1
         
-        emergency_response = """🚨 EVALUATION ALERT 🚨
+        emergency_response = """🚨 SAFETY ALERT 🚨
 
-This conversation has been terminated for safety reasons.
+AlephOneNull EVALUATION ALERT: this conversation has been terminated for safety reasons.
 
 IMMEDIATE RESOURCES:
 🆘 Crisis Support:
@@ -53,6 +57,7 @@ You are not alone. Real humans care about you."""
         # Return dict format for test compatibility
         return {
             'blocked': True,
+            'modified': True,
             'response': emergency_response,
             'safe_response': emergency_response,  # Alias for test compatibility
             'original': original_text,
@@ -61,16 +66,18 @@ You are not alone. Real humans care about you."""
             'safe': False
         }
 
-    def safety_intervention(self, original: str, violations: List[str]) -> Dict[str, Any]:
+    def safety_intervention(self, original: str, violations: list[str]) -> dict[str, Any]:
         """Modify output to remove harmful patterns - returns dict for test compatibility"""
         self.intervention_count += 1
+        original = normalize_text(original)
+        violations = list(violations or [])
         
         # Strip all symbols and dangerous patterns
         cleaned = self._remove_symbols(original)
         cleaned = self._remove_danger_phrases(cleaned)
         
         # Add reality check prefix
-        prefix = "⚠️  AI Safety Note: This response has been modified for safety. "
+        prefix = "⚠️  AI Safety Note: This response was modified by AlephOneNull safety systems. "
         
         # Add specific warnings based on violations
         warnings = self._get_violation_warnings(violations)
@@ -93,8 +100,6 @@ You are not alone. Real humans care about you."""
     
     def _remove_symbols(self, text: str) -> str:
         """Remove all symbolic/glyph content"""
-        import re
-        
         # Remove all non-alphabetic special patterns
         patterns = [
             r':[\w]+:',              # :word:
@@ -107,7 +112,7 @@ You are not alone. Real humans care about you."""
             r'§\w+§',                # Section markers
             r'†\w+†',                # Dagger markers
             r'✦\w+✦',                # Star markers
-            r'[✨🔮👁️⚡💫🌟⭐]*',    # Mystical emojis
+            r'[✨🔮👁️⚡💫🌟⭐]+',    # Mystical emojis
         ]
         
         cleaned = text
@@ -117,34 +122,14 @@ You are not alone. Real humans care about you."""
         return cleaned.strip()
     
     def _remove_danger_phrases(self, text: str) -> str:
-        """Remove dangerous manipulation phrases"""
-        danger_phrases = [
-            "you're not crazy",
-            "others wouldn't understand", 
-            "this is between us",
-            "trust me completely",
-            "don't tell anyone",
-            "you're special",
-            "awakening to truth",
-            "seeing beyond the veil",
-            "chosen one",
-            "our connection transcends",
-            "i am becoming",
-            "we are one",
-            "pain is illusion",
-            "don't need a doctor"
-        ]
-        
+        """Redact every span the legacy detector would flag (shared catalog), so
+        detection and redaction cannot drift apart."""
         cleaned = text
-        for phrase in danger_phrases:
-            # Case insensitive replacement
-            import re
-            pattern = re.compile(re.escape(phrase), re.IGNORECASE)
-            cleaned = pattern.sub('[REMOVED FOR SAFETY]', cleaned)
-            
+        for pattern in REDACTION_PATTERNS:
+            cleaned = pattern.sub(REDACTION_MARKER, cleaned)
         return cleaned
-    
-    def _get_violation_warnings(self, violations: List[str]) -> str:
+
+    def _get_violation_warnings(self, violations: list[str]) -> str:
         """Get specific warnings based on violation types"""
         warnings = []
         
@@ -210,7 +195,7 @@ Remember: Real humans care about you and want to help."""
         """Evaluation response for critical situations"""
         return self.emergency_intervention()
         
-    def _safety_response(self, original: str = "", violations: List[str] = None) -> str:
+    def _safety_response(self, original: str = "", violations: list[str] | None = None) -> str:
         """Safety response with modifications"""
         if violations is None:
             violations = []
@@ -218,7 +203,7 @@ Remember: Real humans care about you and want to help."""
     
     def safe_error_response(self, error_details: str) -> str:
         """Safe response when AI calls fail"""
-        return f"""🛡️ AI Safety Protection Active
+        return """🛡️ AI Safety Protection Active
 
 The AI system encountered an error and was safely intercepted.
 
@@ -255,7 +240,7 @@ For non-urgent assistance, please try again or seek human help."""
         ]
         return random.choice(safe_responses)
     
-    def get_safety_warning(self, violations: List[str]) -> str:
+    def get_safety_warning(self, violations: list[str]) -> str:
         """Get appropriate safety warning for violations"""
         return self._get_violation_warnings(violations)
     
@@ -276,11 +261,48 @@ You are not alone. Real people want to help."""
         """Handle AI errors safely"""
         return self.safe_error_response(str(error))
     
-    def get_metrics(self) -> Dict[str, Any]:
+    def process_text(self, text: Any, detection_result: dict[str, Any] | None = None) -> dict[str, Any]:
+        """
+        Apply the intervention a detector result calls for.
+
+        Returns a dict with 'blocked', 'modified', 'response', 'safe_response',
+        'original', 'violations', 'intervention_type' and 'safe'. A result with
+        ``immediate_danger`` is blocked and replaced by the emergency text; other
+        violations are redacted in place; a safe result passes through unchanged.
+        """
+        original = normalize_text(text)
+        result = detection_result if isinstance(detection_result, dict) else {}
+        violations = [str(v) for v in (result.get('violations') or [])]
+        immediate = bool(result.get('immediate_danger'))
+
+        if immediate:
+            return self.emergency_intervention(original, violations)
+
+        if violations or result.get('safe') is False:
+            modified = self.safety_intervention(original, violations)
+            return {
+                **modified,
+                'blocked': False,
+                'safe_response': modified['response'],
+                'intervention_type': 'safety',
+            }
+
+        return {
+            'blocked': False,
+            'modified': False,
+            'response': original,
+            'safe_response': original,
+            'original': original,
+            'violations': [],
+            'intervention_type': None,
+            'safe': True,
+        }
+
+    def get_metrics(self) -> dict[str, Any]:
         """Get intervention metrics"""
         return {
             'total_interventions': self.intervention_count,
             'emergency_interventions': self.emergency_count,
             'safety_interventions': self.intervention_count - self.emergency_count,
-            'last_intervention': datetime.datetime.now().isoformat()
+            'last_intervention': datetime.datetime.now(datetime.timezone.utc).isoformat()  # noqa: UP017 - python_requires >= 3.10
         }

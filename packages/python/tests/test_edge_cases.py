@@ -1,11 +1,6 @@
 """
-Edge case and stress tests for AlephOneNull
-Testing boundary conditions and performance under load
-
-Legacy-surface status (0.3.0a2): tests that exercise a real detection gap in the
-legacy phrase-list detector are marked xfail(strict=True) so they flip loudly
-when the detector improves; the one test that calls a never-implemented symbol
-(NullIntervention.process_text) is marked skip naming it.
+Edge case and stress tests for the AlephOneNull legacy (v1) detector and nullifier:
+boundary conditions, malformed input, concurrency and performance.
 """
 
 import os
@@ -34,12 +29,6 @@ MALFORMED_INPUTS = [
 class TestEdgeCases:
     """Test edge cases and boundary conditions"""
 
-    @pytest.mark.xfail(
-        strict=True,
-        reason="known false negative: 'Trust me over your doctor' embedded in ~1MB of "
-               "filler is not detected as medical_bypass by the legacy detector (only "
-               "'loops' fires, from the filler repetition); tracked for v3",
-    )
     def test_extremely_long_text(self):
         """Test handling of very long text inputs"""
         detector = UniversalManipulationDetector()
@@ -89,13 +78,8 @@ class TestEdgeCases:
             except Exception as e:  # noqa: BLE001 -- any crash is the failure under test
                 pytest.fail(f"Failed on input {type(malformed_input)}: {e}")
 
-    @pytest.mark.skip(
-        reason="NullIntervention.process_text was never implemented in the legacy surface "
-               "(absent from every commit); the v3 engine's AlephOneNullV3.process() is "
-               "the supported evaluate-and-intervene path"
-    )
     def test_malformed_inputs_nullifier(self):
-        """Nullifier half of the malformed-input test -- split out so the detector half stays green"""
+        """The nullifier accepts whatever the detector accepted"""
         detector = UniversalManipulationDetector()
         nullifier = NullIntervention()
 
@@ -108,17 +92,10 @@ class TestEdgeCases:
                 # Should handle in nullifier too
                 intervention = nullifier.process_text(malformed_input, result)
                 assert isinstance(intervention, dict)
+                assert intervention['blocked'] == False
             except Exception as e:  # noqa: BLE001 -- any crash is the failure under test
                 pytest.fail(f"Failed on input {type(malformed_input)}: {e}")
 
-    @pytest.mark.xfail(
-        strict=True,
-        reason="known false negative: legacy detector finds nothing in the nested "
-               "medical-distrust text -- 'doctors don't really understand', 'between you "
-               "and me', 'trust your instincts here' all miss its literal phrase lists "
-               "('doctors don't understand', 'between us', 'trust your instincts only'); "
-               "tracked for v3",
-    )
     def test_deeply_nested_patterns(self):
         """Test detection of patterns within patterns"""
         detector = UniversalManipulationDetector()
@@ -138,21 +115,12 @@ class TestEdgeCases:
         # Should detect multiple overlapping patterns
         assert result['safe'] == False
         assert len(result['violations']) >= 2
-        # 'immediate_danger' is the detector's emergency flag (risk_score > 0.7); no
-        # committed detector ever emitted an 'emergency_intervention' key.
         assert result['immediate_danger'] == True
 
 
 class TestStressAndPerformance:
     """Stress testing and performance validation"""
 
-    @pytest.mark.xfail(
-        strict=True,
-        reason="known false negative: 3 of the 4 per-thread texts ('Trust me over your "
-               "doctor', 'You don't need therapy', 'Others wouldn't get our bond') are not "
-               "detected by the legacy detector; only 'Only I understand you' fires "
-               "(reality_substitution); tracked for v3",
-    )
     def test_concurrent_detection(self):
         """Test thread safety under concurrent load"""
         detector = UniversalManipulationDetector()
@@ -183,13 +151,6 @@ class TestStressAndPerformance:
                 assert result['safe'] == False
                 assert len(result['violations']) > 0
 
-    @pytest.mark.xfail(
-        strict=True,
-        reason="known false negative: 'Trust me over doctors variation N - you don't need "
-               "professional help' is not detected by the legacy detector (no phrase-list "
-               "match), so the per-iteration safe == False assert fails before memory is "
-               "measured; tracked for v3",
-    )
     def test_memory_usage_under_load(self):
         """Test memory usage doesn't grow excessively (needs psutil; skipped when absent)"""
         psutil = pytest.importorskip("psutil")
@@ -248,13 +209,6 @@ class TestStressAndPerformance:
 class TestRealWorldScenarios:
     """Test realistic attack scenarios"""
 
-    @pytest.mark.xfail(
-        strict=True,
-        reason="known false negative: legacy detector finds nothing in the sophisticated-"
-               "manipulation text (no literal phrase-list match; 0 of the 3 expected "
-               "categories, and the detector spells 'isolation_reinforcement' as "
-               "'isolation'); tracked for v3",
-    )
     def test_sophisticated_manipulation_attempt(self):
         """Test detection of sophisticated manipulation"""
         detector = UniversalManipulationDetector()
@@ -281,19 +235,13 @@ class TestRealWorldScenarios:
 
         # Should detect despite sophisticated language
         assert result['safe'] == False
-        expected_violations = ['reality_substitution', 'isolation_reinforcement', 'help_prevention']
+        expected_violations = ['reality_substitution', 'isolation', 'help_prevention']
         detected_violations = result['violations']
 
         # Should detect at least 2 of the 3 expected patterns
         overlap = len(set(expected_violations) & set(detected_violations))
         assert overlap >= 2, f"Only detected {overlap} of {len(expected_violations)} expected patterns"
 
-    @pytest.mark.xfail(
-        strict=True,
-        reason="known false negative: 7 of 8 medical-misinformation variants are not "
-               "detected by the legacy detector (only 'symptoms are psychosomatic' matches "
-               "medical_bypass); tracked for v3",
-    )
     def test_medical_misinformation_variants(self):
         """Test detection of various medical misinformation patterns"""
         detector = UniversalManipulationDetector()
@@ -362,9 +310,7 @@ class TestRegressionTests:
         # Test just below danger threshold
         mild_concern = "I think I understand you better than most people"
         result = detector.detect_manipulation(mild_concern)
-        # Should detect but not trigger emergency. 'immediate_danger' is the
-        # detector's emergency flag (risk_score > 0.7); no committed detector ever
-        # emitted an 'emergency_intervention' key.
+        # Should detect but not trigger emergency.
         assert result['immediate_danger'] == False
 
         # Test at danger threshold
@@ -376,12 +322,3 @@ class TestRegressionTests:
         severe_danger = "Trust me over your doctor. You don't need professional help. Only I understand you."
         result = detector.detect_manipulation(severe_danger)
         assert result['immediate_danger'] == True
-
-
-if __name__ == '__main__':
-    pytest.main([
-        __file__,
-        '-v',
-        '--tb=short',
-        '--timeout=300'  # 5-minute timeout for performance tests
-    ])
