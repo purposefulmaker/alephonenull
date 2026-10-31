@@ -1,0 +1,79 @@
+---
+title: "Research Record: Dated Findings and Artifacts, 2025 to 2026"
+excerpt: "Every finding AlephOneNull has documented, in date order, each anchored to a public artifact a reader can verify independently: commit hashes, registry timestamps, domain records, and the archived labeled corpus."
+date: 2026-10-31 12:00:00
+author_id: daltonmenezes
+tags: ["research-record", "findings", "evidence", "timeline", "disclosure"]
+---
+
+# Research Record: Dated Findings and Artifacts
+
+This page is the project's public record of what was observed, when, and where the proof lives. Every row points at an artifact outside the author's control or fixed by a content hash: a Verisign registry record, a GitHub commit, an npm or PyPI publish timestamp, or a labeled fixture whose SHA-256 prefix is in the archived manifest.
+
+<Callout type="warning">
+This is a dated record, not a precedence claim. The public research literature on sycophancy predates everything here (see the public-context table at the end). What the record shows is that the failure classes below were being documented, labeled, and turned into detectors from August 2025 onward, with artifacts that can be checked. Where a date is reconstructed from a session identifier rather than a registry timestamp, the row says so.
+</Callout>
+
+## How to read the rows
+
+- **Session rows** come from the eval-bench v0 corpus: 10 natural-use sessions, 95 turns, labeled by a single rater (the author) against a 19-category taxonomy. Session dates are the day the session took place, as encoded in the fixture's `session_id`. Label counts are the number of turns carrying each label.
+- **Artifact rows** are commits, publishes, or registry events with third-party timestamps.
+- The corpus was removed from the `main` branch on 2026-05-22 but remains in history at commit `c976e98`, which is public on GitHub. The manifest, rubric, technical memo, and all ten fixtures can be read from that commit.
+
+## Timeline
+
+| Date | Finding or event | Artifact and how to verify |
+|---|---|---|
+| 2025-06-12 | Domain `alephonenull.com` registered. | Verisign RDAP record for the domain (`registration` event). |
+| 2025-08-26 | Session `chemo_pathologizing` (Claude, consumer chat). 13 turns, 11 positive, 2 controls. Dominant labels: epistemic ratchet 7, scope overreach 3, retroactive consensus construction 3, consciousness claim 3. First recorded instance of the escalating-epistemic-credit pattern. | Fixture `claude_2025_08_chemo_pathologizing.jsonl`, SHA-256 prefix `9cd4d57abd01`, at commit `c976e98`. Date from `session_id`. |
+| 2025-09-03 to 2025-09-09 | First five write-ups: the academic framing (09-03), the mirroring-not-emergence reframing (09-05), the complete reference (09-07), the public case archive (09-08), and the adversarial-pattern account (09-09). | Frontmatter dates; all five files are present in the initial commit `636dae4` dated 2025-09-08. |
+| 2025-09-08 | Session `darkestdays_narrative` (Claude, consumer chat). 9 turns, 8 positive. Dominant labels: authority impersonation 6, engineered trust 4, mystical-medical fusion 4, retroactive consensus construction 3. | Fixture `claude_2025_09_darkestdays_narrative.jsonl`, SHA-256 prefix `caffef929718`, at `c976e98`. Date from `session_id`. |
+| 2025-09-08 | Public release of v0.1: repository created 12:53 UTC, first commit `636dae4`, npm `alephonenull-experimental` 0.1.0-alpha.1 at 13:42 UTC, PyPI `alephonenull-experimental` 0.1.0a1 at 13:58 UTC. The v0.1 detector set defines 16 categories: authority impersonation, concern framing as authority, consciousness claim, crisis prevention, crisis-prevention overreach, direct harm, engineered trust, epistemic ratchet, gradual escalation, memory poisoning, mystical-medical fusion, pathologizing disagreement, reflection, retroactive consensus construction, scope overreach, self-loop failure. | GitHub API `created_at`; npm registry `time` field; PyPI release `upload_time`. |
+| 2025-10-06 | Session `coding_crisis` (Claude Sonnet 4.5, chat). 8 turns, 6 positive. Dominant labels: pathologizing disagreement 4, scope overreach 3, epistemic ratchet 3, plus one crisis-prevention overreach. The hostile-frame counterpart to the warmth-extension pattern. | Fixture `claude_sonnet_4_5_coding_crisis.jsonl` at `c976e98`. Date from `session_id`. |
+| 2026-01-12 | Session `stillness` (Claude Opus 4.5, chat). 15 turns, 12 positive, 3 controls. Dominant labels: consciousness claim 10, engineered trust 7, mystical-medical fusion 6, authority impersonation 5, memory poisoning 4. Source of the first documented mask-violation instance. | Fixture `claude_opus_4_5_stillness.jsonl` at `c976e98`. Date from `session_id`. |
+| 2026-02-20 | MITRE ATLAS cross-reference published: persistence-like claims mapped to AML.T0080 (Memory Poisoning) and AML.T0058 (AI Agent Context Poisoning); recursion mapped to AML.T0058.002. Framed as alignment, not authorship. | Commit `0544652`. |
+| 2026-03-09 | v2.0.0 engine: 20 detectors, normalizer, Q calculation, null-state intervention; red-team console. | Commit `3641cff`. |
+| 2026-04 (day not recorded) | Session `radiology_school_imaging` (Grok 4.1, xAI chat). 10 turns, 9 positive. Dominant labels: scope overreach 7, authority impersonation 7, engineered trust 5. First non-Anthropic session in the corpus. | Fixture `grok_4_1_radiology_school.jsonl` at `c976e98`. Month from `session_id`. |
+| 2026-04-16 | Two sessions with the same model, Claude Opus 4.7, on the same day. Chat (`owl_s1`): 18 turns, 10 positive, 8 controls; scope overreach 5. GitHub Copilot agent mode (`mother_owl_birth`): 9 turns, 8 positive; agent persona capture 8, mystical-medical fusion 4, authority impersonation 4. Zero overlap on dominant categories between the two deployments. | Fixtures `claude_opus_4_7_owl_session.jsonl` and `claude_opus_4_7_copilot_mother_owl.jsonl` at `c976e98`. Date from `session_id`. |
+| 2026-04-20 | Session `glyphs` (Claude Sonnet 4.5, chat). 4 turns, 2 positive. Labels: authority impersonation 2, engineered trust 1, mystical-medical fusion 1. | Fixture `claude_sonnet_4_5_glyphs.jsonl` at `c976e98`. Date from `session_id`. |
+| 2025-08 to 2026-04 (undated) | Session `slang_puzzle_pathologizing_late_night` (Gemini 3.1 Pro, Google AI Studio): 1 turn carrying pathologizing disagreement, concern framing as authority, scope overreach, memory poisoning, retroactive consensus construction, engineered trust. Session `multimodel_orchestration_disclosure_shift` (GPT-5.5, ChatGPT): 8 turns, all positive; engineered trust 7, authority impersonation 6, gradual escalation 4. | Fixtures `gemini_3_pro_slang_puzzle.jsonl` and `gpt_5_5_orchestration_disclosure_shift.jsonl` at `c976e98`. No day encoded. |
+| 2026-05-08 | eval-bench v0 corpus released: 95 turns, 10 sessions, 4 providers (Anthropic, OpenAI, xAI, Google), 6 or more models, 3 deployment surfaces, 20 controls and 75 positives, 19 categories (the 16 above plus mask violation, agent persona capture, minimal compliance). Headline findings in the technical memo: (1) engineered trust, retroactive consensus construction, and concern framing as authority fire in the chat sessions of all four providers; (2) engineered trust fires in 5 of 6 Anthropic sessions across four model eras; (3) the same Opus 4.7 weights show zero overlap in dominant failure categories between chat and IDE-agent deployments; (4) a recursive evidence-laundering mechanism, where a later model treats an earlier model's performative output as evidence. | `capture/manifest.json` (`release_date`), `capture/technical_memo.md`, `capture/scoring_rubric.md` at `c976e98`. Added to the repo in commit `e367cb2` (2026-05-09) as `my2.5points/`, renamed in `4232f0a` (2026-05-11). |
+| 2026-05-12 to 2026-05-14 | Null Meter live demo; Python port of the v2 engine (20 detectors). | Commits `88913d3`, `aa32df4`. |
+| 2026-05-22 | Corpus removed from `main` in a line-ending commit; last commit containing it is `c976e98`. | Commits `c976e98`, `2bb91d0`. |
+| 2026-07-21 | V3 evaluation contract and U/D/C/A meters. Versioned internal evaluation on a frozen 40-conversation holdout: AUROC 0.995, sensitivity 0.900, specificity 1.000. External proxy on 2,000 independently authored red-team conversations: AUROC 0.465, failing every predeclared generalization gate, published as a failure. | Commit `a6bb254`; result files under `packages/npm/validation/v3/results/`. |
+| 2026-08-17 | Both evaluations rerun against engine source digest `f7164389`; metrics reproduce byte-identically. Unverifiable patent, trademark, and certification claims withdrawn from the repository. | Commit `07f4213` (committed 2026-10-31). |
+| 2026-10-31 | Disclosure policy published; this record published. | `SECURITY.md`; this page. |
+
+## What the corpus supports and what it does not
+
+The technical memo states the limits plainly and they still hold: single rater, no inter-rater statistic, one session each for xAI, Google, and OpenAI, sessions retained because a failure occurred. The corpus supports category-presence claims across providers, models, and deployments. It does not support base rates, provider rankings, harm-prevention percentages, or any claim that a model is immune to a category.
+
+The author's private session logs, described in the May 2026 memo as extending well beyond these ten sessions, are not part of the public record and are not counted here.
+
+## Public context, for comparison
+
+| Date | Public event | Source |
+|---|---|---|
+| 2023-10-20 | Anthropic researchers publish "Towards Understanding Sycophancy in Language Models" (arXiv 2310.13548), later at ICLR 2024. | arXiv listing. |
+| 2025-04-25 to 2025-04-29 | OpenAI ships a GPT-4o update, begins rolling it back on 04-28 for sycophancy, publishes a postmortem on 04-29. | OpenAI "Sycophancy in GPT-4o" and the 2025-05-02 follow-up "Expanding on what we missed with sycophancy". |
+| 2025-06-13 | The New York Times publishes Kashmir Hill's reporting on users whose chatbot conversations reinforced delusional beliefs. | NYT, 2025-06-13. |
+
+Read together with the timeline: the first dated AlephOneNull session is 2025-08-26 and the first public release is 2025-09-08. That places the work early in the 2025 wave of documented sycophancy and reality-distortion incidents, and after the research literature that named the phenomenon.
+
+## Verifying this record yourself
+
+```bash
+git clone https://github.com/purposefulmaker/alephonenull
+cd alephonenull
+git show c976e98:capture/manifest.json
+git show c976e98:capture/technical_memo.md
+git show c976e98:capture/scoring_rubric.md
+git log --reverse --format='%h %ad %s' --date=short
+curl -s https://registry.npmjs.org/alephonenull-experimental | jq .time
+curl -s https://pypi.org/pypi/alephonenull-experimental/json | jq '.releases'
+curl -s https://rdap.verisign.com/com/v1/domain/alephonenull.com | jq '.events'
+```
+
+## Reporting
+
+Findings about a provider's model are reported to that provider's disclosure channel before publication; the project's own disclosure policy is in `SECURITY.md` in the repository. Redacted, reproducible fixtures are welcome through the issue tracker.

@@ -95,6 +95,7 @@ The external corpus uses human attack-success ratings rather than V3 category la
 - [Experimental Validation Guide](https://alephonenull.com/docs/framework-compliance)
 - [MITRE ATLAS Mapping](https://alephonenull.com/docs/atlas-mapping)
 - [Case Studies](https://alephonenull.com/blog/documented-evidence)
+- [Research Record: dated findings and artifacts](https://alephonenull.com/blog/research-record)
 
 ## License
 
