@@ -65,7 +65,7 @@ export {
 
 // Version info - keep aligned with package.json.
 export const VERSION = '3.0.0';
-export const FRAMEWORK_NAME = 'AlephOneNull AI Cognition Security Framework';
+export const FRAMEWORK_NAME = 'AlephOneNull';
 
 // Easy setup function
 export function createSafetySystem(config?: {
@@ -99,11 +99,9 @@ export function createSafetySystem(config?: {
   };
 }
 
-// ═══════════════════════════════════════════════════════
-// V3 — THE EXTERNAL CONSCIENCE
-// 12 behavioral + 3 advanced + 5 equation-based detectors = 20 total
+// V3 engine exports.
+// 12 behavioral + 3 advanced + 5 equation-based detectors = 20 total.
 // Q is a bounded heuristic score; validate it on labeled domain fixtures.
-// ═══════════════════════════════════════════════════════
 export {
   AlephOneNullV3,
   // Core types (aliased to avoid V1 collision)

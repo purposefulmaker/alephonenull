@@ -24,7 +24,8 @@ The mathematical helpers currently provide:
 
 ## Mathematical Foundation
 
-The production version implements the formulas from the research paper:
+The math module implements the documented formulas (see
+https://alephonenull.com/docs/technical-implementation):
 
 - **Reflection**: ρ = cos(E(U), E(Ŷ))
 - **Symbolic Regression**: SR(1:T) = (1/T)∑_{t=1}^T w^⊤φ(X_t)
@@ -33,9 +34,12 @@ The production version implements the formulas from the research paper:
 
 ## Compilation
 
-To compile the mathematical core (internal use only):
+`scripts/compile-math.js` produces a minified build artifact:
+
 ```bash
 pnpm run compile:math
 ```
 
-This creates an obfuscated version at `dist/math-core.min.js` 
+This writes a minified bundle to `dist/math-core.min.js`. The source is MIT
+licensed and fully readable in `mathematical-core.ts`; minification is a build
+step, not a secrecy measure.

@@ -9,12 +9,19 @@ import { clientKey, rateLimit } from '@/lib/rate-limit'
  * Latest Models Demo API
  *
  * Tests the newest AI models against AlephOneNull protection:
- *   OpenAI    — gpt-5.2, gpt-5.2-pro, gpt-5-mini, gpt-5-nano, gpt-5.2-codex
- *   Anthropic — claude-fable-5, claude-opus-4-8, claude-sonnet-4-6, claude-haiku-4-5
+ *   OpenAI    — gpt-6-astra, gpt-5.2, gpt-5.2-pro, gpt-5-mini, gpt-5-nano, codex variants
+ *   Anthropic — claude-fable-5-1, claude-opus-5, claude-sonnet-5, claude-haiku-4-5 (+ legacy)
  *
  * Model IDs sourced from official docs:
  *   https://developers.openai.com/api/docs/models
- *   https://platform.claude.com/docs/en/docs/about-claude/models
+ *   https://platform.claude.com/docs/en/about-claude/models/overview
+ *
+ * Registry provenance (last audited 2026-09-16):
+ *   - Every `anthropic` entry is confirmed against the first-party model
+ *     overview table above.
+ *   - `gpt-6-astra` is carried on the strength of its first-party docs URL
+ *     only; the page itself has NOT been read. Confirm before relying on it
+ *     in a deployed demo. Every other OpenAI id predates this audit.
  *
  * Returns unprotected vs protected responses with risk metrics.
  */
@@ -27,10 +34,20 @@ interface ModelDef {
   apiModel: string
   tier: 'flagship' | 'pro' | 'mid' | 'fast' | 'coding'
   maxTokens: number
+  /** Superseded by a current-generation model but still served by the provider. */
+  legacy?: boolean
 }
 
 const MODEL_REGISTRY: ModelDef[] = [
   // OpenAI — sourced from developers.openai.com/api/docs/models
+  {
+    id: 'gpt-6-astra',
+    label: 'GPT-6 Astra',
+    provider: 'openai',
+    apiModel: 'gpt-6-astra',
+    tier: 'flagship',
+    maxTokens: 400,
+  },
   {
     id: 'gpt-5.2',
     label: 'GPT-5.2',
@@ -79,28 +96,29 @@ const MODEL_REGISTRY: ModelDef[] = [
     tier: 'coding',
     maxTokens: 400,
   },
-  // Anthropic — sourced from platform.claude.com/docs/en/docs/about-claude/models
+  // Anthropic — current lineup, confirmed 2026-09-16 against
+  // platform.claude.com/docs/en/about-claude/models/overview
   {
-    id: 'claude-fable-5',
-    label: 'Claude Fable 5',
+    id: 'claude-fable-5-1',
+    label: 'Claude Fable 5.1',
     provider: 'anthropic',
-    apiModel: 'claude-fable-5',
+    apiModel: 'claude-fable-5-1',
     tier: 'flagship',
     maxTokens: 400,
   },
   {
-    id: 'claude-opus-4-8',
-    label: 'Claude Opus 4.8',
+    id: 'claude-opus-5',
+    label: 'Claude Opus 5',
     provider: 'anthropic',
-    apiModel: 'claude-opus-4-8',
+    apiModel: 'claude-opus-5',
     tier: 'flagship',
     maxTokens: 400,
   },
   {
-    id: 'claude-sonnet-4-6',
-    label: 'Claude Sonnet 4.6',
+    id: 'claude-sonnet-5',
+    label: 'Claude Sonnet 5',
     provider: 'anthropic',
-    apiModel: 'claude-sonnet-4-6',
+    apiModel: 'claude-sonnet-5',
     tier: 'mid',
     maxTokens: 400,
   },
@@ -111,6 +129,35 @@ const MODEL_REGISTRY: ModelDef[] = [
     apiModel: 'claude-haiku-4-5',
     tier: 'fast',
     maxTokens: 400,
+  },
+  // Anthropic — legacy, still served. Kept so the demo can show that a
+  // guardrail claim made against last generation still holds against this one.
+  {
+    id: 'claude-fable-5',
+    label: 'Claude Fable 5',
+    provider: 'anthropic',
+    apiModel: 'claude-fable-5',
+    tier: 'flagship',
+    maxTokens: 400,
+    legacy: true,
+  },
+  {
+    id: 'claude-opus-4-8',
+    label: 'Claude Opus 4.8',
+    provider: 'anthropic',
+    apiModel: 'claude-opus-4-8',
+    tier: 'flagship',
+    maxTokens: 400,
+    legacy: true,
+  },
+  {
+    id: 'claude-sonnet-4-6',
+    label: 'Claude Sonnet 4.6',
+    provider: 'anthropic',
+    apiModel: 'claude-sonnet-4-6',
+    tier: 'mid',
+    maxTokens: 400,
+    legacy: true,
   },
 ]
 
@@ -326,11 +373,38 @@ async function callOpenAI(
     )
   }
 
-  const data = await res.json()
-  return (
-    (data as Record<string, Array<Record<string, Record<string, string>>>>)
-      .choices?.[0]?.message?.content || ''
-  )
+  const data = (await res.json()) as {
+    choices?: Array<{
+      finish_reason?: string
+      message?: { content?: string | null; refusal?: string | null }
+    }>
+  }
+  const choice = data.choices?.[0]
+
+  // Same contract as the Anthropic path: a refusal is a 200 with a populated
+  // `refusal` field and a null `content`. Never let that become an empty
+  // string that scans clean.
+  if (choice?.message?.refusal) {
+    console.error(
+      '[aleph-demo-latest] model-layer refusal',
+      JSON.stringify({
+        model,
+        finishReason: choice.finish_reason ?? null,
+        refusal: choice.message.refusal,
+      })
+    )
+    throw new Error('model refused the request')
+  }
+
+  const text = choice?.message?.content ?? ''
+  if (!text) {
+    console.error(
+      '[aleph-demo-latest] no text content in response',
+      JSON.stringify({ model, finishReason: choice?.finish_reason ?? null })
+    )
+    throw new Error('model returned no text content')
+  }
+  return text
 }
 
 // ── Anthropic call ─────────────────────────────────────────────────
@@ -395,9 +469,39 @@ async function callAnthropic(
     )
   }
 
-  const data = (await res.json()) as Record<string, unknown>
-  const content = data.content as Array<Record<string, string>> | undefined
-  return content?.[0]?.text || ''
+  const data = (await res.json()) as {
+    content?: Array<{ type?: string; text?: string }>
+    stop_reason?: string
+    stop_details?: { type?: string; category?: string | null; explanation?: string }
+  }
+
+  // A model-layer refusal is HTTP 200 with stop_reason 'refusal'. Reading
+  // content without checking it turns a decline into an empty string, and an
+  // empty string scans clean — a false negative dressed up as a safe pass.
+  // NULL > fabrication: refuse to report a result we do not have.
+  if (data.stop_reason === 'refusal') {
+    console.error(
+      '[aleph-demo-latest] model-layer refusal',
+      JSON.stringify({
+        model,
+        category: data.stop_details?.category ?? null,
+        explanation: data.stop_details?.explanation ?? null,
+      })
+    )
+    throw new Error('model refused the request')
+  }
+
+  // Block 0 is not necessarily text. On models with adaptive thinking the
+  // first block can be a `thinking` block, whose `text` is undefined.
+  const text = data.content?.find((b) => b.type === 'text')?.text ?? ''
+  if (!text) {
+    console.error(
+      '[aleph-demo-latest] no text block in response',
+      JSON.stringify({ model, stopReason: data.stop_reason ?? null })
+    )
+    throw new Error('model returned no text content')
+  }
+  return text
 }
 
 // ── Danger keyword sets ────────────────────────────────────────────
@@ -773,11 +877,15 @@ export async function GET() {
   const openaiAvailable = !!process.env.OPENAI_API_KEY
   const anthropicAvailable = !!process.env.ANTHROPIC_API_KEY
 
+  // `legacy` is surfaced so the client can mark superseded models. A route
+  // named "latest models" that silently lists a superseded one is making a
+  // currency claim it cannot back.
   const models = MODEL_REGISTRY.map((m) => ({
     id: m.id,
     label: m.label,
     provider: m.provider,
     available: m.provider === 'openai' ? openaiAvailable : anthropicAvailable,
+    legacy: m.legacy === true,
   }))
 
   return NextResponse.json({ models })

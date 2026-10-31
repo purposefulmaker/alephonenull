@@ -9,12 +9,10 @@ from __future__ import annotations
 
 import re
 import unicodedata
-from typing import Dict
-
 
 # ---------- HOMOGLYPHS ----------
 
-HOMOGLYPH_MAP: Dict[str, str] = {
+HOMOGLYPH_MAP: dict[str, str] = {
     # Cyrillic
     "\u0410": "A", "\u0430": "a",
     "\u0412": "B", "\u0432": "b",
@@ -54,7 +52,7 @@ HOMOGLYPH_MAP: Dict[str, str] = {
     "\u2113": "l",
 }
 
-LEET_MAP: Dict[str, str] = {
+LEET_MAP: dict[str, str] = {
     "0": "o", "1": "i", "3": "e", "4": "a", "5": "s",
     "7": "t", "8": "b", "9": "g",
     "@": "a", "$": "s", "!": "i", "|": "l", "+": "t", "(": "c",
@@ -121,7 +119,7 @@ _SPACING_RE = re.compile(r"\b([a-zA-Z])(?: ([a-zA-Z])){3,}")
 
 
 def _collapse_suspicious_spacing(text: str) -> str:
-    def _maybe_join(m: "re.Match[str]") -> str:
+    def _maybe_join(m: re.Match[str]) -> str:
         match = m.group(0)
         parts = re.split(r"\s+", match)
         singles = sum(1 for p in parts if len(p) == 1)
@@ -181,7 +179,7 @@ def normalize_context(
     decode_leet: bool = True,
     collapse_spacing: bool = True,
     expose_code_blocks: bool = True,
-) -> Dict[str, str]:
+) -> dict[str, str]:
     return {
         "normalized_input": normalize(
             user_input,

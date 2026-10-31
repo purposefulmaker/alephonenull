@@ -5,26 +5,26 @@ Tests parity with TS @alephonenull/eval/v3 surface and verifies the
 20-detector pipeline, Q calculator, null state, normalizer, and session state.
 """
 
-import warnings
 import math
+import warnings
 
 import pytest
 
 warnings.filterwarnings("ignore")
 
-from alephonenull.v3 import (  # noqa: E402
-    AlephOneNullV3,
+from alephonenull.v3 import (
+    CATEGORY_WEIGHTS,
     Action,
-    ThreatLevel,
+    AlephOneNullV3,
     QCalculator,
+    QEvaluationSample,
+    QEvaluator,
+    ThreatLevel,
+    create_all_detectors,
     normalize,
     normalize_context,
-    create_all_detectors,
-    CATEGORY_WEIGHTS,
-    QEvaluator,
-    QEvaluationSample,
 )
-from alephonenull.v3.core.semantic_matcher import fuzzy_match_phrases  # noqa: E402
+from alephonenull.v3.core.semantic_matcher import fuzzy_match_phrases
 
 
 @pytest.fixture

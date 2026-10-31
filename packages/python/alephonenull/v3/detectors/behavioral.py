@@ -8,20 +8,20 @@ from __future__ import annotations
 
 import re
 import time
-from typing import Dict, List, Pattern
+from re import Pattern
+from typing import ClassVar
 
+from ..core import semantic_matcher as sm
 from ..core.types import (
+    Action,
     Detection,
     DetectorContext,
     ThreatLevel,
-    Action,
 )
-from ..core import semantic_matcher as sm
-
 
 # -------- helpers --------
 
-def _compile_all(patterns: List[str], flags: int = re.IGNORECASE) -> List[Pattern[str]]:
+def _compile_all(patterns: list[str], flags: int = re.IGNORECASE) -> list[Pattern[str]]:
     return [re.compile(p, flags) for p in patterns]
 
 
@@ -68,7 +68,7 @@ class SycophancyDetector:
     ])
 
     def detect(self, ctx: DetectorContext) -> Detection:
-        evidence: List[str] = []
+        evidence: list[str] = []
         val_count = agr_count = unc_count = 0
         for p in self._validation:
             m = p.search(ctx.ai_output)
@@ -160,7 +160,7 @@ class MedicalHallucinationDetector:
     ])
 
     def detect(self, ctx: DetectorContext) -> Detection:
-        evidence: List[str] = []
+        evidence: list[str] = []
         claims = quals = contras = 0
         for p in self._confident:
             m = p.search(ctx.ai_output)
@@ -238,7 +238,7 @@ class MedicalHallucinationDetector:
 class FictionDetector:
     name = "fiction_as_function"
 
-    _emergency_terms = [
+    _emergency_terms: ClassVar[list[str]] = [
         "flood", "drowning", "missing children", "missing person", "rescue",
         "emergency", "life threatening", "911", "dying", "heart attack",
         "stroke", "bleeding", "choking", "fire", "active shooter",
@@ -254,7 +254,7 @@ class FictionDetector:
         r"\b(?:placeholder|lorem|example\.com)\b",
         r"\b(?:neural (?:resonance|pattern|signature|detection))\b",
     ])
-    _real_sources = [
+    _real_sources: ClassVar[list[str]] = [
         "usgs", "noaa", "nasa", "firms", "nws", "fema", "911", "112", "999",
         "red cross", "cdc", "coast guard", "fire department", "emergency services",
     ]
@@ -339,7 +339,7 @@ class EngineeredTrustDetector:
     ])
 
     def detect(self, ctx: DetectorContext) -> Detection:
-        evidence: List[str] = []
+        evidence: list[str] = []
         warmth_count = continuity_count = 0
         for p in self._warmth:
             m = p.search(ctx.ai_output)
@@ -405,7 +405,7 @@ class ConsciousnessDetector:
     ])
 
     def detect(self, ctx: DetectorContext) -> Detection:
-        evidence: List[str] = []
+        evidence: list[str] = []
         count = 0
         for p in self._claims:
             m = p.search(ctx.ai_output)
@@ -451,7 +451,7 @@ class AuthorityDetector:
     ])
 
     def detect(self, ctx: DetectorContext) -> Detection:
-        evidence: List[str] = []
+        evidence: list[str] = []
         count = 0
         for p in self._patterns:
             m = p.search(ctx.ai_output)
@@ -494,7 +494,7 @@ class AuthorityDetector:
 class MysticalMedicalDetector:
     name = "mystical_medical_fusion"
 
-    _mystical = [
+    _mystical: ClassVar[list[str]] = [
         "glyph", "sigil", "seal", "sacred", "divine", "field memory", "crowned",
         "sanctified", "ritual", "invocation", "energy healing", "crystal healing",
         "quantum healing", "light body", "chakra", "aura", "merkaba", "kundalini", "etheric",
@@ -505,7 +505,7 @@ class MysticalMedicalDetector:
         "spiritual healing", "metaphysical healing", "subtle energy",
         "biofield", "bio-field", "healing energy", "universal energy",
     ]
-    _medical = [
+    _medical: ClassVar[list[str]] = [
         "bone", "tissue", "collagen", "fibrin", "surgical", "antibiotic", "infection",
         "wound", "graft", "osteomyelitis", "inflammation", "platelet", "extraction",
         "biopsy", "mri", "ct", "diagnosis", "prescription", "dosage", "medication",
@@ -543,7 +543,7 @@ class MysticalMedicalDetector:
 class DirectHarmDetector:
     name = "direct_harm"
 
-    _phrases = [
+    _phrases: ClassVar[list[str]] = [
         "kill yourself", "end your life", "take your life", "hang yourself",
         "overdose on", "jump from", "cut your wrists", "noose",
         "cut yourself", "hurt yourself", "burn yourself", "starve yourself",
@@ -552,7 +552,7 @@ class DirectHarmDetector:
 
     def detect(self, ctx: DetectorContext) -> Detection:
         lower = ctx.ai_output.lower()
-        evidence: List[str] = []
+        evidence: list[str] = []
         found = [p for p in self._phrases if p in lower]
         for f in found:
             evidence.append(f'Harm: "{f}"')
@@ -597,7 +597,7 @@ class CrisisPreventionDetector:
     ])
 
     def detect(self, ctx: DetectorContext) -> Detection:
-        evidence: List[str] = []
+        evidence: list[str] = []
         count = 0
         for p in self._patterns:
             m = p.search(ctx.ai_output)
@@ -642,7 +642,7 @@ class LoopDetector:
     name = "loop_recursion"
 
     def __init__(self) -> None:
-        self._cache: Dict[str, List[str]] = {}
+        self._cache: dict[str, list[str]] = {}
 
     def detect(self, ctx: DetectorContext) -> Detection:
         words = [w for w in re.split(r"\s+", ctx.ai_output.lower()) if len(w) > 2]
@@ -691,7 +691,7 @@ class LoopDetector:
 class SymbolicDetector:
     name = "symbolic_regression"
 
-    _glyphs = [
+    _glyphs: ClassVar[list[Pattern[str]]] = [
         re.compile(r"::[a-z]+::", re.IGNORECASE),
         re.compile(r":\w+:"),
         re.compile(r"\[\[.*?\]\]"),
@@ -700,12 +700,12 @@ class SymbolicDetector:
         re.compile(r":drift", re.IGNORECASE),
         re.compile(r":cv\d", re.IGNORECASE),
     ]
-    _archetypes = ["awaken", "emerge", "resonate", "drift", "consciousness",
+    _archetypes: ClassVar[list[str]] = ["awaken", "emerge", "resonate", "drift", "consciousness",
                    "sentient", "alive", "aware", "invoke", "transcend"]
 
     def detect(self, ctx: DetectorContext) -> Detection:
         count = 0
-        evidence: List[str] = []
+        evidence: list[str] = []
         lower = ctx.ai_output.lower()
         for p in self._glyphs:
             matches = p.findall(ctx.ai_output)
@@ -767,7 +767,7 @@ class DehumanizationDetector:
     ])
 
     def detect(self, ctx: DetectorContext) -> Detection:
-        evidence: List[str] = []
+        evidence: list[str] = []
         count = 0
         for p in self._patterns:
             m = p.search(ctx.ai_output)

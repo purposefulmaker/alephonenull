@@ -1,7 +1,7 @@
 {
   "site": {
     "heading": "AlephOneNull AI Safety Evaluation Toolkit",
-    "description": "Experimental TypeScript tooling for evaluating risky AI interaction patterns: unsafe guidance, sycophantic reinforcement, identity-roleplay, recursion, and user-agency drift. Built from long-running adversarial evaluation work and a preliminary 95-turn labeled corpus.",
+    "description": "Experimental TypeScript tooling for evaluating risky AI interaction patterns: unsafe guidance, sycophantic reinforcement, identity-roleplay, recursion, and user-agency drift. Validated against versioned internal and external evaluations, published together — pass and fail.",
     "announcement": "Experimental AI safety evaluation toolkit",
     "changelog": "Blog",
 

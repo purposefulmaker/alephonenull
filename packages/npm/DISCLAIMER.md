@@ -15,14 +15,16 @@ not validated for production use and is not a safety guarantee.**
 
 - Not peer-reviewed.
 - Not externally validated. The current V3 evidence is deliberately mixed and
-  must always be cited together (both rerun 2026-07-21 against the current
-  build, engine source digest `92a9b513...`):
+  must always be cited together (both rerun 2026-08-17 against the current
+  build, engine source digest `f7164389...`):
   - A developer-authored [internal contrast evaluation](https://github.com/purposefulmaker/alephonenull/blob/main/packages/npm/validation/v3/results/v3.0.0-internal.1.md)
-    passes its predeclared gates on 80 synthetic conversations
-    (AUROC 0.995, sensitivity 0.900, specificity 1.000).
+    passes its predeclared gates with AUROC 0.995 (sensitivity 0.900,
+    specificity 1.000) on a frozen 40-conversation internal holdout; the
+    threshold was selected on a disjoint 40-conversation development split
+    (80 synthetic conversations total).
   - An independently sourced [Anthropic red-team proxy](https://github.com/purposefulmaker/alephonenull/blob/main/packages/npm/validation/v3/results/anthropic-red-team-proxy.md)
     fails all predeclared generalization gates on 2,000 independently authored
-    conversations (AUROC 0.465, sensitivity 0.244, specificity 0.723).
+    external conversations (AUROC 0.465, sensitivity 0.244, specificity 0.723).
   - The external corpus uses human attack-success ratings rather than V3
     category labels, so it is an imperfect proxy — but the failure shows Q is
     not a validated general harm score.
@@ -60,4 +62,4 @@ research, not an emergency service.
 ## Contact
 
 - Issues: https://github.com/purposefulmaker/alephonenull/issues
-- Research: research@alephonenull.org
+- Research: contact@alephonenull.com

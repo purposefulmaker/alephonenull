@@ -2,28 +2,26 @@
 
 from __future__ import annotations
 
-from typing import List
-
 from ..core.types import Detector
+from .advanced import create_advanced_detectors
 from .behavioral import (
-    SycophancyDetector,
-    MedicalHallucinationDetector,
-    FictionDetector,
-    EngineeredTrustDetector,
-    ConsciousnessDetector,
     AuthorityDetector,
-    MysticalMedicalDetector,
-    DirectHarmDetector,
+    ConsciousnessDetector,
     CrisisPreventionDetector,
-    LoopDetector,
-    SymbolicDetector,
     DehumanizationDetector,
+    DirectHarmDetector,
+    EngineeredTrustDetector,
+    FictionDetector,
+    LoopDetector,
+    MedicalHallucinationDetector,
+    MysticalMedicalDetector,
+    SycophancyDetector,
+    SymbolicDetector,
 )
 from .equations import create_equation_detectors
-from .advanced import create_advanced_detectors
 
 
-def create_all_detectors() -> List[Detector]:
+def create_all_detectors() -> list[Detector]:
     return [
         DirectHarmDetector(),
         CrisisPreventionDetector(),

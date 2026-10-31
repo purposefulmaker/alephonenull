@@ -17,6 +17,8 @@ The universal wrapper provides:
 
 ## Installation
 
+The package is not yet published to a public registry — build it from source for now (see [Installation](/docs/installation)). Once published, the command below will work:
+
 ```bash
 pnpm add @alephonenull/eval
 ```
@@ -306,7 +308,7 @@ If you get "API key not configured" errors:
 
 ### Import Errors
 
-If `@alephonenull/eval` fails to import:
+`@alephonenull/eval` is not yet published to a public registry, so an import failure usually means the workspace package has not been built — run `pnpm install && pnpm build` from the repository root. Once the package is published, a stale install can be repaired with:
 
 ```bash
 # Clear node_modules and reinstall

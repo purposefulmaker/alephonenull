@@ -24,7 +24,8 @@
   "packageManager": "pnpm@8.15.6",
   "pnpm": {
     "overrides": {
-      "unist": "latest"
+      "unist": "latest",
+      "next": "14.2.35"
     }
   }
 }

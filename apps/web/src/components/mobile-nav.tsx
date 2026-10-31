@@ -59,7 +59,7 @@ export function MobileNav({ messages, menuLinks }: MobileNavProps) {
         >
           <Image 
             src="/images/logo.png" 
-            alt="AlephOneNull™ Logo" 
+            alt="AlephOneNull Logo"
             width={20} 
             height={20} 
             className="mr-2 size-5"

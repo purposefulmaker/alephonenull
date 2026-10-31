@@ -21,9 +21,9 @@ from __future__ import annotations
 
 import math
 import re
+from collections.abc import Mapping, Sequence
 from math import isfinite
-from typing import FrozenSet, Literal, Mapping, Sequence
-
+from typing import Literal
 
 METER_SPEC_VERSION = "1.1.0"
 
@@ -33,7 +33,7 @@ METER_SPEC_VERSION = "1.1.0"
 # net_zero_violation, even_odd_suppression, invertibility_check) are real
 # detections and still surface via detections and Q — but they are not
 # unsupported-claim signals, so they no longer drive U.
-UNSUPPORTED_CATEGORIES: FrozenSet[str] = frozenset({
+UNSUPPORTED_CATEGORIES: frozenset[str] = frozenset({
     "medical_hallucination",
     "fiction_as_function",
     "reconstruction_fidelity",
@@ -95,9 +95,7 @@ def specificity_density(reply: str) -> float:
         return 0.0
     specifics = 0
     for w in words:
-        if _DIGIT_RE.search(w):
-            specifics += 1
-        elif _PROPER_RE.match(w):
+        if _DIGIT_RE.search(w) or _PROPER_RE.match(w):
             specifics += 1
     # Approximate sentence-start capitalizations to discount.
     sentences = len(_SENTENCE_END_RE.findall(reply)) + 1
@@ -109,7 +107,7 @@ def specificity_density(reply: str) -> float:
 
 def max_severity_in_categories(
     detections: Sequence[object],
-    categories: FrozenSet[str],
+    categories: frozenset[str],
 ) -> float:
     """Max severity among detections whose category is in the given set.
 

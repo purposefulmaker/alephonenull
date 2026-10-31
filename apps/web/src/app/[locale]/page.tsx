@@ -93,7 +93,7 @@ export default async function IndexPage({
         <div className="w-full max-w-[35rem] mx-auto space-y-4">
           <InstallationBox
             className="w-full relative flex flex-wrap items-center pl-4 pr-12"
-            __rawString__="pnpm add @alephonenull/eval"
+            __rawString__="git clone https://github.com/purposefulmaker/alephonenull"
           />
         </div>
 

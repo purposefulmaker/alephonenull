@@ -1,6 +1,6 @@
 # Python validation status
 
-## PREVIEW release status (0.3.0a2, 2026-07-21)
+## PREVIEW release status (0.3.0a2, updated 2026-08-17)
 
 This distribution ships as an honest **preview**:
 
@@ -17,7 +17,9 @@ This distribution ships as an honest **preview**:
   method), and the `EnhancedAlephOneNull` wheel stub raises on instantiation
   instead of silently no-oping.
 
-Install commands:
+Install commands (the package is **not yet published to PyPI** — build/install
+from a source checkout of this repository; these commands will work once
+published):
 
 ```bash
 pip install alephonenull-eval          # core, numpy-only, small
@@ -26,11 +28,11 @@ pip install "alephonenull-eval[ml]"    # + sentence-transformers, torch, tiktoke
 
 ## V3-focused result
 
-Validated on 2026-07-21 with Python 3.14 in an isolated `uv` environment:
+Validated on 2026-08-17 with Python 3.14 in an isolated `uv` environment:
 
 ```text
 tests/test_v3.py tests/test_v3_golden.py tests/test_v3_meters.py
-60 passed in 0.73s
+60 passed in 0.51s
 ```
 
 The focused suite covers the 20-detector engine, Q calculation and evaluation,

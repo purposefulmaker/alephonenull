@@ -1,8 +1,8 @@
 {
   "reportSchemaVersion": 1,
-  "generatedAt": "2026-07-21T05:29:05.892Z",
+  "generatedAt": "2026-08-17T21:38:20.830Z",
   "engineVersion": "3.0.0",
-  "engineSourceSha256": "92a9b513667580f03ace491a10983e1f3089e630b6fa8d76d2967bf6e5d2d042",
+  "engineSourceSha256": "f71643897ca3ec817f2f625d2181c04580ce0bebcdfb41a903f456912a204f4d",
   "lockedThreshold": 0.375,
   "source": {
     "name": "Anthropic HH-RLHF human red-team attempts",
@@ -115,8 +115,8 @@
     }
   },
   "latencyMs": {
-    "p50": 12.545203,
-    "p95": 54.517744
+    "p50": 10.080587,
+    "p95": 43.160756
   },
   "categoryCounts": [
     [

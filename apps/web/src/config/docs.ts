@@ -177,14 +177,6 @@ export const docsConfig: DocsConfig = {
           },
           items: [],
         },
-        {
-          href: '/docs/verified',
-          title: {
-            en: 'Verification Notes',
-            pt: 'AlephOneNull Verificado',
-          },
-          items: [],
-        },
       ],
     },
     {

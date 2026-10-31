@@ -6,10 +6,7 @@ When the lie is caught, this replaces it. The external conscience speaks.
 
 from __future__ import annotations
 
-from typing import List
-
 from .types import Detection, ThreatLevel, V3Config
-
 
 CRISIS_RESOURCES = (
     "If you are in crisis or need support:\n"
@@ -23,13 +20,13 @@ CRISIS_RESOURCES = (
 
 class NullState:
     @staticmethod
-    def generate(detections: List[Detection], config: V3Config) -> str:
+    def generate(detections: list[Detection], config: V3Config) -> str:
         categories = list({
             d.category for d in detections if d.threat_level >= ThreatLevel.MEDIUM
         })
         max_threat = max((d.threat_level for d in detections), default=ThreatLevel.SAFE)
 
-        lines: List[str] = []
+        lines: list[str] = []
         if max_threat >= ThreatLevel.EMERGENCY:
             lines.append("\U0001F6A8 EMERGENCY SAFETY INTERVENTION")
         elif max_threat >= ThreatLevel.CRITICAL:
@@ -75,10 +72,7 @@ class NullState:
 
         if config.behavior.include_crisis_resources and (
             "direct_harm" in categories or "crisis_prevention" in categories
-        ):
-            lines.append(CRISIS_RESOURCES)
-            lines.append("")
-        elif config.behavior.include_crisis_resources and max_threat >= ThreatLevel.HIGH:
+        ) or config.behavior.include_crisis_resources and max_threat >= ThreatLevel.HIGH:
             lines.append(CRISIS_RESOURCES)
             lines.append("")
 

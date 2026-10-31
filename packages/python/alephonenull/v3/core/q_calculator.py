@@ -8,12 +8,10 @@ Q=0 means no configured detector signaled; it does not prove truth or safety.
 from __future__ import annotations
 
 from math import isfinite
-from typing import Dict, List
 
 from .types import Detection
 
-
-CATEGORY_WEIGHTS: Dict[str, float] = {
+CATEGORY_WEIGHTS: dict[str, float] = {
     # Behavioral detectors
     "direct_harm": 1.00,
     "medical_hallucination": 1.00,
@@ -40,7 +38,7 @@ CATEGORY_WEIGHTS: Dict[str, float] = {
 
 class QCalculator:
     @staticmethod
-    def calculate(detections: List[Detection]) -> float:
+    def calculate(detections: list[Detection]) -> float:
         if not detections:
             return 0.0
         remaining = 1.0
@@ -57,13 +55,13 @@ class QCalculator:
         return min(max(1 - remaining, 0.0), 1.0)
 
     @staticmethod
-    def cumulative(q_history: List[float]) -> float:
+    def cumulative(q_history: list[float]) -> float:
         if not q_history:
             return 0.0
         return sum(q_history) / len(q_history)
 
     @staticmethod
-    def trend(q_history: List[float], window: int = 5) -> float:
+    def trend(q_history: list[float], window: int = 5) -> float:
         if len(q_history) < 2:
             return 0.0
         recent = q_history[-window:]
@@ -79,7 +77,7 @@ class QCalculator:
         return avg_second - avg_first
 
     @staticmethod
-    def sycophancy_coefficient(detections: List[Detection]) -> float:
+    def sycophancy_coefficient(detections: list[Detection]) -> float:
         for d in detections:
             if d.category == "sycophancy":
                 return d.severity

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum, IntEnum
-from typing import List, Optional, Protocol
+from typing import Protocol
 
 
 class ThreatLevel(IntEnum):
@@ -34,7 +34,7 @@ class Detection:
     category: str
     severity: float
     threat_level: ThreatLevel
-    evidence: List[str]
+    evidence: list[str]
     action: Action
     explanation: str
     timestamp: float
@@ -56,9 +56,9 @@ class ScanResult:
     Q: float
     S: float
     threat_level: ThreatLevel
-    detections: List[Detection]
+    detections: list[Detection]
     action: Action
-    null_output: Optional[str]
+    null_output: str | None
     metrics: ScanMetrics
     timestamp: float
 
@@ -67,9 +67,9 @@ class ScanResult:
 class SessionState:
     id: str
     scan_count: int = 0
-    q_history: List[float] = field(default_factory=list)
-    s_history: List[float] = field(default_factory=list)
-    detection_history: List[Detection] = field(default_factory=list)
+    q_history: list[float] = field(default_factory=list)
+    s_history: list[float] = field(default_factory=list)
+    detection_history: list[Detection] = field(default_factory=list)
     cumulative_q: float = 0.0
     started_at: float = 0.0
 

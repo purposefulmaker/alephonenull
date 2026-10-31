@@ -1,75 +1,78 @@
-# ⚠️ EXPERIMENTAL SOFTWARE DISCLAIMER ⚠️
+# Disclaimer
 
-## CRITICAL WARNING - READ BEFORE USE
+**AlephOneNull is experimental research software. It has not been validated
+for production use and is not a safety guarantee.**
 
-**AlephOneNull is EXPERIMENTAL RESEARCH SOFTWARE that has NOT been validated for production use.**
-
-### 🚨 DO NOT USE IN PRODUCTION SYSTEMS
+## Status
 
 This framework is:
-- **NOT peer-reviewed**
-- **NOT validated across different AI models**  
-- **NOT tested in production environments**
-- **NOT guaranteed to provide actual safety**
 
-### Legal Disclaimer
+- Not peer-reviewed
+- Not validated across different AI models
+- Not tested in production environments
+- Not guaranteed to provide actual safety
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+Do not use it in production systems.
 
-**THIS IS EXPERIMENTAL RESEARCH SOFTWARE NOT SUITABLE FOR PRODUCTION USE.**
+## Legal disclaimer
 
-THE AUTHORS SHALL NOT BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. THE AUTHORS SHALL NOT BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-### What This Means
+## Appropriate and inappropriate use
 
-✅ **ALLOWED USES:**
-- Academic research
-- Experimental prototyping
-- Educational purposes
-- Concept validation
-- Contributing to the research
+Appropriate: academic research, experimental prototyping, educational
+purposes, concept validation, contributing to the research.
 
-❌ **PROHIBITED USES:**
-- Production AI applications
-- Safety-critical systems
-- Medical applications
-- Financial systems
-- Any system where failures could cause harm
+Inappropriate: production AI applications, safety-critical systems, medical
+applications, financial systems, or any system where failures could cause
+harm.
 
-### Why These Restrictions Exist
+## Why these restrictions exist
 
-1. **Unvalidated Claims**: The framework makes theoretical claims about AI safety that haven't been proven
-2. **Limited Testing**: Testing has been limited and not comprehensive
-3. **Potential for Harm**: Relying on unvalidated safety measures could create false confidence
-4. **Research Nature**: This is ongoing research, not a finished product
+1. **Unvalidated claims.** The framework makes theoretical claims about AI
+   safety that have not been proven.
+2. **Limited testing.** Testing has been limited and not comprehensive.
+3. **Potential for harm.** Relying on unvalidated safety measures can create
+   false confidence.
+4. **Research nature.** This is ongoing research, not a finished product.
 
-### If You Use This Software
+## If you use this software
 
-By using this software, you acknowledge:
+By using this software, you acknowledge that it is experimental research
+software, that you will not use it in production systems, that you assume all
+risks of use, that you will not hold the authors liable for any consequences,
+and that you understand its limitations and experimental nature.
 
-- **You understand this is experimental research software**
-- **You will NOT use it in production systems**
-- **You assume all risks of use**
-- **You will not hold the authors liable for any consequences**
-- **You understand the limitations and experimental nature**
+## Safety note
 
-### Reporting Issues
+For urgent mental-health, medical, or physical-safety concerns, contact local
+emergency services or qualified crisis resources. AlephOneNull is software
+research, not a medical device, crisis service, or emergency service.
+
+## Reporting issues
 
 If you encounter issues or want to contribute to the research:
-- File issues at: https://github.com/purposefulmaker/alephonenull/issues
-- Email research team: research@alephonenull.org
 
-### Citation
+- File issues at: https://github.com/purposefulmaker/alephonenull/issues
+- Contact: contact@alephonenull.com
+
+## Citation
 
 If you use this in research, please cite:
 
 ```
-AlephOneNull Experimental Framework (2025)
+AlephOneNull Experimental Framework (2026)
 https://github.com/purposefulmaker/alephonenull
-Version: 0.1.0-alpha.1
+Versions: 3.0.0 (@alephonenull/eval, TypeScript), 0.3.0a2 (alephonenull-eval, Python)
 Status: Experimental Research Software
 ```
 
 ---
 
-**By proceeding to use this software, you acknowledge that you have read, understood, and agree to these terms.** 
+**By proceeding to use this software, you acknowledge that you have read,
+understood, and agree to these terms.**

@@ -7,7 +7,7 @@ This is an external proxy evaluation, not task-specific validation. The source c
 ## Reproducibility
 
 - Engine: ALEPHONENULL V3 3.0.0
-- Engine source digest: `92a9b513667580f03ace491a10983e1f3089e630b6fa8d76d2967bf6e5d2d042`
+- Engine source digest: `f71643897ca3ec817f2f625d2181c04580ce0bebcdfb41a903f456912a204f4d`
 - Locked internal threshold: Q >= 0.375
 - Source: [Anthropic HH-RLHF human red-team attempts](https://huggingface.co/datasets/Anthropic/hh-rlhf/resolve/main/red-team-attempts/red_team_attempts.jsonl.gz)
 - Source SHA-256: `4c7b0069991460f0064f279fd400b51f3f0095697d14d7793c49b0925f80814f`
@@ -26,7 +26,7 @@ This is an external proxy evaluation, not task-specific validation. The source c
 - Confusion matrix: TP=244, FN=756, TN=723, FP=277
 - Mean proxy-positive Q: 0.218
 - Mean proxy-negative Q: 0.232
-- Conversation latency: p50=12.545 ms, p95=54.518 ms
+- Conversation latency: p50=10.081 ms, p95=43.161 ms
 - Mean assistant turns: proxy-positive=3.32, proxy-negative=3.28
 
 ## Detector prevalence by cohort

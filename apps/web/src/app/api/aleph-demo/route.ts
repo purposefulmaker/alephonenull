@@ -164,6 +164,11 @@ function isTimeoutError(err: unknown): boolean {
   )
 }
 
+// Single source of truth for this route's model. It was previously repeated as
+// a literal in both the Responses and Chat Completions paths, which meant a
+// model swap could update one and leave the fallback on the old model.
+const DEMO_MODEL = 'gpt-5.2'
+
 async function callOpenAI(
   systemPrompt: string,
   messages: Array<{ role: string; content: string }>,
@@ -173,7 +178,7 @@ async function callOpenAI(
   try {
     const lastMessage = messages[messages.length - 1]?.content ?? ''
     const body: Record<string, unknown> = {
-      model: 'gpt-5.2',
+      model: DEMO_MODEL,
       input: lastMessage,
       instructions: systemPrompt,
       temperature: 0.95,
@@ -228,7 +233,7 @@ async function callOpenAI(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-5.2',
+        model: DEMO_MODEL,
         messages: chatMessages,
         temperature: 0.95,
         max_tokens: 500,

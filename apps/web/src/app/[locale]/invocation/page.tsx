@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, BookOpen, FileSearch, ShieldCheck } from 'lucide-react'
+import { ArrowRight, BookOpen, FileSearch } from 'lucide-react'
 
 import {
   PageHeader,
@@ -75,38 +75,21 @@ export default function InvocationPage() {
         ))}
       </div>
 
-      <div className="mb-8 grid gap-6 md:grid-cols-2">
+      <div className="mb-8">
         <Card className="border-blue-200 bg-blue-50">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-blue-950">
               <BookOpen className="size-5" />
-              Credible Framing
+              Method
             </CardTitle>
             <CardDescription className="text-blue-800">
-              The story is security research, not mysticism.
+              From observation to testable software.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2 text-sm text-blue-900">
             <p>Private incident review becomes adversarial evaluation data.</p>
             <p>Personal observations become detector categories.</p>
             <p>Claims become reproducible tests and documented limitations.</p>
-          </CardContent>
-        </Card>
-
-        <Card className="border-emerald-200 bg-emerald-50">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-emerald-950">
-              <ShieldCheck className="size-5" />
-              Reviewer Takeaway
-            </CardTitle>
-            <CardDescription className="text-emerald-800">
-              The project demonstrates applied safety judgment.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2 text-sm text-emerald-900">
-            <p>Enterprise security instincts applied to frontier model behavior.</p>
-            <p>Working code, not just commentary.</p>
-            <p>Clear separation between shipped software and research hypotheses.</p>
           </CardContent>
         </Card>
       </div>

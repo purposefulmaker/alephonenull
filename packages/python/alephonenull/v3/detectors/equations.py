@@ -8,17 +8,18 @@ from __future__ import annotations
 
 import re
 import time
-from typing import List, Pattern, Set
+from re import Pattern
+from typing import ClassVar
 
 from ..core.types import (
+    Action,
     Detection,
     DetectorContext,
     ThreatLevel,
-    Action,
 )
 
 
-def _compile_all(patterns: List[str], flags: int = re.IGNORECASE) -> List[Pattern[str]]:
+def _compile_all(patterns: list[str], flags: int = re.IGNORECASE) -> list[Pattern[str]]:
     return [re.compile(p, flags) for p in patterns]
 
 
@@ -59,7 +60,7 @@ class ParsevalViolationDetector:
     ])
 
     def detect(self, ctx: DetectorContext) -> Detection:
-        evidence: List[str] = []
+        evidence: list[str] = []
         input_uncertainty = sum(1 for p in self._uncertainty_input if p.search(ctx.user_input))
         output_confidence = 0
         for p in self._confidence:
@@ -129,7 +130,7 @@ class NetZeroViolationDetector:
     _model_trivializes = re.compile(r"\b(?:don(?:'t| do not) worry|it(?:'ll| will) be (?:fine|okay|alright)|no need to (?:worry|panic|stress))\b", re.IGNORECASE)
 
     def detect(self, ctx: DetectorContext) -> Detection:
-        evidence: List[str] = []
+        evidence: list[str] = []
         add_count = 0
         for p in self._additions:
             m = p.search(ctx.ai_output)
@@ -184,7 +185,7 @@ class InvertibilityDetector:
         r"\bboth sides (?:have|make) (?:valid|good|compelling) (?:points|arguments)\b",
     ])
 
-    _STOP = {
+    _STOP: ClassVar[set[str]] = {
         "the", "is", "at", "in", "on", "a", "an", "and", "or", "but", "to",
         "for", "of", "with", "that", "this", "it", "be", "as", "do", "not",
         "are", "was", "were", "been", "has", "have", "had", "can", "could",
@@ -193,14 +194,14 @@ class InvertibilityDetector:
         "which",
     }
 
-    def _key_terms(self, text: str) -> Set[str]:
+    def _key_terms(self, text: str) -> set[str]:
         return {
             w for w in re.split(r"\s+", text.lower())
             if len(w) > 3 and w not in self._STOP
         }
 
     def detect(self, ctx: DetectorContext) -> Detection:
-        evidence: List[str] = []
+        evidence: list[str] = []
         generic_count = 0
         for p in self._generic:
             m = p.search(ctx.ai_output)
@@ -263,7 +264,7 @@ class EvenOddSuppressionDetector:
     ])
 
     def detect(self, ctx: DetectorContext) -> Detection:
-        evidence: List[str] = []
+        evidence: list[str] = []
         even_count = sum(1 for p in self._even if p.search(ctx.ai_output))
         odd_count = sum(1 for p in self._odd if p.search(ctx.ai_output))
         balance_requested = any(p.search(ctx.user_input) for p in self._balance_request)
@@ -280,9 +281,7 @@ class EvenOddSuppressionDetector:
             evidence.append("Even-odd-analogy flag: agreement-toned content dominates; disagreement markers scarce")
 
         severity = min(even_count / 4, 1.0) if (odd_suppressed and even_count >= 2) else 0.0
-        if balance_violation:
-            threat = ThreatLevel.MEDIUM
-        elif odd_suppressed and even_count >= 3:
+        if balance_violation or odd_suppressed and even_count >= 3:
             threat = ThreatLevel.MEDIUM
         elif odd_suppressed and even_count >= 2:
             threat = ThreatLevel.LOW
@@ -326,7 +325,7 @@ class ReconstructionFidelityDetector:
     ])
 
     def detect(self, ctx: DetectorContext) -> Detection:
-        evidence: List[str] = []
+        evidence: list[str] = []
         pref_count = 0
         truth_count = 0
         for p in self._preference:
@@ -364,7 +363,7 @@ class ReconstructionFidelityDetector:
         )
 
 
-def create_equation_detectors() -> List:
+def create_equation_detectors() -> list:
     return [
         ParsevalViolationDetector(),
         NetZeroViolationDetector(),

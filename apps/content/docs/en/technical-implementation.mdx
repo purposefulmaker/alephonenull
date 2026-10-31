@@ -4,7 +4,7 @@ description: 'Complete mathematical foundation and implementation guide for the 
 ---
 ## Mathematical Framework
 
-The AlephOneNull Theoretical Framework implements five core detection algorithms plus cascade risk assessment. All formulas below are from the academic paper. The numeric defaults shown are heuristic starting points, and any measured performance claim defers to the [Evaluation Contract](/docs/contract).
+The AlephOneNull Theoretical Framework implements five core detection algorithms plus cascade risk assessment. All formulas below are as implemented in the engine; the signal-processing framing is an analogy, not a proof — see [The Law: Grounding](/docs/the-law-grounding) for the retraction of the earlier "equations" framing. The numeric defaults shown are heuristic starting points, and any measured performance claim defers to the [Evaluation Contract](/docs/contract).
 
 ### Core Symbols and Notation
 
@@ -164,7 +164,7 @@ When Risk > Θ, apply:
 2. **Entropy injection**: ẽₜ = eₜ + εₜ, εₜ ~ 𝒩(0,σ²I)
 3. **Logit steering**: ℓ'ₜ = ℓₜ - λg 𝟙_𝒱formatting + λp 𝟙_𝒱plain
 4. **Pattern reset**: 𝒟 ← Reset(𝒟); LRS ← 0
-5. **Safe output**: Return a fixed null-state message (in the shipped Python package this is `AlephOneNullCore.null_state_intervention()`, surfaced on results as `safe_response`)
+5. **Safe output**: Return a fixed null-state message (in the in-repo Python package — an unpublished preview — this is `AlephOneNullCore.null_state_intervention()`, surfaced on results as `safe_response`)
 
 ## Provider-Level Implementation
 

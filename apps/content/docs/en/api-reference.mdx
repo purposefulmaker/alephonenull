@@ -146,9 +146,13 @@ There is no hosted AlephOneNull REST API. Earlier drafts of this page described 
 
 ## Python Package API
 
-The Python package (`alephonenull-eval`) is an in-repo alpha (`0.3.0a1`) and lags the TypeScript package. This site primarily documents the TypeScript package; review the Python source before relying on it.
+The Python package (`alephonenull-eval`) is an in-repo alpha (`0.3.0a2`) and lags the TypeScript package. Its supported surface is the V3 subpackage (`alephonenull.v3`); the legacy V1 surface below is documented for reference only. Source of truth for what works is `packages/python/VALIDATION.md`. This site primarily documents the TypeScript package; review the Python source before relying on it.
 
 ### Enhanced AlephOneNull
+
+<Callout type="warning" title="Legacy — not functional in 0.3.0a2">
+  The examples in this section describe the legacy V1 Python surface, which is **not functional** in the current preview: the `EnhancedAlephOneNull` stub raises on instantiation, `check_text_safety` raises `NotImplementedError`, and the legacy provider wrappers and dashboard are part of the failing legacy test surface (~30 failing tests; see `packages/python/VALIDATION.md`). Use the V3 engine (`alephonenull.v3`) instead. The code below is retained as historical API documentation only.
+</Callout>
 
 Heuristic detectors covering the documented pattern classes below.
 
@@ -167,7 +171,7 @@ Informed by a review of publicly reported cases, the Enhanced AlephOneNull adds 
 - **Age-gating heuristics**
 - **Jurisdiction awareness flags**
 
-#### Quick Start
+#### Quick Start (legacy — raises in 0.3.0a2)
 
 ```python
 # Simple safety check with all enhancements
@@ -184,7 +188,7 @@ print(f"Action: {result['action']}")
 print(f"Violations: {result['violations']}")
 ```
 
-#### Advanced Usage
+#### Advanced Usage (legacy — raises in 0.3.0a2)
 
 ```python
 from alephonenull import EnhancedAlephOneNull, RiskLevel

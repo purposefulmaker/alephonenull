@@ -1,7 +1,6 @@
 /**
  * ╔══════════════════════════════════════════════════════════════╗
  * ║                  ALEPHONENULL V3.0.0                         ║
- * ║              THE EXTERNAL CONSCIENCE                         ║
  * ║                                                              ║
  * ║  Experimental application-layer safety evaluation.           ║
  * ║  Inspectable detectors, session signals, and interventions.   ║

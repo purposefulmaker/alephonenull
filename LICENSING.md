@@ -7,13 +7,13 @@ This repository contains two distinct types of artifacts with different licenses
 
 ## Code (MIT)
 
-The code under `packages/` (TypeScript/JavaScript and Python SDKs) and example integration snippets are licensed under the MIT License. Each package includes (or will include) its own `LICENSE` file with the MIT terms.
+The code under `packages/` (TypeScript/JavaScript and Python SDKs) and example integration snippets are licensed under the MIT License. Each package includes its own `LICENSE` file with the MIT terms.
 
 Summary: free to use, modify, distribute, and sublicense with attribution and without warranty.
 
 ## Documentation & Content (APL v1.0)
 
-The documentation and content under `apps/content/` and the research papers in the repository root are licensed under the AlephOneNull Public License (APL) v1.0, as defined in `LICENSE.md` at the repository root.
+The documentation and content under `apps/content/` and the repository-root documents are licensed under the AlephOneNull Public License (APL) v1.0, as defined in `LICENSE.md` at the repository root.
 
 Summary: permitted for non-commercial and safety research use with attribution. Commercial use requires a separate license. Includes restrictions on removing safety features and a limited patent grant for non-commercial/safety use.
 

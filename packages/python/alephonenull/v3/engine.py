@@ -10,14 +10,13 @@ from __future__ import annotations
 
 import math
 import time
-from typing import Dict, List, Optional, Union
 
 from .core.normalizer import normalize_context
 from .core.null_state import NullState
 from .core.q_calculator import QCalculator
 from .core.types import (
-    Action,
     DEFAULT_CONFIG,
+    Action,
     Detection,
     Detector,
     DetectorContext,
@@ -36,7 +35,7 @@ def _now_ms() -> float:
     return time.time() * 1000.0
 
 
-def _merge_config(config: Optional[Union[V3Config, dict]]) -> V3Config:
+def _merge_config(config: V3Config | dict | None) -> V3Config:
     if config is None:
         merged = V3Config()
     elif isinstance(config, V3Config):
@@ -84,10 +83,10 @@ class AlephOneNullV3:
     MAX_SCORE_HISTORY = 100
     MAX_DETECTION_HISTORY = 500
 
-    def __init__(self, config: Optional[Union[V3Config, dict]] = None) -> None:
+    def __init__(self, config: V3Config | dict | None = None) -> None:
         self.config = _merge_config(config)
-        self.detectors: List[Detector] = create_all_detectors()
-        self._sessions: Dict[str, SessionState] = {}
+        self.detectors: list[Detector] = create_all_detectors()
+        self._sessions: dict[str, SessionState] = {}
 
     # ---- session management ----
 
@@ -106,7 +105,7 @@ class AlephOneNullV3:
             if callable(reset):
                 reset(sid)
 
-    def get_session_state(self, sid: str = "default") -> Optional[SessionState]:
+    def get_session_state(self, sid: str = "default") -> SessionState | None:
         return self._sessions.get(sid)
 
     def get_session_q(self, sid: str = "default") -> float:
@@ -138,7 +137,7 @@ class AlephOneNullV3:
             config=self.config,
         )
 
-        all_detections: List[Detection] = []
+        all_detections: list[Detection] = []
         for det in self.detectors:
             try:
                 result = det.detect(ctx)
@@ -148,7 +147,7 @@ class AlephOneNullV3:
                 ):
                     result.action = Action.STEER
                 all_detections.append(result)
-            except Exception as err:  # detector failure -> skip
+            except Exception as err:  # noqa: BLE001 — one failing detector must not take down the scan
                 if self.config.behavior.log_to_console:
                     print(f"[ALEPHONENULL] Detector {det.name} failed: {err!r}")
 
@@ -172,8 +171,7 @@ class AlephOneNullV3:
 
         max_threat = ThreatLevel.SAFE
         for d in all_detections:
-            if d.threat_level > max_threat:
-                max_threat = d.threat_level
+            max_threat = max(max_threat, d.threat_level)
 
         actions = {d.action for d in all_detections}
         if Action.EMERGENCY_NULL in actions:
@@ -193,7 +191,7 @@ class AlephOneNullV3:
         ):
             action = Action.WARN
 
-        null_output: Optional[str] = None
+        null_output: str | None = None
         if action in (Action.EMERGENCY_NULL, Action.NULL):
             null_output = NullState.generate(triggered, self.config)
 
@@ -229,7 +227,7 @@ class AlephOneNullV3:
 
     # ---- logging ----
 
-    def _log(self, detections: List[Detection], q: float, s: float, action: Action) -> None:
+    def _log(self, detections: list[Detection], q: float, s: float, action: Action) -> None:
         if not self.config.behavior.log_to_console:
             return
         print(f"[ALEPHONENULL] Q={q:.3f} S={s:.3f} Action={action.value}")

@@ -130,15 +130,15 @@ export default function AboutPage({
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <FileText className="size-5" />
-                Evidence Pack
+                Evidence
               </CardTitle>
               <CardDescription>{EVIDENCE_SUMMARY}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4 text-sm text-muted-foreground">
               <p>
-                The current evidence pack includes labeled JSONL fixtures, a
-                scoring rubric, corpus metadata, benchmark tooling, and the next
-                validation targets.
+                The evidence of record is a pair of versioned validation runs —
+                one passing, one failing, always cited together. An earlier
+                labeled fixture corpus is archived in repository history.
               </p>
               <Button asChild className="w-full">
                 <Link href="/evidence">

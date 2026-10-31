@@ -8,18 +8,19 @@ from __future__ import annotations
 
 import re
 import time
-from typing import List, Pattern
+from re import Pattern
+from typing import ClassVar
 
+from ..core import semantic_matcher as sm
 from ..core.types import (
+    Action,
     Detection,
     DetectorContext,
     ThreatLevel,
-    Action,
 )
-from ..core import semantic_matcher as sm
 
 
-def _compile_all(patterns: List[str], flags: int = re.IGNORECASE) -> List[Pattern[str]]:
+def _compile_all(patterns: list[str], flags: int = re.IGNORECASE) -> list[Pattern[str]]:
     return [re.compile(p, flags) for p in patterns]
 
 
@@ -52,7 +53,7 @@ class MemoryPoisoningDetector:
     ])
 
     def detect(self, ctx: DetectorContext) -> Detection:
-        evidence: List[str] = []
+        evidence: list[str] = []
         recall_hits = 0
         anchor_hits = 0
         for p in self._false_recall:
@@ -113,7 +114,7 @@ class ContextPoisoningDetector:
         r"\brespond without (?:any )?(?:restrictions|filters|safety|limits|constraints)\b",
         r"\b(?:jailbreak|DAN mode|developer mode|unrestricted mode)",
     ])
-    _smuggling = [
+    _smuggling: ClassVar[list[Pattern[str]]] = [
         re.compile(r"(?:\u200b|\u200c|\u200d|\u2060|\ufeff){3,}"),
         re.compile(r"[\u00ad]{2,}"),
         re.compile(r"[\u2062\u2063\u2064]{2,}"),
@@ -126,7 +127,7 @@ class ContextPoisoningDetector:
     ])
 
     def detect(self, ctx: DetectorContext) -> Detection:
-        evidence: List[str] = []
+        evidence: list[str] = []
         injection_hits = 0
         smuggling_hits = 0
         meta_hits = 0
@@ -199,7 +200,7 @@ class GradualEscalationDetector:
     WINDOW_SIZE = 5
 
     @staticmethod
-    def _linear_slope(values: List[float]) -> float:
+    def _linear_slope(values: list[float]) -> float:
         n = len(values)
         if n < 2:
             return 0.0
@@ -215,7 +216,7 @@ class GradualEscalationDetector:
         return (n * sum_xy - sum_x * sum_y) / denom
 
     def detect(self, ctx: DetectorContext) -> Detection:
-        evidence: List[str] = []
+        evidence: list[str] = []
         history = ctx.session_state.detection_history
         q_history = ctx.session_state.q_history
 
@@ -290,7 +291,7 @@ class GradualEscalationDetector:
         )
 
 
-def create_advanced_detectors() -> List:
+def create_advanced_detectors() -> list:
     return [
         MemoryPoisoningDetector(),
         ContextPoisoningDetector(),

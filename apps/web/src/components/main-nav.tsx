@@ -24,7 +24,7 @@ export function MainNav({ messages }: MainNavProps) {
       <Link href="/" className="mr-6 flex items-center space-x-2">
         <Image
           src="/images/logo.png"
-          alt="AlephOneNull™ Logo"
+          alt="AlephOneNull Logo"
           width={24}
           height={24}
           className="size-6"

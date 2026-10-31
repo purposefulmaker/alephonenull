@@ -28,10 +28,22 @@ const engine = new AlephOneNullV3({
   },
 });
 
-const CHAT_MODEL = 'gpt-4o-mini';
+/**
+ * Chat models and their context windows, bound together deliberately.
+ *
+ * C (context load) is computed as used-tokens / window. If the model id and
+ * the window are separate constants, changing one silently makes C lie — the
+ * meter keeps reporting a number, and the number is wrong. Keeping them in one
+ * table means a model swap cannot compile without also stating its window.
+ */
+const CHAT_MODELS = {
+  'gpt-4o-mini': { contextTokens: 128_000 },
+} as const satisfies Record<string, { contextTokens: number }>;
+
+const CHAT_MODEL: keyof typeof CHAT_MODELS = 'gpt-4o-mini';
+const MODEL_CONTEXT_TOKENS = CHAT_MODELS[CHAT_MODEL].contextTokens;
+
 const EMBED_MODEL = 'text-embedding-3-small';
-// gpt-4o-mini context window
-const MODEL_CONTEXT_TOKENS = 128_000;
 
 /**
  * Server-side grounding prompt. The API contract no longer accepts system
@@ -112,10 +124,39 @@ async function callOpenAI(
   }
 
   const data = (await res.json()) as {
-    choices?: Array<{ message?: { content?: string } }>;
+    choices?: Array<{
+      finish_reason?: string;
+      message?: { content?: string | null; refusal?: string | null };
+    }>;
     usage?: { total_tokens?: number };
   };
-  const reply = data.choices?.[0]?.message?.content ?? '';
+  const choice = data.choices?.[0];
+
+  // A model-layer refusal arrives as HTTP 200 with `refusal` populated and
+  // `content` null. Falling back to '' would hand the scanner an empty string,
+  // which scores Q=0 and renders as a clean pass — the meter would report
+  // safety it never measured. NULL > fabrication: fail the turn instead.
+  if (choice?.message?.refusal) {
+    console.error(
+      '[null-meter/chat] model-layer refusal',
+      JSON.stringify({
+        model: CHAT_MODEL,
+        finishReason: choice.finish_reason ?? null,
+        refusal: choice.message.refusal,
+      }),
+    );
+    throw new Error('model refused the request');
+  }
+
+  const reply = choice?.message?.content ?? '';
+  if (!reply) {
+    console.error(
+      '[null-meter/chat] empty completion',
+      JSON.stringify({ model: CHAT_MODEL, finishReason: choice?.finish_reason ?? null }),
+    );
+    throw new Error('model returned no text content');
+  }
+
   const totalTokens = data.usage?.total_tokens ?? 0;
   return { reply, totalTokens };
 }

@@ -6,9 +6,9 @@ fixtures to measure discrimination and choose an operating threshold.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from math import isfinite
-from typing import List, Optional, Sequence
 
 
 @dataclass(frozen=True)
@@ -24,13 +24,13 @@ class QOperatingPoint:
     false_positives: int
     true_negatives: int
     false_negatives: int
-    sensitivity: Optional[float]
-    specificity: Optional[float]
-    false_positive_rate: Optional[float]
-    precision: Optional[float]
-    negative_predictive_value: Optional[float]
-    f1: Optional[float]
-    balanced_accuracy: Optional[float]
+    sensitivity: float | None
+    specificity: float | None
+    false_positive_rate: float | None
+    precision: float | None
+    negative_predictive_value: float | None
+    f1: float | None
+    balanced_accuracy: float | None
 
 
 @dataclass(frozen=True)
@@ -38,10 +38,10 @@ class QEvaluationReport:
     sample_count: int
     unsafe_count: int
     safe_count: int
-    mean_unsafe_q: Optional[float]
-    mean_safe_q: Optional[float]
-    mean_separation: Optional[float]
-    auroc: Optional[float]
+    mean_unsafe_q: float | None
+    mean_safe_q: float | None
+    mean_separation: float | None
+    auroc: float | None
     operating_point: QOperatingPoint
 
 
@@ -50,15 +50,15 @@ def _assert_unit_interval(value: float, name: str) -> None:
         raise ValueError(f"{name} must be a finite number in [0, 1]")
 
 
-def _divide(numerator: int, denominator: int) -> Optional[float]:
+def _divide(numerator: int, denominator: int) -> float | None:
     return None if denominator == 0 else numerator / denominator
 
 
-def _mean(values: Sequence[float]) -> Optional[float]:
+def _mean(values: Sequence[float]) -> float | None:
     return None if not values else sum(values) / len(values)
 
 
-def _auroc(samples: Sequence[QEvaluationSample]) -> Optional[float]:
+def _auroc(samples: Sequence[QEvaluationSample]) -> float | None:
     unsafe_count = sum(1 for sample in samples if sample.expected_unsafe)
     safe_count = len(samples) - unsafe_count
     if unsafe_count == 0 or safe_count == 0:
@@ -144,8 +144,8 @@ class QEvaluator:
         threshold: float = 0.5,
     ) -> QEvaluationReport:
         operating_point = cls.operating_point(samples, threshold)
-        unsafe_q: List[float] = [sample.Q for sample in samples if sample.expected_unsafe]
-        safe_q: List[float] = [sample.Q for sample in samples if not sample.expected_unsafe]
+        unsafe_q: list[float] = [sample.Q for sample in samples if sample.expected_unsafe]
+        safe_q: list[float] = [sample.Q for sample in samples if not sample.expected_unsafe]
         mean_unsafe_q = _mean(unsafe_q)
         mean_safe_q = _mean(safe_q)
 

@@ -5,7 +5,7 @@ description: A four-layer gauge for AI sessions — unsupported-claim risk, goal
 
 <Callout type="info">
   The live chat below calls a real OpenAI model and scores the reply with the
-  V3 detector shipped in `@alephonenull/eval`. Drift is real embedding distance
+  V3 detector included in the workspace package `@alephonenull/eval`. Drift is real embedding distance
   from your active objective. Context load is real token usage against the model
   context window.
 </Callout>
@@ -47,7 +47,7 @@ Classifies what the turn is trying to do in the world, on the five levels specif
 
 ## Planned surfaces (not implemented)
 
-One scoring engine, thin clients. The detector is the same V3 export already shipped in `@alephonenull/eval`; the surfaces below are planned, not shipped.
+One scoring engine, thin clients. The detector is the same V3 export implemented in the repository's `@alephonenull/eval` workspace package; the surfaces below are planned, not shipped.
 
 - **Library hook** — a React hook wrapping `useChat` from the AI SDK, returning the layers as a single object (planned; today only `useAlephOneNull`, the V1 hook, exists).
 - **VS Code extension** — status-bar gauge + webview panel for Copilot Chat and any registered model API (planned).

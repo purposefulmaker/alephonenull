@@ -10,7 +10,16 @@ use it as the only safety layer in production or safety-critical systems. Any pe
 
 ## Installation
 
-The package is published under the `experimental` dist-tag (there is no `latest` release):
+The package is **not yet published to a public registry**. To use it today, build it from source:
+
+```bash
+git clone https://github.com/purposefulmaker/alephonenull.git
+cd alephonenull
+pnpm install
+pnpm build
+```
+
+Once it is published (planned under the `experimental` dist-tag, with no `latest` release), this install command will work:
 
 ```bash
 npm install @alephonenull/eval@experimental

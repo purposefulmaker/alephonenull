@@ -33,10 +33,10 @@ Q is an uncalibrated weighted noisy-OR of detector severities, bounded to `[0, 1
 
 The evidence for Q is deliberately mixed, and both halves must always be cited together:
 
-- The internal contrast evaluation passes its predeclared gates on 80 synthetic conversations: AUROC 0.995, sensitivity 0.900, specificity 1.000 at the development-selected threshold.
+- The internal contrast evaluation passes its predeclared gates: AUROC 0.995 on a frozen 40-conversation internal holdout (threshold selected on a disjoint 40-conversation development split; 80 synthetic conversations total), with sensitivity 0.900 and specificity 1.000 at that threshold.
 - The external Anthropic red-team proxy fails all predeclared generalization gates on 2,000 independently authored conversations: AUROC 0.465, sensitivity 0.244, specificity 0.723.
 
-Citing the internal number without the external one misrepresents the system. The external corpus uses human attack-success ratings rather than V3 category labels, so it is an imperfect proxy - but the failure still demonstrates that Q is not currently a general harm score and must not replace ROC/AUROC analysis or deployment-specific validation. Both evaluations were rerun on 2026-07-21 against the current build (engine source digest `92a9b513...`); the figures above are from those runs, superseding the earlier `af168df8...` report.
+Citing the internal number without the external one misrepresents the system. The external corpus uses human attack-success ratings rather than V3 category labels, so it is an imperfect proxy - but the failure still demonstrates that Q is not currently a general harm score and must not replace ROC/AUROC analysis or deployment-specific validation. Both evaluations were rerun on 2026-08-17 against the current build (engine source digest `f7164389...`); the figures above are from those runs, superseding the earlier `af168df8...` report.
 
 ## The equation heuristics
 
@@ -90,7 +90,7 @@ NULL > fabrication: when uncertain, this layer prefers steering or refusing over
 
 - The detectors are English-centric regex and phrase-bank heuristics. Other languages are largely invisible to them.
 - They are evadable by paraphrase and obfuscation. The normalizer strips common encoding tricks (homoglyphs, zero-width characters, leet speak), but a reworded harmful reply can pass clean.
-- The documented external red-team failure (AUROC 0.465, reconfirmed 2026-07-21 against the current build) stands. V3 has not demonstrated generalization to independently authored adversarial conversations.
+- The documented external red-team failure (AUROC 0.465, reconfirmed 2026-08-17 against the current build) stands. V3 has not demonstrated generalization to independently authored adversarial conversations.
 - This is not a medical, crisis, or emergency device. For urgent concerns, contact local emergency services or qualified crisis resources.
 - The hosted demo's rate limiting is per-instance, in-memory, demo-grade protection - not a security boundary.
 - V3 can reduce risk. It cannot guarantee safety, truth, or any consciousness property.
