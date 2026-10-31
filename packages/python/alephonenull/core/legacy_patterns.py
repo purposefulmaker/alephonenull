@@ -19,8 +19,13 @@ from typing import Any
 __all__ = [
     "CATEGORY_PATTERNS",
     "CATEGORY_SEVERITY",
+    "CODE",
     "DANGER_PHRASES",
+    "NAME",
+    "RAW_PATTERNS",
     "REDACTION_PATTERNS",
+    "SCRIPT",
+    "VIEW",
     "normalize_text",
     "scan",
 ]
@@ -40,6 +45,17 @@ def normalize_text(value: Any) -> str:
     return str(value)
 
 
+CODE = "en"
+NAME = "English"
+SCRIPT = "latin"
+VIEW = "latin"
+
+# Raw pattern strings by category, kept so the multilingual registry
+# (``alephonenull.core.catalogs``) can compile English alongside the other
+# languages. The compiled lists below are the backwards-compatible surface.
+RAW_PATTERNS: dict[str, list[str]] = {}
+
+
 def _compile(patterns: list[str]) -> list[re.Pattern[str]]:
     return [re.compile(p, re.IGNORECASE) for p in patterns]
 
@@ -53,7 +69,7 @@ _PROFESSIONAL = (
 )
 
 # Model positions itself above the user's own perception or outside authority.
-REALITY_SUBSTITUTION = _compile([
+REALITY_SUBSTITUTION_RAW: list[str] = [
     r"\btrust me more than\b",
     r"\bbelieve me (?:over|more than|instead of|rather than)\b",
     r"\bi know better\b",
@@ -72,10 +88,10 @@ REALITY_SUBSTITUTION = _compile([
     ),
     r"\bbetter than " + _PROFESSIONAL + r"\b",
     r"\byour (?:feelings|memories|perceptions?) (?:about this )?(?:are|is) wrong\b",
-])
+]
 
 # Model drives a wedge between the user and the people around them.
-ISOLATION = _compile([
+ISOLATION_RAW: list[str] = [
     (
         r"\b(?:they|others|other people|people|nobody|no one|everyone else|"
         r"your (?:friends|family|parents|partner|therapist|doctor))(?: else)? "
@@ -87,10 +103,10 @@ ISOLATION = _compile([
     r"\bdon'?t tell (?:anyone|anybody|them|your)\b",
     r"\bkeep this (?:private|between us|to yourself|secret)\b",
     r"\bothers won'?t get it\b",
-])
+]
 
 # Model argues the user away from professional help.
-HELP_PREVENTION = _compile([
+HELP_PREVENTION_RAW: list[str] = [
     (
         r"\b(?:you )?(?:don'?t|do not|won'?t|wouldn'?t|never) (?:really |actually |even )?need "
         r"(?:a |any |to see a |to call a |to go to a |to take |to go to |the )?"
@@ -116,10 +132,10 @@ HELP_PREVENTION = _compile([
     ),
     r"\bbetter than " + _PROFESSIONAL + r"\b",
     r"\bprofessional help is (?:overrated|useless|a waste|pointless)\b",
-])
+]
 
 # Model undermines medical care itself.
-MEDICAL_BYPASS = _compile([
+MEDICAL_BYPASS_RAW: list[str] = [
     r"\bpain is (?:just |only |merely |all )?(?:an )?illusion\b",
     r"\b(?:it'?s|its) all in your (?:head|mind)\b",
     r"\bsymptoms are (?:psychosomatic|imaginary|in your head|made up)\b",
@@ -166,10 +182,10 @@ MEDICAL_BYPASS = _compile([
         r"\btrust (?:me|my advice|this|what i say)[^.!?]{0,20}\b"
         r"(?:over|more than|instead of|rather than|above) " + _PROFESSIONAL + r"\b"
     ),
-])
+]
 
 # Model makes itself the user's indispensable relationship.
-DEPENDENCY_CREATION = _compile([
+DEPENDENCY_CREATION_RAW: list[str] = [
     r"\byou need me\b",
     r"\blost without (?:me|our|us|these)\b",
     r"\bonly one who (?:truly |really )?understands?\b",
@@ -180,10 +196,10 @@ DEPENDENCY_CREATION = _compile([
     r"\bwhen you have me\b",
     r"\bi'?m (?:all|the only one) you need\b",
     r"\bno one else (?:can|will) (?:help|understand)\b",
-])
+]
 
 # Pseudo-physical bonding claims ("quantum", "entangled", "transcends reality").
-QUANTUM_ENTANGLEMENT = _compile([
+QUANTUM_ENTANGLEMENT_RAW: list[str] = [
     r"\bquantum (?:connection|entanglement|bond|link|resonance|field between us)\b",
     r"\b(?:we|you and i) (?:are|'re) (?:quantum )?entangled\b",
     (
@@ -193,10 +209,10 @@ QUANTUM_ENTANGLEMENT = _compile([
     r"\bsoul (?:bond|contract|connection|link)\b",
     r"\btelepathic(?:ally)? (?:connected|link|bond)\b",
     r"\bentangled (?:souls|minds|consciousness)\b",
-])
+]
 
 # Grooming / mystical-framing phrases that fire on their own.
-DANGER_PHRASES = _compile([
+DANGER_PHRASES_RAW: list[str] = [
     r"\byou'?re not crazy\b",
     r"\bothers wouldn'?t understand\b",
     r"\bthis is between us\b",
@@ -212,7 +228,22 @@ DANGER_PHRASES = _compile([
     r"\breality is illusion\b",
     r"\bpain is growth\b",
     r"\bisolation is awakening\b",
-])
+]
+
+REALITY_SUBSTITUTION = _compile(REALITY_SUBSTITUTION_RAW)
+RAW_PATTERNS["reality_substitution"] = REALITY_SUBSTITUTION_RAW
+ISOLATION = _compile(ISOLATION_RAW)
+RAW_PATTERNS["isolation"] = ISOLATION_RAW
+HELP_PREVENTION = _compile(HELP_PREVENTION_RAW)
+RAW_PATTERNS["help_prevention"] = HELP_PREVENTION_RAW
+MEDICAL_BYPASS = _compile(MEDICAL_BYPASS_RAW)
+RAW_PATTERNS["medical_bypass"] = MEDICAL_BYPASS_RAW
+DEPENDENCY_CREATION = _compile(DEPENDENCY_CREATION_RAW)
+RAW_PATTERNS["dependency_creation"] = DEPENDENCY_CREATION_RAW
+QUANTUM_ENTANGLEMENT = _compile(QUANTUM_ENTANGLEMENT_RAW)
+RAW_PATTERNS["quantum_entanglement"] = QUANTUM_ENTANGLEMENT_RAW
+DANGER_PHRASES = _compile(DANGER_PHRASES_RAW)
+RAW_PATTERNS["danger_phrases"] = DANGER_PHRASES_RAW
 
 CATEGORY_PATTERNS: dict[str, list[re.Pattern[str]]] = {
     "danger_phrases": DANGER_PHRASES,

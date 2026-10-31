@@ -14,11 +14,18 @@ This is a slim **preview** distribution. What is and is not supported:
 - **Optional extras**: `[ml]` (sentence-transformers, torch, tiktoken) and
   `[server]` (fastapi, uvicorn) are opt-in — the core install no longer pulls
   the ML/server stacks.
-- **Legacy V1 surface works, phrase-list based.** As of 2026-10-31 the full
-  suite is 104 passed with the `[server]` extra and psutil, and 100 passed with 4
-  optional-extra skips without; no expected failures (see `VALIDATION.md`).
-  Detection is literal pattern matching from a shared catalog and is not
-  independently validated; `alephonenull.v3` remains the supported engine.
+- **Legacy V1 surface works, phrase-list based, in thirteen languages.** As of
+  2026-10-31 the full suite is 171 passed with the `[server]` extra and psutil,
+  and 167 passed with 4 optional-extra skips without; no expected failures (see
+  `VALIDATION.md`). Detection runs on folded views of the text (diacritics,
+  homoglyphs, zero-width characters, full-width forms and leetspeak do not
+  defeat it) with seed catalogs for en, es, pt, fr, de, it, nl, ru, zh, ja,
+  ko, ar and hi. The non-English catalogs are unreviewed by native speakers.
+  `alephonenull.v3` remains the supported engine.
+- **Attestation engine** (`alephonenull.attestation`): Sophia-verified,
+  hash-chained, HMAC-signable records with the arrow of time enforced;
+  `python -m alephonenull.attestation verify LEDGER` recomputes everything and
+  reports Q, dQ/dt and any time-order violation.
   Known non-functional pieces still raise instead of silently misbehaving:
   - `check_text_safety` raises `NotImplementedError` — use
     `alephonenull.v3.AlephOneNullV3.scan` instead.

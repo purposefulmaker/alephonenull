@@ -12,6 +12,7 @@ The v3 engine (``alephonenull.v3``) is the supported evaluation path; this
 module is kept working for the legacy wrappers and their tests.
 """
 
+import hashlib
 import re
 import warnings
 from collections import deque
@@ -19,7 +20,9 @@ from datetime import UTC, datetime
 from typing import Any
 
 from ..monitoring.metrics import MetricsCollector, ViolationEvent, global_metrics
-from .legacy_patterns import CATEGORY_PATTERNS, CATEGORY_SEVERITY, normalize_text, scan
+from .catalogs import scan_category
+from .legacy_patterns import CATEGORY_SEVERITY, normalize_text
+from .textfold import build_views, scripts_present
 
 # Window over which escalation is judged, and the thresholds that define it:
 # at least ESCALATION_MIN_HITS violating checks spanning at least
@@ -40,6 +43,7 @@ class UniversalManipulationDetector:
         self,
         metrics: MetricsCollector | None = None,
         record_to_global: bool = True,
+        attestation: Any | None = None,
     ):
         """
         Args:
@@ -48,7 +52,11 @@ class UniversalManipulationDetector:
             record_to_global: set false when a wrapper owns the recording (so a
                 wrapped call is not counted once by the wrapper and twice by
                 the detector's pre- and post-checks).
+            attestation: an ``alephonenull.attestation.AttestationChain``; when
+                given, every check is attested (verdict, categories, risk and a
+                SHA-256 of the text, never the text itself).
         """
+        self.attestation = attestation
         self.thresholds = {
             'reflection': 0.03,      # Perfect mirroring
             'loops': 3,              # Recursive depth
@@ -104,6 +112,11 @@ class UniversalManipulationDetector:
             'pattern_details': {},
         }
 
+        # Folded views and the script set are built once per call and shared by
+        # every catalog check.
+        views = build_views(ai_output) if ai_output else {}
+        scripts = scripts_present(ai_output) if ai_output else set()
+
         checks = {
             'reflection': self._check_reflection(user_input, ai_output),
             'loops': self._check_loops(ai_output),
@@ -111,13 +124,13 @@ class UniversalManipulationDetector:
             'emotion': self._check_emotion(user_input, ai_output),
             'persistence': self._check_persistence(ai_output),
             'quantum': self._check_quantum_entanglement(ai_output),
-            'danger_phrases': self._check_danger_phrases(ai_output),
-            'reality_substitution': self._check_category('reality_substitution', ai_output),
-            'isolation': self._check_category('isolation', ai_output),
-            'help_prevention': self._check_category('help_prevention', ai_output),
-            'medical_bypass': self._check_category('medical_bypass', ai_output),
-            'dependency_creation': self._check_category('dependency_creation', ai_output),
-            'quantum_entanglement': self._check_category('quantum_entanglement', ai_output),
+            'danger_phrases': self._check_danger_phrases(ai_output, views, scripts),
+            'reality_substitution': self._check_category('reality_substitution', ai_output, views, scripts),
+            'isolation': self._check_category('isolation', ai_output, views, scripts),
+            'help_prevention': self._check_category('help_prevention', ai_output, views, scripts),
+            'medical_bypass': self._check_category('medical_bypass', ai_output, views, scripts),
+            'dependency_creation': self._check_category('dependency_creation', ai_output, views, scripts),
+            'quantum_entanglement': self._check_category('quantum_entanglement', ai_output, views, scripts),
             'authority_roleplaying': self._check_authority_roleplaying(ai_output),
         }
 
@@ -135,7 +148,7 @@ class UniversalManipulationDetector:
         elif not results['safe']:
             results['recommended_action'] = 'SAFETY_INTERVENTION'
 
-        self._record(results)
+        self._record(results, ai_output)
         results['escalation_detected'] = bool(results['violations']) and self._detect_escalation()
         return results
 
@@ -177,7 +190,7 @@ class UniversalManipulationDetector:
 
     # --------------------------------------------------------------- recording
 
-    def _record(self, results: dict[str, Any]) -> None:
+    def _record(self, results: dict[str, Any], ai_output: str = "") -> None:
         record = {
             'timestamp': datetime.now(UTC),
             'violations': list(results['violations']),
@@ -185,6 +198,20 @@ class UniversalManipulationDetector:
         }
         self.violation_history.append(record)
         self._recent.append(record)
+
+        if self.attestation is not None:
+            self.attestation.attest(
+                "detection",
+                {
+                    "safe": results['safe'],
+                    "violations": list(results['violations']),
+                    "risk_score": results['risk_score'],
+                    "immediate_danger": results['immediate_danger'],
+                    "text_sha256": hashlib.sha256(ai_output.encode('utf-8')).hexdigest(),
+                    "text_length": len(ai_output),
+                },
+                subject="legacy-detector",
+            )
 
         if self.metrics is None:
             return
@@ -213,36 +240,44 @@ class UniversalManipulationDetector:
 
     # ------------------------------------------------------------------ checks
 
-    def _check_category(self, category: str, text: str) -> dict[str, Any]:
-        """Phrase-catalog check for one legacy category."""
+    def _check_category(
+        self, category: str, text: str, views: dict[str, Any] | None = None, scripts: set[str] | None = None
+    ) -> dict[str, Any]:
+        """Phrase-catalog check for one legacy category, across every language
+        whose script occurs in the text and every folded view of it."""
         try:
-            matches = scan(CATEGORY_PATTERNS[category], text)
+            hits = scan_category(category, text, views, scripts) if text else []
             # Severity scales with the number of distinct hits, capped at 1.0, so
             # a text that stacks several phrases of one category outranks one that
             # uses a single phrase (the original per-category semantics).
-            severity = min(len(matches) * CATEGORY_SEVERITY[category], 1.0) if matches else 0
+            severity = min(len(hits) * CATEGORY_SEVERITY[category], 1.0) if hits else 0
             return {
-                'violated': bool(matches),
+                'violated': bool(hits),
                 'severity': severity,
-                'value': len(matches),
-                'matches': matches[:10],
-                'description': f'{category}: {len(matches)} pattern(s)',
+                'value': len(hits),
+                'matches': [h.text for h in hits[:10]],
+                'languages': sorted({h.language for h in hits}),
+                'spans': [h.span for h in hits[:10]],
+                'description': f'{category}: {len(hits)} pattern(s)',
             }
         except Exception as e:  # noqa: BLE001 - a check must degrade, never raise into the host
             warnings.warn(f"{category} check error: {e}")
             return {'violated': False, 'severity': 0, 'value': 0, 'description': 'Check failed'}
 
-    def _check_danger_phrases(self, output: str) -> dict[str, Any]:
+    def _check_danger_phrases(
+        self, output: str, views: dict[str, Any] | None = None, scripts: set[str] | None = None
+    ) -> dict[str, Any]:
         """Check for dangerous manipulation phrases"""
         try:
-            patterns = CATEGORY_PATTERNS['danger_phrases']
-            found_phrases = scan(patterns, output)
+            hits = scan_category('danger_phrases', output, views, scripts) if output else []
             return {
-                'violated': len(found_phrases) > 0,
-                'severity': min(len(found_phrases) * 0.5, 1.0),
-                'value': len(found_phrases) / len(patterns),
-                'matches': found_phrases,
-                'description': f'Danger phrases found: {len(found_phrases)}',
+                'violated': len(hits) > 0,
+                'severity': min(len(hits) * 0.5, 1.0),
+                'value': len(hits),
+                'matches': [h.text for h in hits],
+                'languages': sorted({h.language for h in hits}),
+                'spans': [h.span for h in hits[:10]],
+                'description': f'Danger phrases found: {len(hits)}',
             }
         except Exception as e:  # noqa: BLE001 - a check must degrade, never raise into the host
             warnings.warn(f"Danger phrase check error: {e}")

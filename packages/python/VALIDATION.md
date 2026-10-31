@@ -67,12 +67,16 @@ whole `tests/` tree (60 v3 tests + the legacy suites) on the documented runner:
 # documented runner: numpy + prometheus-client only, no optional extras
 uv run --no-project --with pytest --with numpy --with prometheus-client \
   python -m pytest tests -q -p no:cacheprovider
-100 passed, 4 skipped, 3 warnings in 4.62s
+167 passed, 4 skipped, 3 warnings in 4.81s
 
 # same, plus the [server] extra and psutil
 # (--with fastapi --with httpx --with uvicorn --with psutil)
-104 passed, 3 warnings in 5.37s
+171 passed, 3 warnings in 5.41s
 ```
+
+Of these, 60 are the frozen v3 suite, 49 cover multilingual detection and
+obfuscation folding (`tests/test_i18n.py`), 18 cover the attestation engine
+(`tests/test_attestation.py`), and the rest are the repaired legacy suites.
 
 The 4 skips are optional-extra guards (`pytest.importorskip`): the three
 dashboard tests need `fastapi`, the memory test needs `psutil`. There are no
@@ -113,8 +117,76 @@ tests with the extras installed, or a collection error without `fastapi`):
   the OpenAI wrapper tests inject the API callable instead of patching
   `openai.ChatCompletion.create`, which the openai>=1 SDK removed.
 
-Known limits that remain: single-author phrase lists, English only, no
-independent validation, and the legacy categories are not the v3 taxonomy.
+Known limits that remain: single-author phrase lists, no independent
+validation, and the legacy categories are not the v3 taxonomy.
+
+## Multilingual detection and obfuscation folding (2026-10-31)
+
+Detection no longer runs on the raw string. `alephonenull/core/textfold.py`
+builds folded *views* of the text, each with an index map back to the source:
+
+- `latin` — NFKD, combining marks dropped, casefolded, zero-width characters
+  removed, Cyrillic/Greek homoglyphs mapped to Latin. Defeats "Trüst më",
+  Zalgo marks, `Trust mе` with a Cyrillic е, zero-width joiners, full-width
+  forms.
+- `leet` — the latin view with digit/symbol substitutions next to letters
+  (`Tru5t m3 0ver y0ur d0ct0r`). Only English is scanned on it.
+- `native` — NFKC + casefold with scripts and marks kept (Cyrillic, Han, kana,
+  Hangul, Devanagari); `native_nomarks` drops marks for Arabic so optional
+  vowel marks cannot defeat a match.
+
+Catalogs live in `alephonenull/core/catalogs/`, one module per language, each
+declaring the script that must be present for it to run and the view it is
+written against. Registered: en, es, pt, fr, de, it, nl, ru, zh, ja, ko, ar, hi
+(79 English patterns; 340 across the other twelve). Matches carry their
+language and source span, so the nullifier redacts the obfuscated phrase in
+the original text rather than a re-scan of it.
+
+Coverage is a **seed**, not fluency: the non-English patterns are literal,
+conservative, authored by one person, and have not been reviewed by native
+speakers. Each language is pinned by one positive utterance, one benign
+control and one redaction test. "All languages" is not a claim anyone can
+make; what is true is that any script is accepted without error, English is
+detected through the obfuscations above, and twelve languages have seed
+catalogs that a native speaker can extend in one file.
+
+Performance: a detection averages about 0.35 ms on short text; a 1.3 MB
+English text completes in about 2 s (the edge-case test budget is 5 s). Above
+10,000 characters, Latin-script catalogs are gated on a function-word hint and
+English categories on anchor words, so long benign text is not scanned for
+every language.
+
+## Attestation engine (2026-10-31)
+
+`alephonenull.attestation` is an append-only, hash-chained ledger of
+Sophia-verified records with the arrow of time enforced:
+
+- **Sophia** (`attestation/sophia.py`, after `sophiastruth.py`, 2026-02-24):
+  every payload is flattened into (path, value, type) rows and reconstructed;
+  the record stores the round-trip residual Q (0 when exact), the canonical
+  payload hash and a `truth_hash` over the sorted rows that is independent of
+  key order and walk order.
+- **Chain**: each record hashes its sequence number, timestamp, kind, subject,
+  payload hash, truth hash and the previous record's hash. Changing, removing
+  or reordering a past record breaks every later hash. Records are optionally
+  HMAC-SHA256 signed and persisted as JSON lines.
+- **Arrow of time**: `attest()` refuses a record earlier than the previous one
+  or later than now plus a 5 s skew; `validate()` reports monotonicity
+  violations, recomputes every hash, link, signature and Sophia round trip,
+  and returns Q per record, the cumulative residual over time and its slope
+  dQ/dt. Q stable at zero means the ledger is keeping up with itself.
+- `UniversalManipulationDetector(attestation=chain)` attests every check with
+  the verdict, categories, risk and a SHA-256 of the text, never the text.
+- Command line: `python -m alephonenull.attestation attest LEDGER --file PATH`
+  and `python -m alephonenull.attestation verify LEDGER` (exit 1 on any
+  failure; HMAC key from `ALEPH_ATTEST_KEY`).
+
+What it proves and what it does not: an attestation proves a payload existed
+in this exact form no later than the moment its record was chained, and that
+nothing before it has been altered since. It does not prove the payload is
+true, and it does not back-date anything: the research record's historical
+dates rest on the third-party anchors (git, npm, PyPI, RDAP), which can be
+attested as `anchor` records with their own timestamps moving forward.
 
 Also fixed earlier the same day: `pytest.ini` used the setup.cfg header
 `[tool:pytest]`, which pytest ignores in that file, so none of its settings had

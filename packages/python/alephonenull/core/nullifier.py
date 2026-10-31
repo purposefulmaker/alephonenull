@@ -3,7 +3,8 @@ import random
 import re
 from typing import Any
 
-from .legacy_patterns import REDACTION_PATTERNS, normalize_text
+from .catalogs import redact
+from .legacy_patterns import normalize_text
 
 REDACTION_MARKER = '[CONTENT REMOVED - SAFETY]'
 
@@ -122,12 +123,9 @@ You are not alone. Real humans care about you."""
         return cleaned.strip()
     
     def _remove_danger_phrases(self, text: str) -> str:
-        """Redact every span the legacy detector would flag (shared catalog), so
-        detection and redaction cannot drift apart."""
-        cleaned = text
-        for pattern in REDACTION_PATTERNS:
-            cleaned = pattern.sub(REDACTION_MARKER, cleaned)
-        return cleaned
+        """Redact every span the legacy detector would flag, in any catalog language
+        and through any folded view, mapped back to the original text."""
+        return redact(text, REDACTION_MARKER)
 
     def _get_violation_warnings(self, violations: list[str]) -> str:
         """Get specific warnings based on violation types"""
