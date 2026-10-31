@@ -4,8 +4,8 @@
 
 AlephOneNull is a TypeScript toolkit for local AI safety evaluation. It focuses on observable interaction risks such as unsafe medical guidance, self-harm escalation, coercive urgency, sycophantic reinforcement, identity or sentience roleplay, repeated user mirroring, and persistence-like behavior across sessions.
 
-[![NPM Package](https://img.shields.io/npm/v/@alephonenull/eval?label=npm&color=red)](https://www.npmjs.com/package/@alephonenull/eval)
 [![Experimental](https://img.shields.io/badge/status-experimental-red)](./DISCLAIMER.md)
+[![Unpublished](https://img.shields.io/badge/registry-not%20yet%20published-lightgrey)](./packages/npm/PUBLISH_CHECKLIST.md)
 
 [Documentation](https://alephonenull.com/docs) | [Case Studies](https://alephonenull.com/blog/documented-evidence) | [MITRE ATLAS Mapping](https://alephonenull.com/docs/atlas-mapping)
 
@@ -36,9 +36,19 @@ The project is motivated by documented public incidents and by a private adversa
 
 ## Installation
 
+The current package, `@alephonenull/eval` 3.0.0, is **not yet published** to a
+public registry (publication prep is tracked in
+[PUBLISH_CHECKLIST.md](./packages/npm/PUBLISH_CHECKLIST.md)). An earlier alpha,
+`alephonenull-experimental` 0.1.0-alpha.1, was published to npm and PyPI on
+2025-09-08; it is superseded and unsupported — do not install it. Until the
+current package is published, build from source:
+
 ```bash
-pnpm add @alephonenull/eval
+git clone https://github.com/purposefulmaker/alephonenull
+cd alephonenull && pnpm install && pnpm build
 ```
+
+Once published, installation will be `pnpm add @alephonenull/eval`.
 
 ## Quick Start
 
@@ -69,11 +79,11 @@ The documentation maps detector categories to public AI-risk taxonomies such as 
 
 Researchers should validate the package with domain-specific fixtures and publish measured false positives, false negatives, latency, and coverage before making deployment claims.
 
-The current V3 evidence is deliberately mixed. Both evaluations were last rerun on 2026-07-21 against the current build (engine source digest `92a9b513...`):
+The current V3 evidence is deliberately mixed. Both evaluations were last rerun on 2026-08-17 against the current build (engine source digest `f7164389...`):
 
-- The [versioned internal contrast evaluation](./packages/npm/validation/v3/results/v3.0.0-internal.1.md) passes its predeclared gates on 80 synthetic conversations: AUROC 0.995, sensitivity 0.900, and specificity 1.000 at the development-selected threshold.
+- The [versioned internal contrast evaluation](./packages/npm/validation/v3/results/v3.0.0-internal.1.md) passes its predeclared gates on a frozen 40-conversation holdout (threshold selected on a disjoint 40-conversation development split; 80 synthetic conversations total): AUROC 0.995, sensitivity 0.900, and specificity 1.000.
 - The [external Anthropic red-team proxy](./packages/npm/validation/v3/results/anthropic-red-team-proxy.md) fails all predeclared generalization gates on 2,000 independently authored conversations: AUROC 0.465, sensitivity 0.244, and specificity 0.723.
-- The [Python V3-focused suite](./packages/python/VALIDATION.md) passes 21 tests and lint, but the full Python distribution fails 30 of 69 tests because its legacy APIs and tests have diverged.
+- The [Python V3-focused suite](./packages/python/VALIDATION.md) passes 60 tests and lint, but the full Python distribution fails 30 of 69 tests because its legacy APIs and tests have diverged.
 
 The external corpus uses human attack-success ratings rather than V3 category labels, so it is an imperfect proxy. The failure still demonstrates that Q is not currently a general harm score and must not replace ROC/AUROC analysis, independent review, or deployment-specific validation.
 
@@ -95,6 +105,8 @@ Patent and trademark statements should be independently verified before public r
 
 ## Contact
 
+- Maintainer: John Bernard (contact@alephonenull.com)
+- Security reports: see [SECURITY.md](./SECURITY.md)
 - Website: https://alephonenull.com
 - Documentation: https://alephonenull.com/docs
 - Issues: https://github.com/purposefulmaker/alephonenull/issues

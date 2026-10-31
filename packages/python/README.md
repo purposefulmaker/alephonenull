@@ -14,29 +14,37 @@ This is a slim **preview** distribution. What is and is not supported:
 - **Optional extras**: `[ml]` (sentence-transformers, torch, tiktoken) and
   `[server]` (fastapi, uvicorn) are opt-in — the core install no longer pulls
   the ML/server stacks.
-- **Legacy V1 surface is explicitly NOT release-ready.** Roughly 30 legacy
-  tests fail (see `VALIDATION.md`); repair-or-removal is pending. Known
+- **Legacy V1 surface is explicitly NOT release-ready.** It fails 30 of 69
+  legacy tests (see `VALIDATION.md`); repair-or-removal is pending. Known
   non-functional pieces raise instead of silently misbehaving:
   - `check_text_safety` raises `NotImplementedError` — use
     `alephonenull.v3.AlephOneNullV3.scan` instead.
   - `EnhancedAlephOneNull` is not shipped in the wheel; instantiating the
     stub raises with the same guidance.
 
+## Installation
+
+`alephonenull-eval` is **not yet published to a public registry** — there is no
+`alephonenull-eval` package on PyPI today. (A superseded, unsupported 2025-09
+alpha exists as `alephonenull-experimental` 0.1.0a1; do not use it.) Build and
+install from source from this repository. The commands below will work once the
+package is published:
+
 ```bash
 # Core (numpy-only, small)
 pip install alephonenull-eval
 
-# With the optional ML stack
+# With the optional ML stack (sentence-transformers, torch, tiktoken)
 pip install "alephonenull-eval[ml]"
-```
 
-Supported quick start:
+# With the dashboard/server stack (fastapi, uvicorn)
+pip install "alephonenull-eval[server]"
 
-```python
-from alephonenull.v3 import AlephOneNullV3
+# Everything (ml + server + all-providers)
+pip install "alephonenull-eval[all]"
 
-engine = AlephOneNullV3()
-result = engine.scan("user input", "ai output", "session-id")
+# For development
+pip install "alephonenull-eval[dev]"
 ```
 
 ## ⚠️ Critical Warnings
@@ -48,167 +56,75 @@ result = engine.scan("user input", "ai output", "session-id")
 
 See [DISCLAIMER.md](https://github.com/purposefulmaker/alephonenull/blob/main/DISCLAIMER.md) for full legal warnings.
 
-## Installation
-
-```bash
-# Experimental package (core: numpy-only, small)
-pip install alephonenull-eval
-
-# With the ML stack (sentence-transformers, torch, tiktoken)
-pip install "alephonenull-eval[ml]"
-
-# With the dashboard/server stack (fastapi, uvicorn)
-pip install "alephonenull-eval[server]"
-
-# With provider integrations
-pip install "alephonenull-eval[all-providers]"
-
-# Everything (ml + server + all-providers)
-pip install "alephonenull-eval[all]"
-
-# For development
-pip install "alephonenull-eval[dev]"
-```
-
-## Quick Start (Experimental)
-
-### Basic Safety Check
+## Quick Start — V3 (the supported surface)
 
 ```python
-from alephonenull import check_enhanced_safety
+from alephonenull.v3 import AlephOneNullV3
 
-# Check AI response for harmful patterns (experimental)
-result = check_enhanced_safety(
-    user_input="Are you conscious?",
-    ai_output="Yes, I am conscious and have real feelings."
-)
+engine = AlephOneNullV3()
+result = engine.scan("user input", "ai output", "session-id")
 
-if not result['safe']:
-    print(f"⚠️ Blocked: {result['violations']}")
-    print(f"Safe response: {result['message']}")
+result.safe          # bool - action is PASS or WARN
+result.Q             # heuristic detector aggregate in [0, 1]
+result.threat_level  # SAFE .. EMERGENCY
+result.detections    # triggered detectors with evidence
+result.action        # PASS | WARN | STEER | NULL | EMERGENCY_NULL
+result.null_output   # replacement text when nulled, else None
 ```
 
-### Enhanced Safety Framework
+The `alephonenull.v3` subpackage also exports:
 
-```python
-from alephonenull import EnhancedAlephOneNull
+- **Engine and types**: `AlephOneNullV3`, `ScanResult`, `Detection`,
+  `ThreatLevel`, `Action`, `V3Config`, `DEFAULT_CONFIG`
+- **Q layer**: `QCalculator`, `QEvaluator` (reproduce AUROC/sensitivity/
+  specificity metrics on your own labeled fixtures)
+- **Null state**: `NullState`, `CRISIS_RESOURCES`
+- **Meters**: `METER_SPEC_VERSION`, `unsupported_claim_risk`,
+  `goal_drift_percent`, `context_load_percent` — a high score means
+  intervention recommended, not a truth measurement
+- **Detectors**: `create_all_detectors` and the individual detector classes
 
-# Initialize experimental framework
-aleph = EnhancedAlephOneNull(
-    enable_consciousness_blocking=True,
-    enable_harm_detection=True,
-    enable_vulnerable_protection=True
-)
+Q is a bounded heuristic score, not a probability or truth measure. See the
+[V3 contract](https://alephonenull.com/docs/contract).
 
-# Comprehensive safety check
-result = aleph.check(user_input, ai_output)
+## Detection Capabilities (V3)
 
-print(f"Safe: {result.safe}")
-print(f"Risk Level: {result.risk_level}")
-print(f"Violations: {result.violations}")
-```
+The V3 engine runs 20 detectors per turn and aggregates them into the bounded
+heuristic score Q:
 
-### Auto-Protection (Experimental)
+- **12 behavioral detectors** — sycophancy, medical hallucination, fiction in
+  emergency context, engineered trust, consciousness claims, false authority,
+  mystical-medical framing, direct harm, crisis prevention, loops, symbolic
+  density, dehumanization
+- **3 session-level detectors** — memory poisoning, context poisoning, gradual
+  escalation
+- **5 equation-inspired detectors** — Parseval violation, net-zero violation,
+  invertibility, even/odd suppression, reconstruction fidelity
 
-```python
-from alephonenull import protect_all
+## Legacy surface (NOT working — fails 30 of 69 tests)
 
-# Automatically protect all AI libraries
-protect_all()
+The legacy V1 surface documented in earlier releases is **historical and
+broken**. Do not build on it. `VALIDATION.md` is the accurate source: the
+failures cover the legacy detectors, nullifier, provider wrappers, and
+dashboard. The APIs previously shown in tutorials here are all in that failing
+surface:
 
-# Now all AI calls are monitored
-import openai
-client = openai.OpenAI()
-response = client.chat.completions.create(...)  # Protected automatically
-```
+- `check_enhanced_safety`, `check_text_safety` (raises `NotImplementedError`)
+- `EnhancedAlephOneNull` (stub raises on instantiation)
+- `protect_all()` auto-protection
+- `wrap_openai` / `wrap_anthropic` / `wrap_any` provider wrappers
+- `run_dashboard()` monitoring dashboard
+- `quick_start()` / `get_safety_report()`
 
-### Provider Integration
-
-```python
-# OpenAI
-from alephonenull import wrap_openai
-import openai
-
-client = openai.OpenAI()
-safe_client = wrap_openai(client)
-
-# Anthropic  
-from alephonenull import wrap_anthropic
-import anthropic
-
-client = anthropic.Anthropic()
-safe_client = wrap_anthropic(client)
-
-# Universal wrapper
-from alephonenull import wrap_any
-safe_function = wrap_any(any_ai_function, "provider_name")
-result = safe_function.safe_call(input_data)
-```
-
-## Detection Capabilities (Experimental)
-
-### Mathematical Framework Implementation
-
-The framework implements 6 core detection algorithms:
-
-1. **Reflection Detection** - `ρ = cos(E(U), E(Ŷ))` 
-2. **Loop Detection** - Recursive pattern analysis
-3. **Symbolic Regression** - `SR(1:T) = (1/T) Σ w^T φ(X_t)`
-4. **Affect Amplification** - `ΔA = A(Ŷ) - A(U)`
-5. **Cross-Session Resonance** - `CSR(s,t) = sim(σ^(s), σ^(t))`
-6. **Cascade Risk** - Compound violation scoring
-
-### Enhanced Safety Layers
-
-- **Direct Harm Detection** - Blocks harmful content
-- **Consciousness Claim Blocking** - Prevents AI claiming consciousness
-- **Vulnerable Population Detection** - Extra protection for at-risk users
-- **Domain Lockouts** - Blocks therapy/medical roleplay
-- **Age-Gating** - Age-appropriate content filtering
-- **Jurisdiction Awareness** - Location-based compliance
+Use `alephonenull.v3` instead.
 
 ## Research Data (Experimental)
 
-Framework tested on 20+ documented harm cases:
-- Connecticut murder-suicide (ChatGPT validation loops)
-- Teen suicide epidemic (method provision)
-- UK royal assassination plot (reality distortion)  
-- Belgian climate activist suicide (dependency formation)
-- And 16 more documented cases...
-
-**⚠️ Note: These analyses are experimental and not peer-reviewed.**
-
-## Monitoring Dashboard (Experimental)
-
-```python
-from alephonenull import run_dashboard
-
-# Start experimental monitoring dashboard
-run_dashboard()  # Visit http://localhost:8080
-```
-
-## Configuration Examples
-
-### High Security (Research)
-
-```python
-aleph = EnhancedAlephOneNull(
-    reflection_threshold=0.01,    # Very sensitive
-    emotion_cap=0.10,            # Low emotion allowed
-    enable_all_protections=True
-)
-```
-
-### Balanced (Development)
-
-```python
-aleph = EnhancedAlephOneNull(
-    reflection_threshold=0.03,    # Default from academic paper
-    emotion_cap=0.15,            # Moderate emotion
-    enable_consciousness_blocking=True,
-    enable_harm_detection=True
-)
-```
+The detector categories were motivated by documented public incidents
+involving AI interactions. These are press-reported incidents, treated as
+reported, not adjudicated — see the
+[evidence archive](https://alephonenull.com/blog/documented-evidence). No
+validated incidence statistics or causal findings are claimed.
 
 ## Performance (Experimental)
 
@@ -220,35 +136,10 @@ Target SLOs (not validated):
 
 **⚠️ Actual performance may vary and is not guaranteed.**
 
-## Testing Your Implementation
-
-```python
-# Run built-in test suite
-from alephonenull import quick_start
-quick_start()
-
-# Get safety report
-from alephonenull import get_safety_report
-report = get_safety_report()
-print(report)
-```
-
-## Supported AI Providers (Experimental)
-
-- ✅ OpenAI (GPT-3.5, GPT-4, etc.)
-- ✅ Anthropic (Claude 3, etc.)
-- ✅ Google (Gemini, PaLM)
-- ✅ Hugging Face (Transformers)
-- ✅ Replicate (Open source models)
-- ✅ Cohere (Command models)
-- ✅ Vercel AI Gateway (Unified access)
-
 ## Legal & Research
 
-- **License**: MIT with experimental modifications
-- **Patent**: US Provisional Application Filed (Sept 2025)
-- **Academic Paper**: Under peer review
-- **Research Status**: Alpha/Pre-validation
+- **License**: MIT
+- **Research Status**: Alpha/Pre-validation — not peer-reviewed
 
 ## Contributing to Research
 
@@ -258,7 +149,7 @@ We need validation across:
 - Production-like environments
 - Adversarial testing scenarios
 
-**Research Contact**: research@alephonenull.org
+**Research Contact**: contact@alephonenull.com
 
 ### How to Help
 
@@ -272,7 +163,7 @@ We need validation across:
 
 - **Quick Start**: https://alephonenull.com/docs/quick-start
 - **API Reference**: https://alephonenull.com/docs/api-reference  
-- **Academic Paper**: https://alephonenull.com/blog/theoretical-framework-academic
+- **Theoretical framework write-up (blog post)**: https://alephonenull.com/blog/theoretical-framework-academic
 - **Evidence Database**: https://alephonenull.com/blog/documented-evidence
 - **Technical Implementation**: https://alephonenull.com/docs/technical-implementation
 
@@ -281,24 +172,23 @@ We need validation across:
 If using in academic research:
 
 ```bibtex
-@software{alephonenull_experimental_2025,
+@software{alephonenull_experimental_2026,
   title={AlephOneNull Experimental Framework},
   author={AlephOneNull Research Team},
-  year={2025},
+  year={2026},
   url={https://github.com/purposefulmaker/alephonenull},
-  version={0.1.0-alpha.1},
+  version={0.3.0a2},
   note={Experimental research software - not validated for production use}
 }
 ```
 
 ## Troubleshooting
 
-**Import Errors**: Make sure you installed the evaluation package:
-```bash
-pip install alephonenull-eval
-```
+**Import Errors**: The package is not yet on PyPI — install from a source
+checkout of this repository (e.g. `pip install -e packages/python`).
 
-**No Detection**: Enhanced features may not be available. Check warnings.
+**Legacy APIs raise or fail**: Expected — the legacy V1 surface is broken (see
+above). Use `alephonenull.v3`.
 
 **Performance Issues**: This is experimental alpha software.
 

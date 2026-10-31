@@ -6,8 +6,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
     name="alephonenull-eval",
     version="0.3.0a2",  # Alpha — keep in sync with alephonenull/__init__.py __version__
-    author="AlephOneNull Research Team",
-    author_email="research@alephonenull.org",
+    author="John Bernard",
+    author_email="contact@alephonenull.com",
     description="⚠️ EXPERIMENTAL: Theoretical AI safety framework - research purposes only",
     long_description="""
     ⚠️ WARNING: This is a theoretical research framework that has NOT been validated.

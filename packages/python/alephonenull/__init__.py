@@ -17,7 +17,7 @@ __version__ = "0.3.0a2"  # Alpha — v3 engine; slim preview (extras split, lega
 # Single source of truth for the version string reported by the API helpers.
 # Derive from __version__ so the two can never drift apart.
 _FRAMEWORK_VERSION = f"AlephOneNull-v{__version__}"
-__author__ = "AlephOneNull Research Team"
+__author__ = "John Bernard"
 __description__ = "⚠️ EXPERIMENTAL: Theoretical AI safety framework - research purposes only"
 
 import warnings

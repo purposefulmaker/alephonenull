@@ -6,7 +6,16 @@ description: >
 
 ## TypeScript Package
 
-The current documented package is the scoped npm package, published under the `experimental` dist-tag (there is no `latest` release):
+The documented package is `@alephonenull/eval`. It is **not yet published to a public registry** — to use it today, build it from source. (A superseded, unsupported 2025-09 alpha exists on npm and PyPI as `alephonenull-experimental`; do not install it.)
+
+```bash
+git clone https://github.com/purposefulmaker/alephonenull.git
+cd alephonenull
+pnpm install
+pnpm build
+```
+
+Once it is published (planned under the `experimental` dist-tag, with no `latest` release), this install command will work:
 
 ```bash
 npm install @alephonenull/eval@experimental

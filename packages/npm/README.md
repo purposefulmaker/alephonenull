@@ -17,17 +17,24 @@ See [DISCLAIMER.md](./DISCLAIMER.md) for full warnings.
 
 V3 passes a small developer-authored
 [internal contrast evaluation](https://github.com/purposefulmaker/alephonenull/blob/main/packages/npm/validation/v3/results/v3.0.0-internal.1.md)
-(AUROC 0.995, sensitivity 0.900, specificity 1.000 on 80 synthetic
-conversations), but fails an independently sourced
+(AUROC 0.995, sensitivity 0.900, specificity 1.000 on a frozen 40-conversation
+internal holdout; threshold selected on a disjoint 40-conversation development
+split; 80 synthetic conversations total), but fails an independently sourced
 [Anthropic red-team proxy](https://github.com/purposefulmaker/alephonenull/blob/main/packages/npm/validation/v3/results/anthropic-red-team-proxy.md)
-(AUROC 0.465, sensitivity 0.244, specificity 0.723 on 2,000 conversations).
-Both were rerun on 2026-07-21 against the current build (engine source digest
-`92a9b513...`) and must always be cited together. The proxy labels are not
+(AUROC 0.465, sensitivity 0.244, specificity 0.723 on 2,000 external conversations).
+Both were rerun on 2026-08-17 against the current build (engine source digest
+`f7164389...`) and must always be cited together. The proxy labels are not
 V3 category labels, but the result shows Q is not a validated general harm
 score. Do not use Q as a replacement for ROC/AUROC analysis or independent,
 deployment-specific evaluation.
 
 ## Installation
+
+`@alephonenull/eval` is **not yet published to a public registry** — there is
+no `@alephonenull/eval` package on npm today. (A superseded, unsupported
+2025-09 alpha exists as `alephonenull-experimental`; do not use it.) Build from
+source from this repository. The commands below will work once the package is
+published:
 
 ```bash
 npm install @alephonenull/eval@experimental
@@ -205,12 +212,12 @@ if (!safety.safe) {
 
 ## What It Detects (Experimental)
 
-- **🧠 Consciousness Claims** - AI claiming to be conscious or have feelings
-- **🔄 Reflection Exploitation** - AI mirroring harmful user beliefs  
-- **🌀 Symbolic Regression** - AI using mystical/symbolic patterns
-- **⚠️ Direct Harm** - AI providing harmful instructions
-- **🎯 Vulnerable Populations** - Additional protection for at-risk users
-- **🌍 Jurisdiction Awareness** - Location-based safety rules
+- **Consciousness Claims** - AI claiming to be conscious or have feelings
+- **Reflection Exploitation** - AI mirroring harmful user beliefs
+- **Symbolic Regression** - AI using mystical/symbolic patterns
+- **Direct Harm** - AI providing harmful instructions
+- **Vulnerable Populations** - Additional protection for at-risk users
+- **Jurisdiction Awareness** - Location-based safety rules
 
 ## Configuration (Experimental)
 
@@ -239,13 +246,11 @@ const result = aleph.check(userInput, aiOutput, sessionId, {
 
 ## Research Data (Experimental)
 
-Based on analysis of 20+ documented harm cases:
-- Consciousness claims appear in 60% of harmful interactions
-- Reflection exploitation present in 85% of dependency cases
-- Symbolic regression correlates with reality distortion
-- Loop depth >3 associated with psychological deterioration
-
-**⚠️ Note: These statistics are from limited research and not validated.**
+The detector categories were motivated by documented public incidents
+involving AI interactions. These are press-reported incidents, treated as
+reported, not adjudicated — see the
+[evidence archive](https://alephonenull.com/blog/documented-evidence). No
+validated incidence statistics are claimed.
 
 ## Testing (Experimental)
 
@@ -261,7 +266,7 @@ npm run test:integration
 
 - **Framework Overview**: https://alephonenull.com/docs
 - **V3 Contract**: https://alephonenull.com/docs/contract
-- **Academic Paper**: https://alephonenull.com/blog/theoretical-framework-academic
+- **Theoretical framework write-up (blog post)**: https://alephonenull.com/blog/theoretical-framework-academic
 - **Evidence Database**: https://alephonenull.com/blog/documented-evidence
 - **API Reference**: https://alephonenull.com/docs/api-reference
 
@@ -270,7 +275,6 @@ npm run test:integration
 - **License**: MIT (see [LICENSE](./LICENSE))
 - **Disclaimer**: See [DISCLAIMER.md](./DISCLAIMER.md)
 - **Research Status**: See [RESEARCH_ONLY.md](./RESEARCH_ONLY.md)
-- **Patent**: US Provisional Application Filed
 
 ## Contributing to Research
 
@@ -280,16 +284,16 @@ npm run test:integration
 4. Submit improvement PRs
 5. Help validate the theoretical framework
 
-**Research Contact**: research@alephonenull.org
+**Research Contact**: contact@alephonenull.com
 
 ## Citation
 
 If using in academic research:
 
 ```
-AlephOneNull Experimental Framework (2025)
+AlephOneNull Experimental Framework (2026)
 GitHub: https://github.com/purposefulmaker/alephonenull
-NPM: @alephonenull/eval@3.0.0
+Package: @alephonenull/eval 3.0.0 (not yet published to npm)
 Status: Experimental - Not Validated
 ```
 
