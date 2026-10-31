@@ -8,17 +8,20 @@ import type { NextRequest } from 'next/server'
 import { allBlogs, type Blog } from 'contentlayer/generated'
 import { absoluteUrl, truncateText } from '@/lib/utils'
 import { siteConfig } from '@/config/site'
-import { getFonts } from '@/lib/fonts'
+import { getFonts } from '@/lib/og-fonts'
 
 interface BlogOgProps {
-  params: { slug: string; locale: LocaleOptions }
+  params: Promise<{ slug: string; locale: string }>
 }
 
-export const runtime = 'edge'
 export const dynamicParams = true
 
-export async function GET(_: NextRequest, { params }: BlogOgProps) {
-  const post = getBlogPostBySlugAndLocale(params.slug, params.locale)
+export async function GET(_: NextRequest, props: BlogOgProps) {
+  const params = await props.params;
+  const post = getBlogPostBySlugAndLocale(
+    params.slug,
+    params.locale as LocaleOptions
+  )
 
   if (!post) {
     return new ImageResponse(<Fallback src="/og.jpg" />, {
@@ -119,7 +122,7 @@ function getBlogPostBySlugAndLocale(slug: string, locale: LocaleOptions) {
   })
 }
 
-export async function generateStaticParams(): Promise<BlogOgProps['params'][]> {
+export async function generateStaticParams(): Promise<Awaited<BlogOgProps['params']>[]> {
   const blog = allBlogs.map((blog) => {
     const [locale, ...slugs] = blog.slugAsParams.split('/')
 

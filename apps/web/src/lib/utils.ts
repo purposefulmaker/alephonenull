@@ -17,8 +17,10 @@ export function formatDate(
   })
 }
 
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://alephonenull.com'
+
 export function absoluteUrl(path: string) {
-  return `${process.env.NEXT_PUBLIC_APP_URL}${path}`
+  return `${APP_URL}${path}`
 }
 
 export function truncateText(text: string, maxLength: number = 105) {

@@ -17,17 +17,16 @@ import { NextIntlClientProvider } from 'next-intl'
 
 interface AppLayoutProps {
   children: React.ReactNode
-  params: {
-    locale: LocaleOptions
-  }
+  params: Promise<{ locale: string }>
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { locale: LocaleOptions }
-}): Promise<Metadata> {
-  setRequestLocale(params.locale || defaultLocale)
+export async function generateMetadata(
+  props: {
+    params: Promise<{ locale: string }>
+  }
+): Promise<Metadata> {
+  const params = await props.params;
+  setRequestLocale((params.locale as LocaleOptions) || defaultLocale)
 
   return {
     title: {
@@ -35,7 +34,7 @@ export async function generateMetadata({
       template: `%s - ${siteConfig.name}`,
     },
 
-    description: getObjectValueByLocale(siteConfig.description, params.locale),
+    description: getObjectValueByLocale(siteConfig.description, (params.locale as LocaleOptions)),
 
     keywords: [
       'Docs',
@@ -70,7 +69,7 @@ export async function generateMetadata({
 
       description: getObjectValueByLocale(
         siteConfig.description,
-        params.locale
+        (params.locale as LocaleOptions)
       ),
 
       images: [
@@ -90,7 +89,7 @@ export async function generateMetadata({
 
       description: getObjectValueByLocale(
         siteConfig.description,
-        params.locale
+        (params.locale as LocaleOptions)
       ),
     },
 
@@ -113,11 +112,17 @@ export const viewport: Viewport = {
   ],
 }
 
-export default function RootLayout({ children, params }: AppLayoutProps) {
-  setRequestLocale(params.locale)
+export default async function RootLayout(props: AppLayoutProps) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
+  setRequestLocale(params.locale as LocaleOptions)
 
   return (
-    <html lang={params.locale || defaultLocale} suppressHydrationWarning>
+    <html lang={(params.locale as LocaleOptions) || defaultLocale} suppressHydrationWarning>
       <head>
         <meta name="theme-color" content="#181423" />
         <link rel="icon" type="image/png" href="/images/logo.png" />
@@ -132,7 +137,7 @@ export default function RootLayout({ children, params }: AppLayoutProps) {
         )}
       >
         <NextIntlClientProvider
-          locale={params.locale || defaultLocale}
+          locale={(params.locale as LocaleOptions) || defaultLocale}
           messages={{}}
         >
           <ThemeProvider
@@ -150,7 +155,7 @@ export default function RootLayout({ children, params }: AppLayoutProps) {
                 <SiteFooter />
               </div>
 
-              <div className="fixed left-0 top-0 size-full bg-gradient-to-b from-[#a277ff] via-transparent to-transparent opacity-10" />
+              <div className="fixed left-0 top-0 size-full bg-linear-to-b from-[#a277ff] via-transparent to-transparent opacity-10" />
             </div>
           </ThemeProvider>
         </NextIntlClientProvider>

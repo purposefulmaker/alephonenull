@@ -9,7 +9,7 @@ const intlMiddleware = (request: NextRequest) =>
 const DEFAULT_LOCALE = 'en'
 const LOCALES = ['en', 'pt']
 
-export default async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // If path starts with /docs and no locale prefix, rewrite to default locale.

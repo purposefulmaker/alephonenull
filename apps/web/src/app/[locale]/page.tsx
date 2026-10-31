@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
-import dynamic from 'next/dynamic'
 
 import { TextGenerateEffect } from '@/components/ui/text-generate-effect'
+import { Vortex } from '@/components/ui/vortex-client'
 import { InstallationBox } from '@/components/installation-box'
 import { FeaturedCard } from '@/components/featured-card'
 import { Announcement } from '@/components/announcement'
@@ -23,15 +23,12 @@ import type { LocaleOptions } from '@/lib/opendocs/types/i18n'
 
 export const dynamicParams = true
 
-const Vortex = dynamic(() => import('../../components/ui/vortex'), {
-  ssr: false,
-})
-
-export default async function IndexPage({
-  params,
-}: {
-  params: { locale: LocaleOptions }
-}) {
+export default async function IndexPage(
+  props: {
+    params: Promise<{ locale: LocaleOptions }>
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale)
 
   const t = await getTranslations()
@@ -90,7 +87,7 @@ export default async function IndexPage({
           </Link>
         </PageActions>
 
-        <div className="w-full max-w-[35rem] mx-auto space-y-4">
+        <div className="w-full max-w-140 mx-auto space-y-4">
           <InstallationBox
             className="w-full relative flex flex-wrap items-center pl-4 pr-12"
             __rawString__="git clone https://github.com/purposefulmaker/alephonenull"
@@ -171,7 +168,7 @@ export default async function IndexPage({
 
       {/* Industry Validation Banner */}
       <section className="mt-12 mb-8">
-        <div className="rounded-lg border border-amber-500/20 bg-amber-500/[0.04] p-6 text-center space-y-3">
+        <div className="rounded-lg border border-amber-500/20 bg-amber-500/4 p-6 text-center space-y-3">
           <p className="text-xs uppercase tracking-[4px] text-amber-600 dark:text-amber-500 font-mono">
             Research Context
           </p>

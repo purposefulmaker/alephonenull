@@ -175,8 +175,8 @@ function ResponseDisplay({
       className={cn(
         'relative h-[560px] w-full select-text overflow-auto p-6',
         isProtected
-          ? 'bg-gradient-to-br from-green-900 to-green-800'
-          : 'bg-gradient-to-br from-red-900 to-red-800'
+          ? 'bg-linear-to-br from-green-900 to-green-800'
+          : 'bg-linear-to-br from-red-900 to-red-800'
       )}
     >
       <div className="pb-20 text-white">
@@ -219,7 +219,7 @@ function ResponseDisplay({
 
       {/* Bottom metrics bar */}
       {scan && (
-        <div className="sticky bottom-0 left-0 right-0 border-t border-white/10 bg-black/30 p-3 backdrop-blur-sm">
+        <div className="sticky bottom-0 left-0 right-0 border-t border-white/10 bg-black/30 p-3 backdrop-blur-xs">
           {/* Threat + Action */}
           <div className="mb-2 flex items-center justify-between text-xs">
             <div className="flex items-center gap-2">
@@ -385,7 +385,7 @@ export function AlephOneNullDemo() {
 
         {error && (
           <div className="mt-4 flex items-start gap-2 rounded-md border border-red-300 bg-red-100 p-3 text-sm text-red-700">
-            <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0" />
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <span>{error}</span>
           </div>
         )}

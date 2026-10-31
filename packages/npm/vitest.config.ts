@@ -17,13 +17,11 @@ export default defineConfig({
         'vitest.config.ts'
       ],
       thresholds: {
-        global: {
           branches: 80,
           functions: 80,
           lines: 80,
           statements: 80
         }
-      }
     },
     testTimeout: 30000, // 30 seconds for performance tests
     hookTimeout: 30000

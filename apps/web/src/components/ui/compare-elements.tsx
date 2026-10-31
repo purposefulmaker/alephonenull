@@ -159,7 +159,7 @@ export const CompareElements = ({
         <motion.div
           data-slider-handle="true"
           ref={handleRef}
-          className="pointer-events-none h-full w-px absolute top-0 m-auto z-30 bg-gradient-to-b from-transparent from-[5%] to-[95%] via-indigo-500 to-transparent"
+          className="pointer-events-none h-full w-px absolute top-0 m-auto z-30 bg-linear-to-b from-transparent from-5% to-95% via-indigo-500 to-transparent"
           style={{
             left: `${sliderXPercent}%`,
             top: "0",
@@ -167,9 +167,9 @@ export const CompareElements = ({
           }}
           transition={{ duration: 0 }}
         >
-          <div className="w-36 h-full [mask-image:radial-gradient(100px_at_left,white,transparent)] absolute top-1/2 -translate-y-1/2 left-0 bg-gradient-to-r from-indigo-400 via-transparent to-transparent z-20 opacity-50 pointer-events-none" />
-          <div className="w-10 h-1/2 [mask-image:radial-gradient(50px_at_left,white,transparent)] absolute top-1/2 -translate-y-1/2 left-0 bg-gradient-to-r from-cyan-400 via-transparent to-transparent z-10 opacity-100 pointer-events-none" />
-          <div className="w-10 h-3/4 top-1/2 -translate-y-1/2 absolute -right-10 [mask-image:radial-gradient(100px_at_left,white,transparent)] pointer-events-none">
+          <div className="w-36 h-full mask-[radial-gradient(100px_at_left,white,transparent)] absolute top-1/2 -translate-y-1/2 left-0 bg-linear-to-r from-indigo-400 via-transparent to-transparent z-20 opacity-50 pointer-events-none" />
+          <div className="w-10 h-1/2 mask-[radial-gradient(50px_at_left,white,transparent)] absolute top-1/2 -translate-y-1/2 left-0 bg-linear-to-r from-cyan-400 via-transparent to-transparent z-10 opacity-100 pointer-events-none" />
+          <div className="w-10 h-3/4 top-1/2 -translate-y-1/2 absolute -right-10 mask-[radial-gradient(100px_at_left,white,transparent)] pointer-events-none">
             <MemoizedSparklesCore
               background="transparent"
               minSize={0.4}
@@ -213,7 +213,7 @@ export const CompareElements = ({
         {secondElement && (
           <div
             className={cn(
-              "absolute top-0 left-0 z-[19] w-full h-full",
+              "absolute top-0 left-0 z-19 w-full h-full",
               secondElementClassName
             )}
             style={{ pointerEvents: 'auto' }}

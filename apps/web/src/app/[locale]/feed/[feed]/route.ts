@@ -94,19 +94,20 @@ const provideWebsiteFeeds = cache(
 )
 
 type StaticParams = {
-  params: { feed: RSSFeed['file']; locale: LocaleOptions }
+  params: Promise<{ feed: string; locale: string }>
 }
 
-export const generateStaticParams = async (): Promise<StaticParams['params'][]> => {
+export const generateStaticParams = async (): Promise<Awaited<StaticParams['params']>[]> => {
   return blogConfig.rss
     .map(({ file }) => locales.map((locale) => ({ feed: file, locale })))
     .flat()
 }
 
-export const GET = async (_: Request, { params }: StaticParams) => {
+export const GET = async (_: Request, props: StaticParams) => {
+  const params = await props.params;
   const websiteFeed = provideWebsiteFeeds({
     feed: params.feed,
-    locale: params.locale || defaultLocale,
+    locale: (params.locale as LocaleOptions) || defaultLocale,
   })
 
   const feed = blogConfig.rss.find((rss) => rss.file === params.feed)
@@ -124,9 +125,5 @@ export const GET = async (_: Request, { params }: StaticParams) => {
 export const dynamicParams = true
 export const dynamic = 'force-static'
 
-const VERCEL_REVALIDATE = Number(
-  // eslint-disable-next-line turbo/no-undeclared-env-vars
-  process.env.NEXT_PUBLIC_VERCEL_REVALIDATE_TIME || 300
-)
-
-export const revalidate = VERCEL_REVALIDATE
+// Next 16 requires a literal here (previously Number(env) || 300).
+export const revalidate = 300

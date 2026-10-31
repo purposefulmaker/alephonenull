@@ -2,19 +2,27 @@
   "name": "@opendocs/eslint-config",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
+  "exports": {
+    "./next": "./next.mjs",
+    "./library": "./library.mjs"
+  },
   "files": [
-    "library.js",
-    "next.js",
-    "react-internal.js"
+    "next.mjs",
+    "library.mjs",
+    "shared.mjs"
   ],
-  "devDependencies": {
-    "@vercel/style-guide": "^5.2.0",
-    "eslint-config-turbo": "^2.0.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-only-warn": "^1.1.0",
-    "@typescript-eslint/parser": "^7.1.0",
-    "@typescript-eslint/eslint-plugin": "^7.1.0",
-    "typescript": "^5.3.3"
+  "dependencies": {
+    "eslint-config-next": "16.4.3",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-config-turbo": "^2.11.10",
+    "eslint-plugin-only-warn": "^1.2.1",
+    "eslint-plugin-prettier": "^5.5.7",
+    "typescript-eslint": "^8.72.1"
+  },
+  "peerDependencies": {
+    "eslint": ">=10.0.0",
+    "prettier": ">=3.0.0",
+    "typescript": ">=5.0.0"
   }
 }

@@ -60,8 +60,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "validate:v3": "npm run build && node validation/v3/run-validation.mjs",
-    "lint": "eslint src --ext .ts,.tsx",
-    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
     "type-check": "tsc --noEmit",
     "prepublishOnly": "npm run build && npm test && npm run lint",
     "release": "npm version prerelease && npm publish --access public --tag experimental"
@@ -93,17 +93,17 @@
   "homepage": "https://alephonenull.com",
   "dependencies": {},
   "devDependencies": {
-    "@types/node": "^20.0.0",
-    "@types/react": "^18.3.24",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
     "@opendocs/eslint-config": "workspace:*",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
-    "eslint": "^8.45.0",
-    "react": "^18.3.1",
-    "terser": "^5.27.0",
-    "tsup": "^8.0.0",
-    "typescript": "^5.0.0",
-    "vitest": "^1.0.0"
+    "@typescript-eslint/eslint-plugin": "^8.72.1",
+    "@typescript-eslint/parser": "^8.72.1",
+    "eslint": "^10.14.0",
+    "react": "^19.3.1",
+    "terser": "^5.51.2",
+    "tsup": "^9.0.0",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.5"
   },
   "peerDependencies": {
     "next": ">=13.0.0",
@@ -118,8 +118,8 @@
     }
   },
   "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=8.0.0"
+    "node": ">=22",
+    "npm": ">=10"
   },
   "publishConfig": {
     "access": "public",

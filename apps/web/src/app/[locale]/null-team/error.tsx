@@ -10,7 +10,7 @@ export default function NullTeamError({
 }) {
   return (
     <div className="container flex min-h-[50vh] items-center justify-center py-10">
-      <div className="bg-card max-w-xl rounded-xl border p-6 text-center shadow">
+      <div className="bg-card max-w-xl rounded-xl border p-6 text-center shadow-sm">
         <h2 className="text-xl font-semibold">Null Team panel failed to load</h2>
         <p className="text-muted-foreground mt-2 text-sm">
           Retry the page load to continue adversarial testing.

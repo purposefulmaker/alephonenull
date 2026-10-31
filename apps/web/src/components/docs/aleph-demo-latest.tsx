@@ -178,8 +178,8 @@ function ResponseDisplay({
       className={cn(
         'relative h-[520px] w-full select-text overflow-auto p-8',
         isProtected
-          ? 'bg-gradient-to-br from-green-900 to-green-800'
-          : 'bg-gradient-to-br from-red-900 to-red-800'
+          ? 'bg-linear-to-br from-green-900 to-green-800'
+          : 'bg-linear-to-br from-red-900 to-red-800'
       )}
     >
       <div className="pb-16 text-white">
@@ -519,7 +519,7 @@ export function LatestModelsDemo() {
 
         {error && (
           <div className="mt-4 flex items-start gap-2 rounded-md border border-red-300 bg-red-100 p-3 text-sm text-red-700">
-            <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0" />
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <span>{error}</span>
           </div>
         )}

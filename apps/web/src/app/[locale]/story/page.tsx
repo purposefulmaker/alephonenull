@@ -11,11 +11,12 @@ export const metadata = {
     'A personal account of why AlephOneNull exists — the lens, the drift, and the line being defended.',
 }
 
-export default function StoryPage({
-  params,
-}: {
-  params: { locale: LocaleOptions }
-}) {
+export default async function StoryPage(
+  props: {
+    params: Promise<{ locale: LocaleOptions }>
+  }
+) {
+  const params = await props.params;
   void params
 
   return (

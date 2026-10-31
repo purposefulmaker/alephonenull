@@ -8,20 +8,21 @@ import type { LocaleOptions } from '@/lib/opendocs/types/i18n'
 
 interface DocsLayoutProps {
   children: React.ReactNode
-  params: {
-    locale: LocaleOptions
-  }
+  params: Promise<{ locale: string }>
 }
 
 export const dynamicParams = true
 
-export default async function DocsLayout({
-  children,
-  params,
-}: DocsLayoutProps) {
-  setRequestLocale(params.locale)
+export default async function DocsLayout(props: DocsLayoutProps) {
+  const params = await props.params;
 
-  const docsConfig = await getServerDocsConfig({ locale: params.locale })
+  const {
+    children
+  } = props;
+
+  setRequestLocale(params.locale as LocaleOptions)
+
+  const docsConfig = await getServerDocsConfig({ locale: (params.locale as LocaleOptions) })
 
   return (
     <div className="border-b">

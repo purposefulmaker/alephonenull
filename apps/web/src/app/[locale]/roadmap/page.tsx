@@ -78,11 +78,12 @@ const phases: Phase[] = [
   },
 ]
 
-export default function RoadmapPage({
-  params,
-}: {
-  params: { locale: LocaleOptions }
-}) {
+export default async function RoadmapPage(
+  props: {
+    params: Promise<{ locale: LocaleOptions }>
+  }
+) {
+  const params = await props.params;
   void params
 
   return (

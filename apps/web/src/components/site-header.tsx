@@ -22,8 +22,8 @@ export async function SiteHeader() {
   const t = await getTranslations('site')
 
   return (
-    <header className={'sticky top-0 z-50 w-full backdrop-blur'}>
-      <div className="container flex h-14 max-w-screen-2xl items-center">
+    <header className={'sticky top-0 z-50 w-full backdrop-blur-sm'}>
+      <div className="container flex h-14 max-w-(--breakpoint-2xl) items-center">
         <MainNav
           messages={{
             about: t('words.about'),

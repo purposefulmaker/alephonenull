@@ -23,17 +23,16 @@ import { Icons } from '@/components/icons'
 import { absoluteUrl } from '@/lib/utils'
 
 interface BlogPageProps {
-  params: {
+  params: Promise<{
     slug: string[]
     locale: LocaleOptions
-  }
+  }>
 }
 
 export const dynamicParams = true
 
-export async function generateMetadata({
-  params,
-}: BlogPageProps): Promise<Metadata> {
+export async function generateMetadata(props: BlogPageProps): Promise<Metadata> {
+  const params = await props.params;
   const locale = params.locale || defaultLocale
 
   setRequestLocale(locale)
@@ -136,7 +135,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams(): Promise<
-  BlogPageProps['params'][]
+  Awaited<BlogPageProps['params']>[]
 > {
   const blog = allBlogs.map((blog) => {
     const [locale, ...slugs] = blog.slugAsParams.split('/')
@@ -150,7 +149,8 @@ export async function generateStaticParams(): Promise<
   return blog
 }
 
-export default async function BlogPage({ params }: BlogPageProps) {
+export default async function BlogPage(props: BlogPageProps) {
+  const params = await props.params;
   const locale = params.locale || defaultLocale
 
   setRequestLocale(locale)

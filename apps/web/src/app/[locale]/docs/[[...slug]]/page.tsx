@@ -23,9 +23,8 @@ import { absoluteUrl } from '@/lib/utils'
 
 export const dynamicParams = true
 
-export async function generateMetadata({
-  params,
-}: DocPageProps): Promise<Metadata> {
+export async function generateMetadata(props: DocPageProps): Promise<Metadata> {
+  const params = await props.params;
   const locale = params.locale
 
   setRequestLocale(locale || defaultLocale)
@@ -83,7 +82,8 @@ export async function generateStaticParams(): Promise<
   return docs
 }
 
-export default async function DocPage({ params }: DocPageProps) {
+export default async function DocPage(props: DocPageProps) {
+  const params = await props.params;
   setRequestLocale(params.locale || defaultLocale)
 
   const doc = await getDocFromParams({ params })

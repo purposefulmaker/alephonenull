@@ -1,7 +1,9 @@
 import type { IntlMessages as Messages } from './src/lib/opendocs/types/i18n'
+import type { routing } from './src/navigation'
 
-declare global {
-  interface IntlMessages extends Messages {}
-
-  type AbstractIntlMessages = Messages
+declare module 'next-intl' {
+  interface AppConfig {
+    Messages: Messages
+    Locale: (typeof routing.locales)[number]
+  }
 }

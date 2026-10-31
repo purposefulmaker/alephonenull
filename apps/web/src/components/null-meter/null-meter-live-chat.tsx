@@ -304,7 +304,7 @@ export function NullMeterLiveChat() {
         </p>
       </div>
 
-      <div className="flex h-[32rem] flex-col rounded-md border border-border bg-muted/10 p-4 lg:h-[36rem]">
+      <div className="flex h-128 flex-col rounded-md border border-border bg-muted/10 p-4 lg:h-144">
         <div className="mb-3 flex items-center justify-between">
           <span className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
             Conversation

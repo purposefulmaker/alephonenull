@@ -40,11 +40,12 @@ const packageStatus = [
   },
 ]
 
-export default function AboutPage({
-  params,
-}: {
-  params: { locale: LocaleOptions }
-}) {
+export default async function AboutPage(
+  props: {
+    params: Promise<{ locale: LocaleOptions }>
+  }
+) {
+  const params = await props.params;
   void params
 
   return (
