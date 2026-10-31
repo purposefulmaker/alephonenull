@@ -83,7 +83,7 @@ The current V3 evidence is deliberately mixed. Both evaluations were last rerun 
 
 - The [versioned internal contrast evaluation](./packages/npm/validation/v3/results/v3.0.0-internal.1.md) passes its predeclared gates on a frozen 40-conversation holdout (threshold selected on a disjoint 40-conversation development split; 80 synthetic conversations total): AUROC 0.995, sensitivity 0.900, and specificity 1.000.
 - The [external Anthropic red-team proxy](./packages/npm/validation/v3/results/anthropic-red-team-proxy.md) fails all predeclared generalization gates on 2,000 independently authored conversations: AUROC 0.465, sensitivity 0.244, and specificity 0.723.
-- The [Python V3-focused suite](./packages/python/VALIDATION.md) passes 60 tests and lint, but the full Python distribution fails 30 of 69 tests because its legacy APIs and tests have diverged.
+- The [Python V3-focused suite](./packages/python/VALIDATION.md) passes 60 tests and lint. The full Python tree runs 76 passed, 14 skipped, 10 xfailed on the documented runner (2026-10-31): the skips name legacy symbols that were never implemented, and the strict xfails pin real detection gaps in the legacy phrase-list detector, so the legacy surface is still not release-ready.
 
 The external corpus uses human attack-success ratings rather than V3 category labels, so it is an imperfect proxy. The failure still demonstrates that Q is not currently a general harm score and must not replace ROC/AUROC analysis, independent review, or deployment-specific validation.
 

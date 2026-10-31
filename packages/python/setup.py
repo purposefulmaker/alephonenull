@@ -27,16 +27,16 @@ setup(
         "Topic :: Scientific/Engineering :: Information Analysis",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Environment :: No Input/Output (Daemon)",
         "Operating System :: OS Independent",
         "Natural Language :: English"
     ],
-    python_requires=">=3.8",
+    python_requires=">=3.10",  # 3.8/3.9 are end-of-life; validated on 3.14
     # Minimal core: `import alephonenull` and the v3 engine need only numpy.
     # Heavy optional stacks live in extras (see below).
     install_requires=[

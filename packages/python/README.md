@@ -14,9 +14,13 @@ This is a slim **preview** distribution. What is and is not supported:
 - **Optional extras**: `[ml]` (sentence-transformers, torch, tiktoken) and
   `[server]` (fastapi, uvicorn) are opt-in — the core install no longer pulls
   the ML/server stacks.
-- **Legacy V1 surface is explicitly NOT release-ready.** It fails 30 of 69
-  legacy tests (see `VALIDATION.md`); repair-or-removal is pending. Known
-  non-functional pieces raise instead of silently misbehaving:
+- **Legacy V1 surface is explicitly NOT release-ready.** Its tests run green
+  only because every gap is declared in-test: on the documented runner the
+  full suite is 76 passed, 14 skipped, 10 xfailed (78 / 12 / 10 with the
+  `[server]` extra) — the skips name never-implemented legacy symbols and the
+  strict xfails pin real detection gaps (see `VALIDATION.md`);
+  repair-or-removal is pending. Known non-functional pieces raise instead of
+  silently misbehaving:
   - `check_text_safety` raises `NotImplementedError` — use
     `alephonenull.v3.AlephOneNullV3.scan` instead.
   - `EnhancedAlephOneNull` is not shipped in the wheel; instantiating the
@@ -101,13 +105,14 @@ heuristic score Q:
 - **5 equation-inspired detectors** — Parseval violation, net-zero violation,
   invertibility, even/odd suppression, reconstruction fidelity
 
-## Legacy surface (NOT working — fails 30 of 69 tests)
+## Legacy surface (NOT working — gaps declared as strict xfails and skips)
 
 The legacy V1 surface documented in earlier releases is **historical and
 broken**. Do not build on it. `VALIDATION.md` is the accurate source: the
-failures cover the legacy detectors, nullifier, provider wrappers, and
-dashboard. The APIs previously shown in tutorials here are all in that failing
-surface:
+declared gaps (10 strict xfails for real detection misses, plus skips naming
+legacy symbols that were never implemented) cover the legacy detectors,
+nullifier, provider wrappers, and dashboard. The APIs previously shown in
+tutorials here are all in that surface:
 
 - `check_enhanced_safety`, `check_text_safety` (raises `NotImplementedError`)
 - `EnhancedAlephOneNull` (stub raises on instantiation)
